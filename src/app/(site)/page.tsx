@@ -4,8 +4,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
-import { CountUp } from '@/components/ui/CountUp'
 import { DrawLine } from '@/components/ui/DrawLine'
+import { HeroSection } from '@/components/sections/HeroSection'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -43,55 +43,7 @@ export default function HomePage() {
       <Header />
 
       {/* HERO */}
-      <section className="grid grid-cols-1 md:grid-cols-2 overflow-hidden" style={{ height: 'calc(100vh - 68px - 90px)', minHeight: 480 }}>
-        <div className="flex flex-col justify-center px-10 md:px-20 py-16 bg-cream gap-5">
-          <Reveal delay={0.1}>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-site-gray">
-              Nail Studio · ดอนหัวฬอ ชลบุรี
-            </p>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <h1 className="text-5xl md:text-6xl font-bold leading-[1.05] text-site-dark">
-              ความสวยงาม<br />เริ่มต้น<br />ที่ปลายนิ้ว
-            </h1>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <p className="text-sm text-site-gray leading-relaxed">
-              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />
-              วัสดุคุณภาพสูง ช่างมืออาชีพ
-            </p>
-          </Reveal>
-          <Reveal delay={0.4}>
-            <div className="flex items-center gap-7 flex-wrap">
-              <Link href="/booking"
-                className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-8 py-3.5 hover:bg-sand-dark transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-95">
-                จองนัดเลย
-              </Link>
-              <Link href="#services" className="text-xs font-semibold tracking-widest uppercase text-sand hover:gap-2 transition-all">
-                ดูบริการ →
-              </Link>
-            </div>
-          </Reveal>
-          <Reveal delay={0.5}>
-            <div className="flex items-center gap-6 mt-2">
-              <div>
-                <span className="block text-2xl font-bold text-sand leading-none">
-                  <CountUp to={2000} suffix="+" />
-                </span>
-                <span className="text-xs text-site-gray mt-1 tracking-wide">ผู้ติดตาม</span>
-              </div>
-              <div className="w-px h-10 bg-sand/30" />
-              <div>
-                <span className="block text-2xl font-bold text-sand leading-none">5★</span>
-                <span className="text-xs text-site-gray mt-1 tracking-wide">รีวิวจากลูกค้า</span>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-        <div className="relative overflow-hidden bg-[#e8d5c0] hidden md:block">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1200')] bg-center bg-cover scale-105 hover:scale-100 transition-transform duration-[2s]" />
-        </div>
-      </section>
+      <HeroSection />
 
       {/* BOOKING BAR */}
       <BookingBar />
