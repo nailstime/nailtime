@@ -177,15 +177,57 @@ export default function HomePage() {
         <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1000')] bg-center bg-cover min-h-[400px]" />
       </section>
 
+      {/* GALLERY */}
+      <section id="products" className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-2">Our Work</p>
+            <h2 className="text-4xl font-bold text-site-dark">ผลงานของเรา</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {[
+              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',
+              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&crop=entropy',
+              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80',
+              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&crop=entropy',
+              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&sat=-50',
+              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&sat=-30',
+            ].map((src, i) => (
+              <div key={i} className="relative overflow-hidden rounded-xl aspect-square bg-cream group">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${src})` }} />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
+              className="inline-flex items-center gap-2 rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-8 py-3 hover:bg-site-dark hover:text-white transition-all">
+              ดูผลงานทั้งหมดบน Instagram →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* INSTAGRAM CTA */}
       <section id="gallery" className="relative overflow-hidden">
         <div className="grid grid-cols-5 grid-rows-2">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="h-48"
-              style={{ background: ['#d8b192','#c8a07a','#e0c8a8','#b89060','#d4b090','#c4a07a','#dcc0a0','#b89868','#d0b090','#c8a880'][i] }} />
+          {[
+            'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=70',
+            'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=400&q=70',
+            'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=70&crop=entropy',
+            'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=400&q=70&crop=entropy',
+            'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=70&sat=-30',
+            'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=400&q=70&sat=-30',
+            'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=70&sat=20',
+            'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=400&q=70&sat=20',
+            'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=70&con=20',
+            'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=400&q=70&con=20',
+          ].map((src, i) => (
+            <div key={i} className="h-48 bg-cover bg-center"
+              style={{ backgroundImage: `url(${src})` }} />
           ))}
         </div>
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 bg-site-dark/40 flex items-center justify-center">
           <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
             className="bg-cream shadow-2xl px-16 py-10 text-center flex flex-col items-center gap-2">
             <svg className="w-10 h-10 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
