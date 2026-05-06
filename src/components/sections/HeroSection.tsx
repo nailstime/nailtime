@@ -6,56 +6,74 @@ import { CountUp } from '@/components/ui/CountUp'
 const ease = cubicBezier(0.76, 0, 0.24, 1)
 
 const HEADLINE = [
-  { text: 'ความสวยงาม', className: 'text-site-dark' },
-  { text: 'เริ่มต้น',     className: 'text-site-dark' },
+  { text: 'ความสวยงาม', className: 'text-white' },
+  { text: 'เริ่มต้น',     className: 'text-white' },
   { text: 'ที่ปลายนิ้ว', className: 'text-sand' },
 ]
 
 export function HeroSection() {
   return (
     <section
-      className="relative grid grid-cols-1 md:grid-cols-2 overflow-hidden"
-      style={{ height: 'calc(100vh - 68px - 90px)', minHeight: 520 }}
+      className="relative flex flex-col items-center justify-center overflow-hidden"
+      style={{ height: 'calc(100vh - 68px)', minHeight: 560 }}
     >
-      {/* Floating blobs */}
+      {/* Background — Ken Burns slow zoom */}
       <motion.div
-        className="absolute top-[-20%] left-[-8%] w-[480px] h-[480px] rounded-full pointer-events-none select-none"
-        style={{ background: 'radial-gradient(circle, rgba(216,177,146,0.2) 0%, transparent 65%)' }}
-        animate={{ x: [0, 28, 0], y: [0, -18, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute bottom-[-5%] left-[35%] w-[300px] h-[300px] rounded-full pointer-events-none select-none"
-        style={{ background: 'radial-gradient(circle, rgba(216,177,146,0.13) 0%, transparent 70%)' }}
-        animate={{ x: [0, -22, 0], y: [0, 22, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1600')] bg-center bg-cover"
+        initial={{ scale: 1.08 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 9, ease: 'easeOut' }}
       />
 
-      {/* LEFT — Text */}
-      <div className="flex flex-col justify-center px-10 md:px-20 py-16 gap-5 relative z-10">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-site-dark/60 via-site-dark/35 to-site-dark/70 pointer-events-none" />
 
-        {/* Tag with leading line */}
+      {/* Spinning badge — bottom right */}
+      <motion.div
+        className="absolute bottom-28 right-10 w-24 h-24 hidden md:block z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, rotate: 360 }}
+        transition={{
+          opacity: { duration: 1, delay: 1.3 },
+          rotate: { duration: 16, repeat: Infinity, ease: 'linear' },
+        }}
+      >
+        <svg viewBox="0 0 100 100" className="w-full h-full">
+          <defs>
+            <path id="badgePath" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
+          </defs>
+          <text fontSize="8.5" fill="#d8b192" letterSpacing="1.5" fontFamily="sans-serif">
+            <textPath href="#badgePath">JAPANESE NAIL · STUDIO · CHONBURI ·</textPath>
+          </text>
+        </svg>
+      </motion.div>
+
+      {/* Center content */}
+      <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 max-w-4xl w-full -mt-8">
+
+        {/* Tag */}
         <motion.div
           className="flex items-center gap-3"
-          initial={{ opacity: 0, x: -18 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.1 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease, delay: 0.2 }}
         >
-          <span className="block w-8 h-px bg-sand shrink-0" />
-          <span className="text-[10px] font-semibold tracking-[0.28em] uppercase text-site-gray">
+          <span className="block w-8 h-px bg-sand/60 shrink-0" />
+          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/65">
             Nail Studio · ดอนหัวฬอ ชลบุรี
           </span>
+          <span className="block w-8 h-px bg-sand/60 shrink-0" />
         </motion.div>
 
         {/* Headline — line-by-line mask reveal */}
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col items-center gap-0">
           {HEADLINE.map((line, i) => (
             <div key={line.text} className="overflow-hidden">
               <motion.h1
-                className={`text-5xl md:text-6xl font-bold leading-[1.08] font-serif ${line.className}`}
+                className={`text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.06] font-serif ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
-                transition={{ duration: 0.9, ease, delay: 0.22 + i * 0.13 }}
+                transition={{ duration: 0.9, ease, delay: 0.3 + i * 0.13 }}
               >
                 {line.text}
               </motion.h1>
@@ -63,146 +81,78 @@ export function HeroSection() {
           ))}
         </div>
 
+        {/* Subtext */}
         <motion.p
-          className="text-sm text-site-gray leading-relaxed"
+          className="text-sm text-white/60 leading-relaxed"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease, delay: 0.7 }}
+          transition={{ duration: 0.8, ease, delay: 0.75 }}
         >
-          ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />
-          วัสดุคุณภาพสูง ช่างมืออาชีพ
+          ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น · วัสดุคุณภาพสูง ช่างมืออาชีพ
         </motion.p>
 
         {/* CTA */}
         <motion.div
-          className="flex items-center gap-7 flex-wrap"
+          className="flex items-center gap-6 flex-wrap justify-center mt-1"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease, delay: 0.85 }}
+          transition={{ duration: 0.8, ease, delay: 0.9 }}
         >
           <Link
             href="/booking"
-            className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-8 py-3.5 hover:bg-sand-dark transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
+            className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-9 py-3.5 hover:bg-sand-dark transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
           >
             จองนัดเลย
           </Link>
-          <Link href="#services" className="text-xs font-semibold tracking-widest uppercase text-sand">
+          <Link
+            href="#services"
+            className="text-xs font-semibold tracking-widest uppercase text-white/75 hover:text-sand transition-colors"
+          >
             ดูบริการ →
           </Link>
         </motion.div>
+      </div>
 
-        {/* Stats */}
-        <motion.div
-          className="flex items-center gap-6 mt-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.05 }}
-        >
-          <div>
-            <span className="block text-2xl font-bold text-sand leading-none font-serif">
-              <CountUp to={2000} suffix="+" duration={2000} />
-            </span>
-            <span className="text-[10px] text-site-gray mt-1 tracking-wide">ผู้ติดตาม</span>
-          </div>
-          <div className="w-px h-8 bg-sand/30" />
-          <div>
-            <span className="block text-2xl font-bold text-sand leading-none font-serif">5★</span>
-            <span className="text-[10px] text-site-gray mt-1 tracking-wide">รีวิวจากลูกค้า</span>
-          </div>
-          <div className="w-px h-8 bg-sand/30" />
-          <div>
-            <span className="block text-2xl font-bold text-sand leading-none font-serif">8+</span>
-            <span className="text-[10px] text-site-gray mt-1 tracking-wide">ปีประสบการณ์</span>
-          </div>
-        </motion.div>
+      {/* Stats bar — pinned to bottom */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center gap-10 px-6 py-5 border-t border-white/10 bg-site-dark/40 backdrop-blur-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease, delay: 1.1 }}
+      >
+        <div className="text-center">
+          <span className="block text-xl font-bold text-sand leading-none font-serif">
+            <CountUp to={2000} suffix="+" duration={2000} />
+          </span>
+          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">ผู้ติดตาม</span>
+        </div>
+
+        <div className="w-px h-8 bg-white/15" />
+
+        <div className="text-center">
+          <span className="block text-xl font-bold text-sand leading-none font-serif">5★</span>
+          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">รีวิวจากลูกค้า</span>
+        </div>
+
+        <div className="w-px h-8 bg-white/15" />
+
+        <div className="text-center">
+          <span className="block text-xl font-bold text-sand leading-none font-serif">8+</span>
+          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">ปีประสบการณ์</span>
+        </div>
 
         {/* Scroll indicator */}
-        <motion.div
-          className="flex items-center gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.4 }}
-        >
+        <div className="absolute right-8 flex items-center gap-2 hidden md:flex">
           <motion.span
-            className="block h-px bg-sand/50 origin-left"
-            style={{ width: 36 }}
+            className="block h-px bg-white/35 origin-left"
+            style={{ width: 32 }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 0.9, ease, delay: 1.5 }}
+            transition={{ duration: 0.9, ease, delay: 1.6 }}
           />
-          <span className="text-[9px] tracking-[0.25em] uppercase text-site-gray">Scroll</span>
-        </motion.div>
-      </div>
-
-      {/* RIGHT — Pill image + spinning badge + accent */}
-      <div className="relative hidden md:flex items-center justify-center">
-
-        <motion.div
-          className="relative"
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, ease, delay: 0.4 }}
-        >
-          {/* Main pill image */}
-          <div
-            className="w-56 h-[360px] overflow-hidden shadow-2xl bg-[#ede0d3]"
-            style={{ borderRadius: '140px 140px 16px 16px' }}
-          >
-            <motion.div
-              className="w-full h-full bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800')] bg-center bg-cover"
-              initial={{ scale: 1.12 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1.8, ease, delay: 0.4 }}
-            />
-          </div>
-
-          {/* Accent photo — bottom left */}
-          <motion.div
-            className="absolute -bottom-6 -left-16 w-24 h-32 overflow-hidden shadow-xl"
-            style={{ borderRadius: '60px 60px 8px 8px' }}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease, delay: 0.9 }}
-          >
-            <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400')] bg-[center_top] bg-cover" />
-          </motion.div>
-
-          {/* Spinning circular text badge */}
-          <motion.div
-            className="absolute -top-4 -right-12 w-[88px] h-[88px]"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
-          >
-            <svg viewBox="0 0 100 100" className="w-full h-full">
-              <defs>
-                <path id="badgePath" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
-              </defs>
-              <text fontSize="8.5" fill="#d8b192" letterSpacing="1.5" fontFamily="sans-serif">
-                <textPath href="#badgePath">JAPANESE NAIL · STUDIO · CHONBURI ·</textPath>
-              </text>
-            </svg>
-          </motion.div>
-
-          {/* Ghost decorative number */}
-          <motion.span
-            className="absolute top-1/2 -translate-y-1/2 -right-20 text-[120px] font-bold leading-none select-none pointer-events-none font-serif"
-            style={{ color: 'rgba(216,177,146,0.07)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2, delay: 1.3 }}
-          >
-            01
-          </motion.span>
-        </motion.div>
-
-        {/* Curtain wipe overlay */}
-        <motion.div
-          className="absolute inset-0 bg-cream origin-right pointer-events-none"
-          initial={{ scaleX: 1 }}
-          animate={{ scaleX: 0 }}
-          transition={{ duration: 1, ease, delay: 0.2 }}
-        />
-      </div>
+          <span className="text-[9px] tracking-[0.25em] uppercase text-white/40">Scroll</span>
+        </div>
+      </motion.div>
     </section>
   )
 }
