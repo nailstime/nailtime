@@ -21,8 +21,8 @@ export function HeroSection() {
       {/* Full-width background image */}
       <motion.div
         className="absolute inset-0"
-        initial={{ scale: 1.05 }}
-        animate={{ scale: 1 }}
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1.06 }}
         transition={{ duration: 1.6, ease: 'easeOut' }}
       >
         <Image
@@ -34,11 +34,11 @@ export function HeroSection() {
         />
       </motion.div>
 
-      {/* Left gradient — text readable, image shows on right */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/65 to-cream/5 pointer-events-none" />
+      {/* Left gradient — light enough to show leaf shadow, dark enough for text */}
+      <div className="absolute inset-0 bg-gradient-to-r from-cream/80 via-cream/45 to-transparent pointer-events-none" />
 
       {/* Text content — left side overlay */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-16 lg:px-24 py-16 max-w-2xl gap-5">
+      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-20 lg:px-28 py-16 max-w-[600px] gap-5">
 
         {/* Brand */}
         <motion.div
