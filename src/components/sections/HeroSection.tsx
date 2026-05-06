@@ -18,15 +18,17 @@ export function HeroSection() {
       style={{ height: 'calc(100vh - 68px)', minHeight: 560 }}
     >
       {/* Background — Ken Burns slow zoom */}
+      {/* Replace URL with your own photo for best results */}
       <motion.div
-        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1600')] bg-center bg-cover"
+        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=1600')] bg-center bg-cover"
+        style={{ filter: 'brightness(1.05) saturate(0.75)' }}
         initial={{ scale: 1.08 }}
         animate={{ scale: 1 }}
         transition={{ duration: 9, ease: 'easeOut' }}
       />
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-site-dark/60 via-site-dark/35 to-site-dark/70 pointer-events-none" />
+      {/* Gradient overlay — lighter to let natural tones show */}
+      <div className="absolute inset-0 bg-gradient-to-b from-site-dark/45 via-site-dark/15 to-site-dark/55 pointer-events-none" />
 
       {/* Spinning badge — bottom right */}
       <motion.div
@@ -51,26 +53,31 @@ export function HeroSection() {
       {/* Center content */}
       <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 max-w-4xl w-full -mt-8">
 
-        {/* Tag */}
+        {/* Brand name — prominent */}
         <motion.div
-          className="flex items-center gap-3"
+          className="flex flex-col items-center gap-2"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.2 }}
+          transition={{ duration: 0.7, ease, delay: 0.15 }}
         >
-          <span className="block w-8 h-px bg-sand/60 shrink-0" />
-          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/65">
-            Nail Studio · ดอนหัวฬอ ชลบุรี
+          <span className="text-2xl md:text-3xl font-light tracking-[0.55em] uppercase text-white/95 drop-shadow-sm">
+            Nail Time Studio
           </span>
-          <span className="block w-8 h-px bg-sand/60 shrink-0" />
+          <div className="flex items-center gap-3">
+            <span className="block w-6 h-px bg-sand/60 shrink-0" />
+            <span className="text-[9px] tracking-[0.3em] uppercase text-white/55">
+              ดอนหัวฬอ · ชลบุรี
+            </span>
+            <span className="block w-6 h-px bg-sand/60 shrink-0" />
+          </div>
         </motion.div>
 
-        {/* Headline — line-by-line mask reveal */}
+        {/* Headline — line-by-line mask reveal, smaller */}
         <div className="flex flex-col items-center gap-0">
           {HEADLINE.map((line, i) => (
             <div key={line.text} className="overflow-hidden">
               <motion.h1
-                className={`text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.06] font-serif ${line.className}`}
+                className={`text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] font-serif ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.9, ease, delay: 0.3 + i * 0.13 }}
