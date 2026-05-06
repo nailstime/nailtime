@@ -3,6 +3,9 @@ import { Header } from '@/components/layout/Header'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
+import { CountUp } from '@/components/ui/CountUp'
+import { DrawLine } from '@/components/ui/DrawLine'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -40,41 +43,53 @@ export default function HomePage() {
       <Header />
 
       {/* HERO */}
-      <section className="grid grid-cols-1 md:grid-cols-2" style={{ height: 'calc(100vh - 68px - 90px)', minHeight: 480 }}>
+      <section className="grid grid-cols-1 md:grid-cols-2 overflow-hidden" style={{ height: 'calc(100vh - 68px - 90px)', minHeight: 480 }}>
         <div className="flex flex-col justify-center px-10 md:px-20 py-16 bg-cream gap-5">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-site-gray">
-            Nail Studio · ดอนหัวฬอ ชลบุรี
-          </p>
-          <h1 className="text-5xl md:text-6xl font-bold leading-[1.05] text-site-dark">
-            ความสวยงาม<br />เริ่มต้น<br />ที่ปลายนิ้ว
-          </h1>
-          <p className="text-sm text-site-gray leading-relaxed">
-            ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />
-            วัสดุคุณภาพสูง ช่างมืออาชีพ
-          </p>
-          <div className="flex items-center gap-7 flex-wrap mt-2">
-            <Link href="/booking"
-              className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-8 py-3.5 hover:bg-sand-dark transition-all hover:-translate-y-0.5 hover:shadow-lg">
-              จองนัดเลย
-            </Link>
-            <Link href="#services" className="text-xs font-semibold tracking-widest uppercase text-sand">
-              ดูบริการ →
-            </Link>
-          </div>
-          <div className="flex items-center gap-6 mt-4">
-            <div>
-              <span className="block text-2xl font-bold text-sand leading-none">2K+</span>
-              <span className="text-xs text-site-gray mt-1 tracking-wide">ผู้ติดตาม</span>
+          <Reveal delay={0.1}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-site-gray">
+              Nail Studio · ดอนหัวฬอ ชลบุรี
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <h1 className="text-5xl md:text-6xl font-bold leading-[1.05] text-site-dark">
+              ความสวยงาม<br />เริ่มต้น<br />ที่ปลายนิ้ว
+            </h1>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <p className="text-sm text-site-gray leading-relaxed">
+              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />
+              วัสดุคุณภาพสูง ช่างมืออาชีพ
+            </p>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div className="flex items-center gap-7 flex-wrap">
+              <Link href="/booking"
+                className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-8 py-3.5 hover:bg-sand-dark transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-95">
+                จองนัดเลย
+              </Link>
+              <Link href="#services" className="text-xs font-semibold tracking-widest uppercase text-sand hover:gap-2 transition-all">
+                ดูบริการ →
+              </Link>
             </div>
-            <div className="w-px h-10 bg-sand/30" />
-            <div>
-              <span className="block text-2xl font-bold text-sand leading-none">5★</span>
-              <span className="text-xs text-site-gray mt-1 tracking-wide">รีวิวจากลูกค้า</span>
+          </Reveal>
+          <Reveal delay={0.5}>
+            <div className="flex items-center gap-6 mt-2">
+              <div>
+                <span className="block text-2xl font-bold text-sand leading-none">
+                  <CountUp to={2000} suffix="+" />
+                </span>
+                <span className="text-xs text-site-gray mt-1 tracking-wide">ผู้ติดตาม</span>
+              </div>
+              <div className="w-px h-10 bg-sand/30" />
+              <div>
+                <span className="block text-2xl font-bold text-sand leading-none">5★</span>
+                <span className="text-xs text-site-gray mt-1 tracking-wide">รีวิวจากลูกค้า</span>
+              </div>
             </div>
-          </div>
+          </Reveal>
         </div>
         <div className="relative overflow-hidden bg-[#e8d5c0] hidden md:block">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1200')] bg-center bg-cover" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1200')] bg-center bg-cover scale-105 hover:scale-100 transition-transform duration-[2s]" />
         </div>
       </section>
 
@@ -82,129 +97,180 @@ export default function HomePage() {
       <BookingBar />
 
       {/* FEATURES */}
-      <section id="services" className="py-20">
+      <section id="services" className="py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+          <Reveal className="text-center mb-16">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">What We Do</p>
+            <h2 className="text-4xl font-bold text-site-dark inline-block relative">
+              บริการของเรา
+              <DrawLine className="w-32 mx-auto mt-2" />
+            </h2>
+          </Reveal>
+          <StaggerParent className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
             {[
               { title: 'Nail Care', desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
               { title: 'Nail Art',  desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
               { title: 'Tips & Trends', desc: 'อัพเดตเทรนด์ใหม่ แนะนำสีและลาย เปลี่ยนทุกซีซั่น' },
             ].map(f => (
-              <div key={f.title}>
-                <div className="w-20 h-20 mx-auto mb-5 rounded-full border border-sand/40 flex items-center justify-center">
-                  <span className="text-2xl text-sand">✦</span>
+              <StaggerChild key={f.title}>
+                <div className="group cursor-default">
+                  <div className="w-20 h-20 mx-auto mb-5 rounded-full border border-sand/40 flex items-center justify-center group-hover:border-sand group-hover:bg-sand/5 transition-all duration-300">
+                    <span className="text-2xl text-sand">✦</span>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2 group-hover:text-sand transition-colors duration-300">{f.title}</h3>
+                  <p className="text-sm text-site-gray leading-relaxed">{f.desc}</p>
                 </div>
-                <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
-                <p className="text-sm text-site-gray leading-relaxed">{f.desc}</p>
-              </div>
+              </StaggerChild>
             ))}
-          </div>
+          </StaggerParent>
         </div>
       </section>
 
       {/* STORY */}
       <section id="story" className="grid grid-cols-1 md:grid-cols-2 min-h-[560px]">
         <div className="relative bg-[#e0d0ba] overflow-hidden min-h-[320px]">
-          <div className="absolute left-16 top-10 w-[260px] bottom-10 rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800')] bg-center bg-cover shadow-2xl" />
-          <div className="absolute right-10 bottom-14 w-[180px] h-[260px] rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600')] bg-top bg-cover shadow-[-20px_-20px_30px_rgba(0,0,0,0.16)]" />
+          <Reveal y={0} delay={0} className="absolute left-16 top-10 w-[260px] bottom-10">
+            <div className="w-full h-full rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800')] bg-center bg-cover shadow-2xl" />
+          </Reveal>
+          <Reveal y={20} delay={0.15} className="absolute right-10 bottom-14 w-[180px] h-[260px]">
+            <div className="w-full h-full rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600')] bg-top bg-cover shadow-[-20px_-20px_30px_rgba(0,0,0,0.16)]" />
+          </Reveal>
         </div>
         <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-4">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Story</p>
-          <h2 className="text-4xl font-bold">เกี่ยวกับร้านของเรา</h2>
-          <p className="text-sm text-site-gray leading-relaxed">
-            ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคีลิก PVC และสปามือเท้า
-            ตั้งอยู่ที่ดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล
-          </p>
-          <p className="text-sm text-site-gray leading-relaxed">
-            เราเน้นสไตล์ญี่ปุ่น ใช้วัสดุนำเข้าคุณภาพสูง ไม่แพ้ผิว ช่างมืออาชีพ ใส่ใจทุกรายละเอียด
-          </p>
-          <ul className="flex flex-col gap-2 my-2 text-sm text-site-gray">
-            <li><strong className="text-site-dark">Always Clean</strong> — อุปกรณ์สะอาด ปลอดภัยทุกครั้ง</li>
-            <li><strong className="text-site-dark">Always Leading</strong> — ตามเทรนด์ญี่ปุ่น อัพเดตทุกซีซั่น</li>
-          </ul>
-          <a href="https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/"
-            target="_blank" rel="noopener"
-            className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all mt-2">
-            ดูเพจ Facebook →
-          </a>
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Story</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="text-4xl font-bold">
+              เกี่ยวกับร้านของเรา
+              <DrawLine className="w-40 mt-2" delay={0.6} />
+            </h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="text-sm text-site-gray leading-relaxed">
+              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคีลิก PVC และสปามือเท้า
+              ตั้งอยู่ที่ดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล
+            </p>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <p className="text-sm text-site-gray leading-relaxed">
+              เราเน้นสไตล์ญี่ปุ่น ใช้วัสดุนำเข้าคุณภาพสูง ไม่แพ้ผิว ช่างมืออาชีพ ใส่ใจทุกรายละเอียด
+            </p>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <ul className="flex flex-col gap-2 my-2 text-sm text-site-gray">
+              <li><strong className="text-site-dark">Always Clean</strong> — อุปกรณ์สะอาด ปลอดภัยทุกครั้ง</li>
+              <li><strong className="text-site-dark">Always Leading</strong> — ตามเทรนด์ญี่ปุ่น อัพเดตทุกซีซั่น</li>
+            </ul>
+          </Reveal>
+          <Reveal delay={0.5}>
+            <a href="https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/"
+              target="_blank" rel="noopener"
+              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
+              ดูเพจ Facebook →
+            </a>
+          </Reveal>
         </div>
       </section>
 
       {/* MIX & MATCH POLISHES */}
-      <section className="bg-sand py-20 px-10">
-        <h2 className="text-center text-2xl font-bold uppercase tracking-[0.1em] text-white mb-14">
-          Mix &amp; Match Polishes
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+      <section className="bg-sand py-24 px-10 overflow-hidden">
+        <Reveal>
+          <h2 className="text-center text-2xl font-bold uppercase tracking-[0.1em] text-white mb-14">
+            Mix &amp; Match Polishes
+          </h2>
+        </Reveal>
+        <StaggerParent className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
           {[
             { src: '/images/bottle-base.png',  name: 'Base Coat',    sub: 'Film shadow / No.5 oz' },
             { src: '/images/bottle-gel.png',   name: 'Gel Polish',   sub: 'Sorbet fine / No.5 oz' },
             { src: '/images/bottle-top.png',   name: 'Top Coat',     sub: 'Summer mirage / No.5 oz' },
             { src: '/images/bottle-matte.png', name: 'Matte Polish', sub: 'Blue Paletts / No.5 oz' },
           ].map(b => (
-            <div key={b.name} className="text-center">
-              <Image src={b.src} alt={b.name} width={100} height={220}
-                className="mx-auto mb-5 object-contain drop-shadow-[-16px_-6px_20px_rgba(0,0,0,0.18)]"
-                style={{ height: 220, width: 'auto' }} />
-              <p className="text-sm font-semibold text-white">{b.name}</p>
-              <p className="text-xs text-white/70 mt-1">{b.sub}</p>
-            </div>
+            <StaggerChild key={b.name}>
+              <div className="text-center group">
+                <div className="overflow-hidden">
+                  <Image src={b.src} alt={b.name} width={100} height={220}
+                    className="mx-auto mb-5 object-contain drop-shadow-[-16px_-6px_20px_rgba(0,0,0,0.18)] group-hover:-translate-y-3 group-hover:drop-shadow-[-16px_-12px_28px_rgba(0,0,0,0.28)] transition-all duration-500"
+                    style={{ height: 220, width: 'auto' }} />
+                </div>
+                <p className="text-sm font-semibold text-white">{b.name}</p>
+                <p className="text-xs text-white/70 mt-1">{b.sub}</p>
+              </div>
+            </StaggerChild>
           ))}
-        </div>
+        </StaggerParent>
       </section>
 
       {/* TREATMENTS & PRICES */}
       <section id="prices" className="grid grid-cols-1 md:grid-cols-2 min-h-[500px]">
         <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-6">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Treatments &amp; Prices</p>
-          <h2 className="text-4xl font-bold">บริการและราคา</h2>
-          <div className="flex flex-col divide-y divide-sand/20">
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Treatments &amp; Prices</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="text-4xl font-bold">
+              บริการและราคา
+              <DrawLine className="w-36 mt-2" delay={0.5} />
+            </h2>
+          </Reveal>
+          <StaggerParent className="flex flex-col divide-y divide-sand/20">
             {services.map(s => (
-              <div key={s.name} className="flex items-start justify-between py-4 gap-4">
-                <div>
-                  <strong className="text-sm font-semibold text-site-dark">{s.name}</strong>
-                  <p className="text-xs text-site-gray mt-0.5">{s.desc}</p>
+              <StaggerChild key={s.name}>
+                <div className="flex items-start justify-between py-4 gap-4 group hover:px-2 transition-all duration-300">
+                  <div>
+                    <strong className="text-sm font-semibold text-site-dark group-hover:text-sand transition-colors duration-300">{s.name}</strong>
+                    <p className="text-xs text-site-gray mt-0.5">{s.desc}</p>
+                  </div>
+                  <span className="text-xs font-semibold text-sand whitespace-nowrap pt-0.5">สอบถาม</span>
                 </div>
-                <span className="text-xs font-semibold text-sand whitespace-nowrap pt-0.5">สอบถาม</span>
-              </div>
+              </StaggerChild>
             ))}
-          </div>
-          <a href="tel:0647451946"
-            className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all">
-            โทรสอบถามราคา
-          </a>
+          </StaggerParent>
+          <Reveal delay={0.2}>
+            <a href="tel:0647451946"
+              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
+              โทรสอบถามราคา
+            </a>
+          </Reveal>
         </div>
         <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1000')] bg-center bg-cover min-h-[400px]" />
       </section>
 
       {/* GALLERY */}
-      <section id="products" className="py-20 bg-white">
+      <section id="products" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
+          <Reveal className="text-center mb-12">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-2">Our Work</p>
-            <h2 className="text-4xl font-bold text-site-dark">ผลงานของเรา</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <h2 className="text-4xl font-bold text-site-dark">
+              ผลงานของเรา
+              <DrawLine className="w-32 mx-auto mt-2" delay={0.4} />
+            </h2>
+          </Reveal>
+          <StaggerParent className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
               'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',
-              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&crop=entropy',
               'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80',
-              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&crop=entropy',
-              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&sat=-50',
-              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&sat=-30',
+              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&flip=h',
+              'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=600&q=80&flip=h',
             ].map((src, i) => (
-              <div key={i} className="relative overflow-hidden rounded-xl aspect-square bg-cream group">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${src})` }} />
-              </div>
+              <StaggerChild key={i}>
+                <div className="relative overflow-hidden rounded-xl aspect-square bg-cream group cursor-pointer">
+                  <div className="absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${src})` }} />
+                  <div className="absolute inset-0 bg-site-dark/0 group-hover:bg-site-dark/20 transition-all duration-300" />
+                </div>
+              </StaggerChild>
             ))}
-          </div>
-          <div className="text-center mt-10">
+          </StaggerParent>
+          <Reveal delay={0.2} className="text-center mt-10">
             <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
-              className="inline-flex items-center gap-2 rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-8 py-3 hover:bg-site-dark hover:text-white transition-all">
+              className="inline-flex items-center gap-2 rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-8 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
               ดูผลงานทั้งหมดบน Instagram →
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -218,7 +284,7 @@ export default function HomePage() {
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
           <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
-            className="bg-cream shadow-2xl px-16 py-10 text-center flex flex-col items-center gap-2">
+            className="bg-cream shadow-2xl px-16 py-10 text-center flex flex-col items-center gap-2 hover:shadow-3xl hover:-translate-y-1 transition-all duration-300">
             <svg className="w-10 h-10 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <rect x="2" y="2" width="20" height="20" rx="5"/>
               <circle cx="12" cy="12" r="4"/>
@@ -234,19 +300,31 @@ export default function HomePage() {
       <section id="contact" className="grid grid-cols-1 md:grid-cols-2 min-h-[440px]">
         <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1000')] bg-center bg-cover" />
         <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-4">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Contact Our Salon</p>
-          <h2 className="text-4xl font-bold">ติดต่อร้านของเรา</h2>
-          <p className="text-xs uppercase tracking-widest text-site-gray mt-2">โทรนัดหมาย</p>
-          <a href="tel:0647451946" className="text-3xl font-bold text-sand">064 745 1946</a>
-          <div className="flex flex-col gap-2 text-sm text-site-gray">
-            <p>📍 เทศบาลดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล</p>
-            <p>📷 Instagram: <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener" className="text-sand">@nail_time_bytt</a></p>
-          </div>
-          <div className="flex items-end gap-4 border-b border-[#c8b0a0] pb-2 mt-4 max-w-sm">
-            <input type="email" placeholder="กรอกอีเมลเพื่อรับโปรโมชั่น"
-              className="flex-1 bg-transparent outline-none text-sm text-site-dark placeholder:text-site-gray" />
-            <button className="text-xs font-bold uppercase tracking-widest text-sand whitespace-nowrap">Subscribe</button>
-          </div>
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Contact Our Salon</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="text-4xl font-bold">ติดต่อร้านของเรา</h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="text-xs uppercase tracking-widest text-site-gray mt-2">โทรนัดหมาย</p>
+            <a href="tel:0647451946" className="text-3xl font-bold text-sand hover:text-sand-dark transition-colors">
+              064 745 1946
+            </a>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div className="flex flex-col gap-2 text-sm text-site-gray">
+              <p>📍 เทศบาลดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล</p>
+              <p>📷 Instagram: <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener" className="text-sand hover:underline">@nail_time_bytt</a></p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div className="flex items-end gap-4 border-b border-[#c8b0a0] pb-2 mt-4 max-w-sm group">
+              <input type="email" placeholder="กรอกอีเมลเพื่อรับโปรโมชั่น"
+                className="flex-1 bg-transparent outline-none text-sm text-site-dark placeholder:text-site-gray" />
+              <button className="text-xs font-bold uppercase tracking-widest text-sand whitespace-nowrap hover:text-sand-dark transition-colors">Subscribe</button>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -262,7 +340,7 @@ export default function HomePage() {
                 { href: 'https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/', label: 'FB' },
               ].map(s => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener"
-                  className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-xs text-white font-semibold hover:bg-white/20 transition-all">
+                  className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-xs text-white font-semibold hover:bg-white/20 hover:scale-110 transition-all">
                   {s.label}
                 </a>
               ))}
@@ -271,7 +349,7 @@ export default function HomePage() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">เมนู</h4>
             {[['/#services','บริการ'],['/#story','เกี่ยวกับ'],['/#products','ผลงาน'],['/booking','จองนัด']].map(([href,label]) => (
-              <Link key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white transition-colors">{label}</Link>
+              <Link key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</Link>
             ))}
           </div>
           <div>
@@ -299,20 +377,20 @@ function BookingBar() {
       <div className="max-w-6xl mx-auto flex items-center h-[90px] gap-0">
         <div className="flex-1 flex flex-col gap-1 px-6">
           <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">บริการ</span>
-          <Link href="/booking" className="text-sm font-medium text-white">เลือกบริการ →</Link>
+          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกบริการ →</Link>
         </div>
         <div className="w-px h-10 bg-white/30" />
         <div className="flex-1 flex flex-col gap-1 px-6">
           <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">วันที่</span>
-          <Link href="/booking" className="text-sm font-medium text-white">เลือกวันที่ →</Link>
+          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกวันที่ →</Link>
         </div>
         <div className="w-px h-10 bg-white/30" />
         <div className="flex-1 flex flex-col gap-1 px-6">
           <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">เวลา</span>
-          <Link href="/booking" className="text-sm font-medium text-white">เลือกเวลา →</Link>
+          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกเวลา →</Link>
         </div>
         <Link href="/booking"
-          className="ml-6 rounded-full bg-white text-sand-deep text-xs font-medium tracking-widest uppercase px-8 py-3 hover:bg-cream transition-all whitespace-nowrap">
+          className="ml-6 rounded-full bg-white text-sand-deep text-xs font-medium tracking-widest uppercase px-8 py-3 hover:bg-cream hover:scale-105 transition-all active:scale-95 whitespace-nowrap">
           จองนัด
         </Link>
       </div>
