@@ -16,7 +16,7 @@ export function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ height: 'calc(100vh - 68px)', minHeight: 680 }}
+      style={{ height: 'calc(100vh - 68px - 90px)', minHeight: 590 }}
     >
       {/* Full-width background image */}
       <motion.div
@@ -50,7 +50,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.1 }}
         >
-          <span className="text-base md:text-lg font-light tracking-[0.52em] uppercase text-sand-dark/90 whitespace-nowrap">
+          <span className="text-lg font-medium tracking-[0.44em] text-site-dark/85 uppercase whitespace-nowrap md:text-xl lg:text-2xl">
             Nail Time Studio
           </span>
           <div className="flex items-center justify-center gap-3">
