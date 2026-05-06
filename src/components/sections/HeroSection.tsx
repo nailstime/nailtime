@@ -29,16 +29,16 @@ export function HeroSection() {
           src="/images/hero.webp"
           alt="Nail Time Studio"
           fill
-          className="object-cover object-center"
+          className="object-cover object-[55%_45%]"
           priority
         />
       </motion.div>
 
-      {/* Left gradient — light enough to show leaf shadow, dark enough for text */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cream/80 via-cream/45 to-transparent pointer-events-none" />
+      {/* Left gradient — minimal so leaf shadow shows through */}
+      <div className="absolute inset-0 bg-gradient-to-r from-cream/60 via-cream/25 to-transparent pointer-events-none" />
 
       {/* Text content — left side overlay */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-14 lg:px-20 py-16 max-w-[520px] gap-4">
+      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-14 lg:px-20 pt-8 pb-16 max-w-[520px] gap-4 mt-8">
 
         {/* Brand */}
         <motion.div
