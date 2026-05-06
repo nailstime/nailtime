@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -23,19 +23,17 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect /admin routes — must be logged in + role=admin
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
       return NextResponse.redirect(new URL('/login?redirect=/admin', request.url))
     }
     const { data: profile } = await supabase
-      .from('profiles').select('role').eq('id', user.id).single()
+      .from('profiles').select('role').eq('id', user.id).single() as { data: { role: string } | null; error: unknown }
     if (profile?.role !== 'admin') {
       return NextResponse.redirect(new URL('/', request.url))
     }
   }
 
-  // Protect /booking/history — must be logged in
   if (request.nextUrl.pathname.startsWith('/history')) {
     if (!user) {
       return NextResponse.redirect(new URL('/login?redirect=/history', request.url))
