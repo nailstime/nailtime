@@ -15,21 +15,30 @@ const HEADLINE = [
 export function HeroSection() {
   return (
     <section
-      className="relative grid grid-cols-1 md:grid-cols-2 overflow-hidden bg-cream"
-      style={{ height: 'calc(100vh - 68px)', minHeight: 520 }}
+      className="relative overflow-hidden"
+      style={{ height: 'calc(100vh - 68px)', minHeight: 560 }}
     >
-      {/* Soft background blobs */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 55% 65% at 90% 45%, rgba(216,177,146,0.22) 0%, transparent 65%)' }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 35% 45% at 8% 85%, rgba(216,177,146,0.13) 0%, transparent 65%)' }}
-      />
+      {/* Full-width background image */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ scale: 1.05 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.6, ease: 'easeOut' }}
+      >
+        <Image
+          src="/images/hero.webp"
+          alt="Nail Time Studio"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+      </motion.div>
 
-      {/* LEFT — Text */}
-      <div className="flex flex-col justify-center px-10 md:px-14 lg:px-20 py-16 gap-5 relative z-10">
+      {/* Left gradient — text readable, image shows on right */}
+      <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/65 to-cream/5 pointer-events-none" />
+
+      {/* Text content — left side overlay */}
+      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-16 lg:px-24 py-16 max-w-2xl gap-5">
 
         {/* Brand */}
         <motion.div
@@ -123,48 +132,25 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* RIGHT — Photo */}
-      <div className="relative hidden md:block overflow-hidden">
-
-        {/* Fade left edge to blend into cream */}
-        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-cream to-transparent z-10 pointer-events-none" />
-
-        {/* Image */}
-        <motion.div
-          className="absolute inset-0"
-          initial={{ scale: 1.06, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.3, ease, delay: 0.3 }}
-        >
-          <Image
-            src="/images/hero.webp"
-            alt="Nail Time Studio"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </motion.div>
-
-        {/* Spinning circular badge */}
-        <motion.div
-          className="absolute bottom-10 right-8 w-24 h-24 z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, rotate: 360 }}
-          transition={{
-            opacity: { duration: 1, delay: 1.2 },
-            rotate: { duration: 16, repeat: Infinity, ease: 'linear' },
-          }}
-        >
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <defs>
-              <path id="badgePath" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
-            </defs>
-            <text fontSize="8.5" fill="#d8b192" letterSpacing="1.5" fontFamily="sans-serif">
-              <textPath href="#badgePath">JAPANESE NAIL · STUDIO · CHONBURI ·</textPath>
-            </text>
-          </svg>
-        </motion.div>
-      </div>
+      {/* Spinning circular badge — bottom right */}
+      <motion.div
+        className="absolute bottom-10 right-8 w-24 h-24 z-20 hidden md:block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, rotate: 360 }}
+        transition={{
+          opacity: { duration: 1, delay: 1.2 },
+          rotate: { duration: 16, repeat: Infinity, ease: 'linear' },
+        }}
+      >
+        <svg viewBox="0 0 100 100" className="w-full h-full">
+          <defs>
+            <path id="badgePath" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
+          </defs>
+          <text fontSize="8.5" fill="#d8b192" letterSpacing="1.5" fontFamily="sans-serif">
+            <textPath href="#badgePath">JAPANESE NAIL · STUDIO · CHONBURI ·</textPath>
+          </text>
+        </svg>
+      </motion.div>
     </section>
   )
 }

@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
 import { DrawLine } from '@/components/ui/DrawLine'
 import { HeroSection } from '@/components/sections/HeroSection'
+import { FloatingCTA } from '@/components/layout/FloatingCTA'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -41,6 +42,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
+      <FloatingCTA />
 
       {/* HERO */}
       <HeroSection />
