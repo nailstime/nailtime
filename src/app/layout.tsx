@@ -1,11 +1,18 @@
 import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+import { Montserrat, Fraunces } from 'next/font/google'
 import './globals.css'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-montserrat',
   display: 'swap',
+})
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '900'],
 })
 
 export const metadata: Metadata = {
@@ -22,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th" className={montserrat.variable}>
+    <html lang="th" className={`${montserrat.variable} ${fraunces.variable}`}>
       <body className="font-sans antialiased min-h-full">{children}</body>
     </html>
   )

@@ -2,6 +2,7 @@
 
 @theme inline {
   --font-sans: var(--font-montserrat);
+  --font-serif: var(--font-fraunces);
 
   --color-cream:      #fcf8ef;
   --color-sand:       #d8b192;
