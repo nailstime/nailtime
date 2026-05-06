@@ -6,29 +6,55 @@ import { CountUp } from '@/components/ui/CountUp'
 const ease = cubicBezier(0.76, 0, 0.24, 1)
 
 const HEADLINE = [
-  { text: 'ความสวยงาม', className: 'text-white' },
-  { text: 'เริ่มต้น',     className: 'text-white' },
+  { text: 'ความสวยงาม', className: 'text-site-dark' },
+  { text: 'เริ่มต้น',     className: 'text-site-dark' },
   { text: 'ที่ปลายนิ้ว', className: 'text-sand' },
 ]
 
 export function HeroSection() {
   return (
     <section
-      className="relative flex flex-col items-center justify-center overflow-hidden"
+      className="relative flex flex-col items-center justify-center overflow-hidden bg-cream"
       style={{ height: 'calc(100vh - 68px)', minHeight: 560 }}
     >
-      {/* Background — Ken Burns slow zoom */}
-      {/* Replace URL with your own photo for best results */}
-      <motion.div
-        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=1600')] bg-center bg-cover"
-        style={{ filter: 'brightness(1.05) saturate(0.75)' }}
-        initial={{ scale: 1.08 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 9, ease: 'easeOut' }}
+      {/* Static warm gradient layers */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 70% 60% at 75% 25%, rgba(216,177,146,0.28) 0%, transparent 70%)' }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 50% 45% at 15% 85%, rgba(216,177,146,0.16) 0%, transparent 65%)' }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 40% 30% at 50% 50%, rgba(252,248,239,0.0) 0%, rgba(216,177,146,0.06) 100%)' }}
       />
 
-      {/* Gradient overlay — lighter to let natural tones show */}
-      <div className="absolute inset-0 bg-gradient-to-b from-site-dark/45 via-site-dark/15 to-site-dark/55 pointer-events-none" />
+      {/* Animated floating blobs */}
+      <motion.div
+        className="absolute top-[-12%] right-[-4%] w-[480px] h-[480px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(216,177,146,0.2) 0%, transparent 65%)' }}
+        animate={{ x: [0, -22, 0], y: [0, 16, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-[-8%] left-[-4%] w-[360px] h-[360px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(216,177,146,0.15) 0%, transparent 65%)' }}
+        animate={{ x: [0, 20, 0], y: [0, -14, 0] }}
+        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+      />
+
+      {/* Ghost decorative number */}
+      <motion.span
+        className="absolute right-16 top-1/2 -translate-y-1/2 text-[220px] font-bold leading-none select-none pointer-events-none font-serif hidden lg:block"
+        style={{ color: 'rgba(216,177,146,0.06)' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2, delay: 1 }}
+      >
+        01
+      </motion.span>
 
       {/* Spinning badge — bottom right */}
       <motion.div
@@ -53,26 +79,26 @@ export function HeroSection() {
       {/* Center content */}
       <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 max-w-4xl w-full -mt-8">
 
-        {/* Brand name — prominent */}
+        {/* Brand name */}
         <motion.div
           className="flex flex-col items-center gap-2"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.15 }}
         >
-          <span className="text-2xl md:text-3xl font-light tracking-[0.55em] uppercase text-white/95 drop-shadow-sm">
+          <span className="text-2xl md:text-3xl font-light tracking-[0.55em] uppercase text-site-dark/75">
             Nail Time Studio
           </span>
           <div className="flex items-center gap-3">
-            <span className="block w-6 h-px bg-sand/60 shrink-0" />
-            <span className="text-[9px] tracking-[0.3em] uppercase text-white/55">
+            <span className="block w-6 h-px bg-sand/50 shrink-0" />
+            <span className="text-[9px] tracking-[0.3em] uppercase text-site-gray">
               ดอนหัวฬอ · ชลบุรี
             </span>
-            <span className="block w-6 h-px bg-sand/60 shrink-0" />
+            <span className="block w-6 h-px bg-sand/50 shrink-0" />
           </div>
         </motion.div>
 
-        {/* Headline — line-by-line mask reveal, smaller */}
+        {/* Headline */}
         <div className="flex flex-col items-center gap-0">
           {HEADLINE.map((line, i) => (
             <div key={line.text} className="overflow-hidden">
@@ -90,7 +116,7 @@ export function HeroSection() {
 
         {/* Subtext */}
         <motion.p
-          className="text-sm text-white/60 leading-relaxed"
+          className="text-sm text-site-gray leading-relaxed"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease, delay: 0.75 }}
@@ -113,7 +139,7 @@ export function HeroSection() {
           </Link>
           <Link
             href="#services"
-            className="text-xs font-semibold tracking-widest uppercase text-white/75 hover:text-sand transition-colors"
+            className="text-xs font-semibold tracking-widest uppercase text-sand-dark hover:text-sand transition-colors"
           >
             ดูบริการ →
           </Link>
@@ -122,7 +148,7 @@ export function HeroSection() {
 
       {/* Stats bar — pinned to bottom */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center gap-10 px-6 py-5 border-t border-white/10 bg-site-dark/40 backdrop-blur-sm"
+        className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center gap-10 px-6 py-5 border-t border-sand/15 bg-cream/80 backdrop-blur-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease, delay: 1.1 }}
@@ -131,33 +157,33 @@ export function HeroSection() {
           <span className="block text-xl font-bold text-sand leading-none font-serif">
             <CountUp to={2000} suffix="+" duration={2000} />
           </span>
-          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">ผู้ติดตาม</span>
+          <span className="text-[10px] text-site-gray mt-1 tracking-wide block">ผู้ติดตาม</span>
         </div>
 
-        <div className="w-px h-8 bg-white/15" />
+        <div className="w-px h-8 bg-sand/25" />
 
         <div className="text-center">
           <span className="block text-xl font-bold text-sand leading-none font-serif">5★</span>
-          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">รีวิวจากลูกค้า</span>
+          <span className="text-[10px] text-site-gray mt-1 tracking-wide block">รีวิวจากลูกค้า</span>
         </div>
 
-        <div className="w-px h-8 bg-white/15" />
+        <div className="w-px h-8 bg-sand/25" />
 
         <div className="text-center">
           <span className="block text-xl font-bold text-sand leading-none font-serif">8+</span>
-          <span className="text-[10px] text-white/50 mt-1 tracking-wide block">ปีประสบการณ์</span>
+          <span className="text-[10px] text-site-gray mt-1 tracking-wide block">ปีประสบการณ์</span>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute right-8 flex items-center gap-2 hidden md:flex">
+        <div className="absolute right-8 hidden md:flex items-center gap-2">
           <motion.span
-            className="block h-px bg-white/35 origin-left"
+            className="block h-px bg-sand/40 origin-left"
             style={{ width: 32 }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.9, ease, delay: 1.6 }}
           />
-          <span className="text-[9px] tracking-[0.25em] uppercase text-white/40">Scroll</span>
+          <span className="text-[9px] tracking-[0.25em] uppercase text-site-gray/60">Scroll</span>
         </div>
       </motion.div>
     </section>
