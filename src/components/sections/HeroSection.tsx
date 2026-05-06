@@ -38,7 +38,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-r from-cream/80 via-cream/45 to-transparent pointer-events-none" />
 
       {/* Text content — left side overlay */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-20 lg:px-28 py-16 max-w-[600px] gap-5">
+      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-14 lg:px-20 py-16 max-w-[520px] gap-4">
 
         {/* Brand */}
         <motion.div
@@ -47,7 +47,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.1 }}
         >
-          <span className="text-xl md:text-2xl font-light tracking-[0.5em] uppercase text-site-dark/80">
+          <span className="text-base md:text-lg font-light tracking-[0.35em] uppercase text-site-dark/80 whitespace-nowrap">
             Nail Time Studio
           </span>
           <div className="flex items-center gap-2.5">
@@ -63,7 +63,7 @@ export function HeroSection() {
           {HEADLINE.map((line, i) => (
             <div key={line.text} className="overflow-hidden">
               <motion.h1
-                className={`text-5xl md:text-6xl font-bold leading-[1.1] font-serif ${line.className}`}
+                className={`text-4xl md:text-5xl font-bold leading-[1.1] font-serif ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.9, ease, delay: 0.2 + i * 0.13 }}
