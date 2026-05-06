@@ -16,7 +16,7 @@ export function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ height: 'calc(100vh - 68px)', minHeight: 560 }}
+      style={{ height: 'calc(100vh - 68px - 64px)', minHeight: 500 }}
     >
       {/* Full-width background image */}
       <motion.div
@@ -38,7 +38,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-r from-cream/60 via-cream/25 to-transparent pointer-events-none" />
 
       {/* Text content — left side overlay */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-14 lg:px-20 pt-8 pb-16 max-w-[520px] gap-4 mt-8">
+      <div className="relative z-10 flex flex-col justify-center h-full px-10 md:px-14 lg:px-20 py-10 max-w-[520px] gap-4">
 
         {/* Brand */}
         <motion.div
