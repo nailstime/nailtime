@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 
 export const SLOT_MINUTES = 15
+export const LAST_START_MINUTES = 18 * 60 + 45  // 18:45 — latest allowed booking start
 
 type Slot = Database['public']['Tables']['time_slots']['Row']
 type Service = Pick<Database['public']['Tables']['services']['Row'], 'id' | 'duration'>
@@ -150,6 +151,7 @@ export async function getBookableSlotsForDuration(
   const bookableSlots = slotRows.reduce<BookableSlot[]>((acc, slot) => {
     const start = timeToMinutes(slot.start_time)
     if (minimumStartMinutes !== null && start < minimumStartMinutes) return acc
+    if (start > LAST_START_MINUTES) return acc
 
     const requiredSlots = Array.from({ length: requiredCount }, (_, index) => {
       return slotMap.get(start + index * SLOT_MINUTES)
@@ -220,7 +222,7 @@ export async function getAllSlotsWithAvailability(
     const allExist = requiredSlots.every(s => s != null)
 
     let available = 0
-    if (!isPast && allExist) {
+    if (!isPast && allExist && start <= LAST_START_MINUTES) {
       const remaining = requiredSlots.map(s => {
         const minute = timeToMinutes(s!.start_time)
         return s!.capacity - (occupiedCounts[minute] ?? 0)

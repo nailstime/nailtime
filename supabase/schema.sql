@@ -214,7 +214,7 @@ group by s.id;
 create or replace function public.generate_time_slots(
   days_ahead int default 60,
   open_time time default '10:00',
-  close_time time default '18:00',
+  close_time time default '19:30',
   default_capacity int default 1
 )
 returns void
@@ -237,7 +237,7 @@ begin
     d::timestamp + close_time - interval '15 minutes',
     interval '15 minutes'
   ) slot_start
-  where extract(dow from d) between 1 and 6
+  where extract(dow from d) between 0 and 6  -- 0=อา ถึง 6=ส (ทุกวัน)
   on conflict (slot_date, start_time) do nothing;
 end;
 $$;
