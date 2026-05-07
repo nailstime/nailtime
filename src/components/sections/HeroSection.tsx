@@ -101,12 +101,12 @@ export function HeroSection() {
           >
             จองนัดเลย
           </Link>
-          <Link
+          <a
             href="#services"
             className="rounded-full border border-sand/40 text-xs font-medium tracking-widest uppercase px-7 py-3.5 text-sand-dark hover:border-sand hover:bg-sand/5 transition-all"
           >
             ดูบริการ →
-          </Link>
+          </a>
         </motion.div>
 
         {/* Stats */}

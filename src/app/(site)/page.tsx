@@ -7,6 +7,7 @@ import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
 import { DrawLine } from '@/components/ui/DrawLine'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { FloatingCTA } from '@/components/layout/FloatingCTA'
+import { Hand, Lightbulb, Paintbrush } from 'lucide-react'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -38,6 +39,12 @@ const services = [
   { name: 'สปามือ & เท้า', en: 'Nail Spa',        icon: '🦶', desc: 'ดูแลครบวงจร ขัดผิว นวดผ่อนคลาย' },
 ]
 
+const featureServices = [
+  { title: 'Nail Care', icon: Hand, desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
+  { title: 'Nail Art', icon: Paintbrush, desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
+  { title: 'Tips & Trends', icon: Lightbulb, desc: 'อัพเดตเทรนด์ใหม่ แนะนำสีและลาย เปลี่ยนทุกซีซั่น' },
+]
+
 export default function HomePage() {
   return (
     <>
@@ -61,15 +68,11 @@ export default function HomePage() {
             </h2>
           </Reveal>
           <StaggerParent className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-            {[
-              { title: 'Nail Care', desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
-              { title: 'Nail Art',  desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
-              { title: 'Tips & Trends', desc: 'อัพเดตเทรนด์ใหม่ แนะนำสีและลาย เปลี่ยนทุกซีซั่น' },
-            ].map(f => (
+            {featureServices.map(({ icon: Icon, ...f }) => (
               <StaggerChild key={f.title}>
                 <div className="group cursor-default">
                   <div className="w-20 h-20 mx-auto mb-5 rounded-full border border-sand/40 flex items-center justify-center group-hover:border-sand group-hover:bg-sand/5 transition-all duration-300">
-                    <span className="text-2xl text-sand">✦</span>
+                    <Icon size={28} strokeWidth={1.5} className="text-sand transition-transform duration-300 group-hover:-translate-y-0.5" aria-hidden="true" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2 group-hover:text-sand transition-colors duration-300">{f.title}</h3>
                   <p className="text-sm text-site-gray leading-relaxed">{f.desc}</p>
@@ -143,7 +146,7 @@ export default function HomePage() {
           ].map(b => (
             <StaggerChild key={b.name}>
               <div className="text-center group">
-                <div className="overflow-hidden">
+                <div className="overflow-visible pt-4">
                   <Image src={b.src} alt={b.name} width={100} height={220}
                     className="mx-auto mb-5 object-contain drop-shadow-[-16px_-6px_20px_rgba(0,0,0,0.18)] group-hover:-translate-y-3 group-hover:drop-shadow-[-16px_-12px_28px_rgba(0,0,0,0.28)] transition-all duration-500"
                     style={{ height: 220, width: 'auto' }} />
@@ -303,7 +306,11 @@ export default function HomePage() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">เมนู</h4>
             {[['/#services','บริการ'],['/#story','เกี่ยวกับ'],['/#products','ผลงาน'],['/booking','จองนัด']].map(([href,label]) => (
-              <Link key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</Link>
+              href.startsWith('/#') ? (
+                <a key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</a>
+              ) : (
+                <Link key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</Link>
+              )
             ))}
           </div>
           <div>

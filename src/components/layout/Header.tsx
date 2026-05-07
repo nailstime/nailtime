@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/#services', label: 'บริการ' },
@@ -23,10 +22,10 @@ export function Header() {
 
         <nav className="hidden md:flex gap-8 flex-1">
           {navLinks.map(l => (
-            <Link key={l.href} href={l.href}
+            <a key={l.href} href={l.href}
               className="text-xs font-medium uppercase tracking-widest text-site-gray hover:text-sand transition-colors">
               {l.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -44,10 +43,10 @@ export function Header() {
       {open && (
         <div className="md:hidden bg-cream border-t border-sand/20 px-6 py-4 flex flex-col gap-4">
           {navLinks.map(l => (
-            <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)}
               className="text-sm font-medium uppercase tracking-widest text-site-gray">
               {l.label}
-            </Link>
+            </a>
           ))}
           <Link href="/booking" onClick={() => setOpen(false)}
             className="text-sm font-medium uppercase tracking-widest text-sand">
