@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { Suspense, useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 type Service = { id: string; name: string; name_en: string | null; duration: number; price: number | null }
@@ -28,14 +29,15 @@ function getDates(days = 30) {
   return result
 }
 
-export default function BookingPage() {
+function BookingContent() {
+  const searchParams = useSearchParams()
   const [step, setStep] = useState(0)
   const [services, setServices] = useState<Service[]>([])
-  const [selectedService, setSelectedService] = useState<Service | null>(null)
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [slots, setSlots] = useState<SlotRow[]>([])
   const [selectedSlot, setSelectedSlot] = useState<SlotRow | null>(null)
-  const [form, setForm] = useState({ name: '', phone: '', note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', lineId: '', note: '' })
   const [loading, setLoading] = useState(false)
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -44,6 +46,9 @@ export default function BookingPage() {
 
   const dates = getDates(30)
   const supabase = createClient()
+  const selectedServices = services.filter(service => selectedServiceIds.includes(service.id))
+  const selectedServiceNames = selectedServices.map(service => service.name).join(', ')
+  const totalDuration = selectedServices.reduce((total, service) => total + service.duration, 0)
 
   useEffect(() => {
     supabase.from('services').select('id, name, name_en, duration, price').eq('is_active', true).order('sort_order')
@@ -59,15 +64,43 @@ export default function BookingPage() {
     })
   }, [])
 
+  useEffect(() => {
+    const serviceIds = searchParams.get('services')?.split(',').filter(Boolean) ?? []
+    const date = searchParams.get('date')
+    const slotId = searchParams.get('slot')
+
+    if (serviceIds.length === 0 || !date || !slotId) return
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedServiceIds(serviceIds)
+    setSelectedDate(date)
+
+    const params = new URLSearchParams({ date, service_ids: serviceIds.join(',') })
+    fetch(`/api/slots?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!Array.isArray(data)) return
+        setSlots(data)
+        const slot = data.find((item: SlotRow) => item.id === slotId)
+        if (slot) {
+          setSelectedSlot(slot)
+          setStep(3)
+        }
+      })
+  }, [searchParams])
+
   const fetchSlots = useCallback(async (date: string) => {
+    if (selectedServiceIds.length === 0) return
+
     setSlotsLoading(true)
     setSlots([])
     setSelectedSlot(null)
-    const res = await fetch(`/api/slots?date=${date}`)
+    const params = new URLSearchParams({ date, service_ids: selectedServiceIds.join(',') })
+    const res = await fetch(`/api/slots?${params.toString()}`)
     const data = await res.json()
     setSlots(Array.isArray(data) ? data : [])
     setSlotsLoading(false)
-  }, [])
+  }, [selectedServiceIds])
 
   // Realtime subscription when on slot-selection step
   useEffect(() => {
@@ -89,14 +122,14 @@ export default function BookingPage() {
     setLoading(true)
     setError('')
     const payload: Record<string, string> = {
-      service_id: selectedService!.id,
+      service_id: selectedServiceIds[0],
+      service_ids: selectedServiceIds.join(','),
       slot_id: selectedSlot!.id,
-      note: form.note,
+      note: [`บริการที่เลือก: ${selectedServiceNames}`, form.note].filter(Boolean).join('\n'),
     }
-    if (!userProfile) {
-      payload.guest_name = form.name
-      payload.guest_phone = form.phone
-    }
+    payload.guest_name = form.name
+    payload.guest_phone = form.phone
+    payload.guest_line_uid = form.lineId
 
     const res = await fetch('/api/bookings', {
       method: 'POST',
@@ -120,7 +153,7 @@ export default function BookingPage() {
           <p className="text-site-gray mb-1">หมายเลขการจอง</p>
           <p className="text-2xl font-bold text-sand mb-6">{bookingNo}</p>
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-sand/20 text-left mb-6 space-y-3 text-sm">
-            <div className="flex justify-between"><span className="text-site-gray">บริการ</span><span className="font-medium">{selectedService?.name}</span></div>
+            <div className="flex justify-between gap-4"><span className="text-site-gray">บริการ</span><span className="font-medium text-right">{selectedServiceNames}</span></div>
             <div className="flex justify-between"><span className="text-site-gray">วันที่</span><span className="font-medium">{formatDateThai(selectedSlot!.slot_date)}</span></div>
             <div className="flex justify-between"><span className="text-site-gray">เวลา</span><span className="font-medium">{formatTime(selectedSlot!.start_time)} – {formatTime(selectedSlot!.end_time)} น.</span></div>
             <div className="flex justify-between"><span className="text-site-gray">ชื่อ</span><span className="font-medium">{form.name || userProfile?.full_name}</span></div>
@@ -168,8 +201,12 @@ export default function BookingPage() {
           <div>
             <h2 className="text-xl font-bold text-site-dark mb-6">เลือกบริการ</h2>
             <div className="space-y-3">
-              {services.map(s => (
-                <button key={s.id} onClick={() => { setSelectedService(s); setStep(1) }}
+              {services.map(s => {
+                const selected = selectedServiceIds.includes(s.id)
+                return (
+                <button key={s.id} onClick={() => {
+                  setSelectedServiceIds(current => selected ? current.filter(id => id !== s.id) : [...current, s.id])
+                }}
                   className="w-full bg-white rounded-2xl p-5 shadow-sm border border-sand/20 text-left hover:border-sand hover:shadow-md transition-all flex justify-between items-center group">
                   <div>
                     <p className="font-semibold text-site-dark">{s.name}</p>
@@ -178,10 +215,16 @@ export default function BookingPage() {
                   </div>
                   <div className="text-right">
                     {s.price && <p className="text-sand font-bold">{s.price.toLocaleString()} ฿</p>}
-                    <span className="text-xs text-sand group-hover:translate-x-1 transition-transform inline-block mt-1">→</span>
+                    <span className={`text-xs inline-block mt-1 ${selected ? 'text-green-600' : 'text-sand group-hover:translate-x-1 transition-transform'}`}>
+                      {selected ? 'เลือกแล้ว' : '+'}
+                    </span>
                   </div>
                 </button>
-              ))}
+              )})}
+              <button disabled={selectedServiceIds.length === 0} onClick={() => setStep(1)}
+                className="w-full rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase py-3.5 hover:bg-sand-dark transition-all disabled:opacity-50 mt-2">
+                เลือกวันที่
+              </button>
             </div>
           </div>
         )}
@@ -190,7 +233,7 @@ export default function BookingPage() {
         {step === 1 && (
           <div>
             <button onClick={() => setStep(0)} className="text-xs text-site-gray mb-4 hover:text-sand transition-colors flex items-center gap-1">
-              ← {selectedService?.name}
+              ← {selectedServices.length} บริการ · {totalDuration} นาที
             </button>
             <h2 className="text-xl font-bold text-site-dark mb-6">เลือกวันที่</h2>
             <div className="grid grid-cols-2 gap-3">
@@ -277,34 +320,28 @@ export default function BookingPage() {
 
             {/* Summary card */}
             <div className="bg-sand/10 rounded-2xl p-4 mb-6 space-y-1.5 text-sm">
-              <div className="flex justify-between"><span className="text-site-gray">บริการ</span><span className="font-medium">{selectedService?.name}</span></div>
+              <div className="flex justify-between gap-4"><span className="text-site-gray">บริการ</span><span className="font-medium text-right">{selectedServiceNames}</span></div>
+              <div className="flex justify-between"><span className="text-site-gray">ระยะเวลา</span><span className="font-medium">{totalDuration} นาที</span></div>
               <div className="flex justify-between"><span className="text-site-gray">วันที่</span><span className="font-medium">{formatDateThai(selectedSlot!.slot_date)}</span></div>
               <div className="flex justify-between"><span className="text-site-gray">เวลา</span><span className="font-medium">{formatTime(selectedSlot!.start_time)} – {formatTime(selectedSlot!.end_time)} น.</span></div>
             </div>
 
             <div className="space-y-4">
-              {!userProfile && (
-                <>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">ชื่อ-นามสกุล *</label>
-                    <input type="text" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="border border-sand/30 rounded-lg px-4 py-3 text-sm outline-none focus:border-sand transition-colors bg-white" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">เบอร์โทรศัพท์ *</label>
-                    <input type="tel" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                      className="border border-sand/30 rounded-lg px-4 py-3 text-sm outline-none focus:border-sand transition-colors bg-white" />
-                  </div>
-                </>
-              )}
-
-              {userProfile && (
-                <div className="bg-white rounded-2xl p-4 border border-sand/20 text-sm">
-                  <p className="text-site-gray text-xs mb-2">ข้อมูลจากบัญชีของคุณ</p>
-                  <p className="font-semibold">{userProfile.full_name}</p>
-                  <p className="text-site-gray">{userProfile.phone}</p>
-                </div>
-              )}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">ชื่อ-นามสกุล *</label>
+                <input type="text" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                  className="border border-sand/30 rounded-lg px-4 py-3 text-sm outline-none focus:border-sand transition-colors bg-white" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">เบอร์โทรศัพท์ *</label>
+                <input type="tel" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                  className="border border-sand/30 rounded-lg px-4 py-3 text-sm outline-none focus:border-sand transition-colors bg-white" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">LINE ID</label>
+                <input type="text" value={form.lineId} onChange={e => setForm(f => ({ ...f, lineId: e.target.value }))}
+                  className="border border-sand/30 rounded-lg px-4 py-3 text-sm outline-none focus:border-sand transition-colors bg-white" />
+              </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold uppercase tracking-widest text-site-gray">หมายเหตุ (ถ้ามี)</label>
@@ -315,7 +352,7 @@ export default function BookingPage() {
 
               {error && <p className="text-red-500 text-xs">{error}</p>}
 
-              <button onClick={handleSubmit} disabled={loading || (!userProfile && (!form.name || !form.phone))}
+              <button onClick={handleSubmit} disabled={loading || !form.name || !form.phone}
                 className="w-full rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase py-3.5 hover:bg-sand-dark transition-all disabled:opacity-50 mt-2">
                 {loading ? 'กำลังยืนยัน...' : 'ยืนยันการจอง'}
               </button>
@@ -332,5 +369,13 @@ export default function BookingPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-cream" />}>
+      <BookingContent />
+    </Suspense>
   )
 }

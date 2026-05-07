@@ -16,14 +16,13 @@ function groupByDate(slots: Slot[]) {
 
 export default function SlotsClient({ slots: initial }: { slots: Slot[] }) {
   const router = useRouter()
-  const [slots, setSlots] = useState<Slot[]>(initial)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ slot_date: '', start_time: '10:00', end_time: '11:00', capacity: '3' })
-  const [bulkForm, setBulkForm] = useState({ from_date: '', to_date: '', days: '1,2,3,4,5,6', start_time: '10:00', end_time: '18:00', interval: '60', capacity: '3' })
+  const [form, setForm] = useState({ slot_date: '', start_time: '10:00', end_time: '10:15', capacity: '3' })
+  const [bulkForm, setBulkForm] = useState({ from_date: '', to_date: '', days: '1,2,3,4,5,6', start_time: '10:00', end_time: '18:00', interval: '15', capacity: '3' })
   const [loading, setLoading] = useState(false)
   const [tab, setTab] = useState<'single' | 'bulk'>('single')
 
-  const grouped = groupByDate(slots)
+  const grouped = groupByDate(initial)
 
   async function createSlot() {
     setLoading(true)
@@ -151,9 +150,10 @@ export default function SlotsClient({ slots: initial }: { slots: Slot[] }) {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-site-gray uppercase tracking-wide">ทุก (นาที)</label>
-                  <input type="number" min="30" max="180" step="15" value={bulkForm.interval}
+                  <input type="number" min="15" max="180" step="15" value={bulkForm.interval}
                     onChange={e => setBulkForm(f => ({ ...f, interval: e.target.value }))}
-                    className="border border-sand/30 rounded-lg px-3 py-2 text-sm outline-none focus:border-sand" />
+                    disabled
+                    className="border border-sand/30 rounded-lg px-3 py-2 text-sm outline-none bg-cream text-site-gray" />
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">

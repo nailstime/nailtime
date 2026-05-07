@@ -71,10 +71,13 @@ export default function LiffBookingPage() {
   }, [])
 
   const fetchSlots = useCallback(async (date: string) => {
-    const res = await fetch(`/api/slots?date=${date}`)
+    if (!selectedService) return
+
+    const params = new URLSearchParams({ date, service_id: selectedService.id })
+    const res = await fetch(`/api/slots?${params.toString()}`)
     const data = await res.json()
     setSlots(Array.isArray(data) ? data : [])
-  }, [])
+  }, [selectedService])
 
   useEffect(() => {
     if (step !== 2 || !selectedDate) return

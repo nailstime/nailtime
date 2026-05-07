@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
       .lt('created_at', today + 'T23:59:59'),
     supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('bookings')
-      .select(`booking_no, status, created_at, services(name), time_slots(slot_date, start_time), profiles(full_name), guest_name`)
+      .select(`booking_no, status, created_at, slot_date, start_time, services(name), time_slots(slot_date, start_time), profiles(full_name), guest_name`)
       .order('created_at', { ascending: false })
       .limit(10),
   ])
@@ -72,7 +72,7 @@ export default async function AdminDashboard() {
                   <td className="px-4 py-3">{b.profiles?.full_name ?? b.guest_name ?? '—'}</td>
                   <td className="px-4 py-3">{b.services?.name}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-xs text-site-gray">
-                    {b.time_slots?.slot_date} {b.time_slots?.start_time?.slice(0, 5)}
+                    {b.slot_date ?? b.time_slots?.slot_date} {(b.start_time ?? b.time_slots?.start_time)?.slice(0, 5)}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLOR[b.status]}`}>{STATUS_TH[b.status]}</span>

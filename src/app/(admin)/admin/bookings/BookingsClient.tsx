@@ -19,6 +19,13 @@ const STATUS_COLOR: Record<string, string> = {
 
 function formatTime(t: string) { return t?.slice(0, 5) ?? '' }
 
+function addMinutes(time: string | undefined, minutes: number | undefined) {
+  if (!time || !minutes) return ''
+  const [hours, mins] = time.slice(0, 5).split(':').map(Number)
+  const total = hours * 60 + mins + minutes
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`
+}
+
 type Booking = any
 
 export default function BookingsClient({
@@ -83,9 +90,9 @@ export default function BookingsClient({
                     <td className="px-4 py-3 font-medium">{name}</td>
                     <td className="px-4 py-3 text-site-gray text-xs">{phone}</td>
                     <td className="px-4 py-3">{b.services?.name}</td>
-                    <td className="px-4 py-3 text-xs text-site-gray whitespace-nowrap">{b.time_slots?.slot_date}</td>
+                    <td className="px-4 py-3 text-xs text-site-gray whitespace-nowrap">{b.slot_date ?? b.time_slots?.slot_date}</td>
                     <td className="px-4 py-3 text-xs whitespace-nowrap">
-                      {formatTime(b.time_slots?.start_time)}–{formatTime(b.time_slots?.end_time)}
+                      {formatTime(b.start_time ?? b.time_slots?.start_time)}–{formatTime(b.end_time) || addMinutes(b.time_slots?.start_time, b.services?.duration) || formatTime(b.time_slots?.end_time)}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLOR[b.status]}`}>{b.status}</span>

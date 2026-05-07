@@ -9,6 +9,13 @@ function formatDateThai(dateStr: string) {
 
 function formatTime(t: string) { return t.slice(0, 5) }
 
+function addMinutes(time: string | undefined, minutes: number | undefined) {
+  if (!time || !minutes) return ''
+  const [hours, mins] = time.slice(0, 5).split(':').map(Number)
+  const total = hours * 60 + mins + minutes
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`
+}
+
 const STATUS_LABEL: Record<string, string> = {
   pending: 'รอยืนยัน',
   confirmed: 'ยืนยันแล้ว',
@@ -30,7 +37,7 @@ export default async function HistoryPage() {
 
   const { data: bookings } = await supabase
     .from('bookings')
-    .select(`*, services(name), time_slots(slot_date, start_time, end_time)`)
+    .select(`*, services(name, duration), time_slots(slot_date, start_time, end_time)`)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(50)
@@ -72,8 +79,8 @@ export default async function HistoryPage() {
                   </span>
                 </div>
                 <div className="border-t border-sand/10 pt-3 text-sm text-site-gray space-y-1">
-                  <p>📅 {formatDateThai(b.time_slots?.slot_date)}</p>
-                  <p>🕐 {formatTime(b.time_slots?.start_time)} – {formatTime(b.time_slots?.end_time)} น.</p>
+                  <p>📅 {formatDateThai(b.slot_date ?? b.time_slots?.slot_date)}</p>
+                  <p>🕐 {formatTime(b.start_time ?? b.time_slots?.start_time)} – {formatTime(b.end_time) || addMinutes(b.time_slots?.start_time, b.services?.duration) || formatTime(b.time_slots?.end_time)} น.</p>
                   {b.note && <p>📝 {b.note}</p>}
                 </div>
               </div>

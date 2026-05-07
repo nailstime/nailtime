@@ -1,6 +1,13 @@
 -- ============================================================
 -- Nail Time & Spa — Supabase Schema
 -- วิธีใช้: paste ทั้งหมดนี้ใน Supabase SQL Editor แล้วกด Run
+--
+-- หมายเหตุหลังรัน schema:
+-- 1) ตาราง time_slots จะยังว่างอยู่ ต้องรัน `select public.generate_time_slots();`
+--    อย่างน้อย 1 ครั้ง เพื่อสร้างเวลาว่างล่วงหน้า
+-- 2) ยังไม่ได้ตั้ง cron job อัตโนมัติ ดูตัวอย่างท้ายไฟล์ในหัวข้อ OPTIONAL CRON JOB
+-- 3) ระบบจองใช้ slot จริงทุก 15 นาทีเท่านั้น
+--    service duration ต้องหาร 15 ลงตัว เช่น 30, 45, 60, 90 นาที
 -- ============================================================
 
 -- Enable UUID extension
@@ -50,7 +57,7 @@ create table public.services (
   name        text not null,
   name_en     text,
   description text,
-  duration    int not null default 60,  -- นาที
+  duration    int not null default 60 check (duration > 0 and duration % 15 = 0),  -- นาที
   price       numeric(10,2),
   is_active   boolean default true,
   sort_order  int default 0,
@@ -87,7 +94,8 @@ create table public.time_slots (
   capacity    int not null default 1,  -- จำนวนช่างที่ว่าง
   is_active   boolean default true,
   created_at  timestamptz default now(),
-  unique (slot_date, start_time)
+  unique (slot_date, start_time),
+  check (end_time = start_time + interval '15 minutes')
 );
 
 alter table public.time_slots enable row level security;
@@ -112,7 +120,10 @@ create table public.bookings (
   guest_phone     text,
   guest_line_uid  text,
   service_id      uuid not null references public.services(id),
-  slot_id         uuid not null references public.time_slots(id),
+  slot_id         uuid references public.time_slots(id) on delete set null,
+  slot_date       date not null,
+  start_time      time not null,
+  end_time        time not null,
   note            text,
   status          text not null default 'pending' check (status in ('pending','confirmed','completed','cancelled')),
   created_at      timestamptz default now(),
@@ -127,7 +138,25 @@ create policy "Users can view own bookings"
   );
 
 create policy "Anyone can create booking"
-  on public.bookings for insert with check (true);
+  on public.bookings
+  for insert
+  to anon, authenticated
+  with check (
+    status = 'pending'
+    and service_id is not null
+    and slot_id is not null
+    and slot_date is not null
+    and start_time is not null
+    and end_time is not null
+    and (
+      (auth.uid() is not null and user_id = auth.uid())
+      or (
+        user_id is null
+        and guest_name is not null
+        and (guest_phone is not null or guest_line_uid is not null)
+      )
+    )
+  );
 
 create policy "Users can cancel own booking"
   on public.bookings for update using (auth.uid() = user_id)
@@ -167,6 +196,53 @@ left join public.bookings b on b.slot_id = s.id
 group by s.id;
 
 -- ============================================================
+-- SLOT GENERATOR
+-- สร้าง time_slots ทุก 15 นาทีล่วงหน้า และลบ slots วันที่ผ่านมาแล้ว
+--
+-- วิธีรันครั้งแรก:
+--   select public.generate_time_slots();
+--
+-- ค่า default:
+--   - สร้างล่วงหน้า 60 วัน
+--   - เปิด 10:00 ถึง 18:00
+--   - จันทร์-เสาร์
+--   - capacity = 1
+--
+-- ถ้าต้องการเปลี่ยนจำนวนช่าง/ที่นั่ง:
+--   select public.generate_time_slots(default_capacity := 2);
+-- ============================================================
+create or replace function public.generate_time_slots(
+  days_ahead int default 60,
+  open_time time default '10:00',
+  close_time time default '18:00',
+  default_capacity int default 1
+)
+returns void
+language plpgsql
+as $$
+begin
+  -- ลบ slot ที่เลยวันทั้งหมดได้ เพราะ bookings เก็บ snapshot วัน/เวลาไว้เองแล้ว
+  delete from public.time_slots
+  where slot_date < current_date;
+
+  insert into public.time_slots (slot_date, start_time, end_time, capacity)
+  select
+    d::date,
+    slot_start::time,
+    (slot_start + interval '15 minutes')::time,
+    default_capacity
+  from generate_series(current_date, current_date + days_ahead, interval '1 day') d
+  cross join lateral generate_series(
+    d::timestamp + open_time,
+    d::timestamp + close_time - interval '15 minutes',
+    interval '15 minutes'
+  ) slot_start
+  where extract(dow from d) between 1 and 6
+  on conflict (slot_date, start_time) do nothing;
+end;
+$$;
+
+-- ============================================================
 -- SEO SETTINGS (admin แก้ meta ทุกหน้า)
 -- ============================================================
 create table public.seo_settings (
@@ -196,3 +272,22 @@ insert into public.seo_settings (page_key, title, description, keywords) values
   ('home',    'Nail Time & Spa ネイルタイム — ดอนหัวฬอ ชลบุรี', 'ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น ดอนหัวฬอ ชลบุรี', 'ร้านทำเล็บ,เล็บเจล,ดอนหัวฬอ,ชลบุรี'),
   ('booking', 'จองนัด — Nail Time & Spa', 'จองนัดทำเล็บออนไลน์ ดูคิวว่างได้ทันที', 'จองนัดทำเล็บ,คิวว่าง'),
   ('liff',    'จองนัดผ่าน LINE — Nail Time & Spa', 'จองนัดทำเล็บผ่าน LINE ง่ายๆ', 'จองนัด LINE,ทำเล็บ');
+
+-- ============================================================
+-- OPTIONAL CRON JOB (ยังไม่ได้เปิดใช้งานโดยอัตโนมัติ)
+--
+-- ถ้าต้องการให้ Supabase สร้าง slot ใหม่ทุกวันเอง:
+-- 1) เปิด extension pg_cron ก่อน
+-- 2) uncomment SQL ด้านล่าง แล้วรันใน SQL Editor
+--
+-- หมายเหตุ:
+-- - schedule นี้รันทุกวัน 01:00 ตาม timezone ของ database
+-- - function จะลบ slot วันที่ผ่านมาแล้ว และเติม slot ล่วงหน้าให้ครบ 60 วัน
+-- ============================================================
+-- create extension if not exists pg_cron;
+--
+-- select cron.schedule(
+--   'generate-nailtime-slots',
+--   '0 1 * * *',
+--   $$select public.generate_time_slots();$$
+-- );

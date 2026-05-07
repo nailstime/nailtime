@@ -1,30 +1,53 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { getBookableSlots, getBookableSlotsForServices } from '@/lib/booking/availability'
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const { service_id, slot_id, guest_name, guest_phone, note } = body
+  const { service_id, service_ids, slot_id, guest_name, guest_phone, guest_line_uid, note } = body
+  const selectedServiceIds = typeof service_ids === 'string'
+    ? service_ids.split(',').map((id: string) => id.trim()).filter(Boolean)
+    : service_id ? [service_id] : []
 
-  if (!service_id || !slot_id) {
-    return NextResponse.json({ error: 'service_id and slot_id are required' }, { status: 400 })
+  if (selectedServiceIds.length === 0 || !slot_id) {
+    return NextResponse.json({ error: 'service_ids and slot_id are required' }, { status: 400 })
   }
 
   const supabase = await createClient()
+  let adminSupabase: ReturnType<typeof createAdminClient>
 
-  const { data: slot, error: slotErr } = await supabase
-    .from('slot_availability')
-    .select('available')
+  try {
+    adminSupabase = createAdminClient()
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 })
+  }
+
+  const { data: slot, error: slotErr } = await adminSupabase
+    .from('time_slots')
+    .select('slot_date')
     .eq('id', slot_id)
-    .single() as { data: { available: number } | null; error: unknown }
+    .single() as { data: { slot_date: string } | null; error: unknown }
 
   if (slotErr || !slot) return NextResponse.json({ error: 'Slot not found' }, { status: 404 })
-  if (slot.available <= 0) return NextResponse.json({ error: 'Slot is fully booked' }, { status: 409 })
+
+  const { data: availableSlots, error: availabilityError } = selectedServiceIds.length > 1
+    ? await getBookableSlotsForServices(adminSupabase, slot.slot_date, selectedServiceIds)
+    : await getBookableSlots(adminSupabase, slot.slot_date, selectedServiceIds[0])
+  if (availabilityError) return NextResponse.json({ error: availabilityError.message }, { status: 500 })
+
+  const requestedSlot = availableSlots?.find(s => s.id === slot_id)
+  if (!requestedSlot) {
+    return NextResponse.json({ error: 'Selected time is not available for this service duration' }, { status: 409 })
+  }
 
   const { data: { user } } = await supabase.auth.getUser()
 
   const insertPayload: Record<string, unknown> = {
-    service_id,
+    service_id: selectedServiceIds[0],
     slot_id,
+    slot_date: requestedSlot.slot_date,
+    start_time: requestedSlot.start_time,
+    end_time: requestedSlot.end_time,
     note: note || null,
     status: 'pending',
   }
@@ -32,15 +55,17 @@ export async function POST(request: Request) {
   if (user) {
     insertPayload.user_id = user.id
   } else {
-    if (!guest_name || !guest_phone) {
-      return NextResponse.json({ error: 'Name and phone are required for guest booking' }, { status: 400 })
+    if (!guest_name || (!guest_phone && !guest_line_uid)) {
+      return NextResponse.json({ error: 'Name and phone or LINE user id are required for guest booking' }, { status: 400 })
     }
-    insertPayload.guest_name = guest_name
-    insertPayload.guest_phone = guest_phone
   }
 
+  insertPayload.guest_name = guest_name || null
+  insertPayload.guest_phone = guest_phone || null
+  insertPayload.guest_line_uid = guest_line_uid || null
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from('bookings') as any)
+  const { data, error } = await (adminSupabase.from('bookings') as any)
     .insert(insertPayload)
     .select('booking_no')
     .single()
@@ -61,7 +86,7 @@ export async function GET(request: Request) {
 
   const { data, error } = await supabase
     .from('bookings')
-    .select(`*, services(name), time_slots(slot_date, start_time, end_time)`)
+    .select(`*, services(name, duration), time_slots(slot_date, start_time, end_time)`)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .range(from, from + limit - 1)

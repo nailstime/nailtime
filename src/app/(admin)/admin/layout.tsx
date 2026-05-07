@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 const NAV = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/bookings', label: 'การจอง' },
+  { href: '/admin/services', label: 'บริการ' },
   { href: '/admin/slots', label: 'เวลาว่าง' },
   { href: '/admin/seo', label: 'SEO' },
 ]

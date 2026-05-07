@@ -19,7 +19,8 @@ export async function POST(request: Request) {
   const db = supabase.from('time_slots') as any
 
   if (body.bulk) {
-    const { from_date, to_date, days, start_time, end_time, interval, capacity } = body
+    const { from_date, to_date, days, start_time, end_time, capacity } = body
+    const interval = 15
     const allowedDays = (days as string).split(',').map(Number)
     const rows: Record<string, unknown>[] = []
 
@@ -52,6 +53,11 @@ export async function POST(request: Request) {
   }
 
   const { slot_date, start_time, end_time, capacity } = body
+  const [startH, startM] = (start_time as string).split(':').map(Number)
+  const [endH, endM] = (end_time as string).split(':').map(Number)
+  if (endH * 60 + endM - (startH * 60 + startM) !== 15) {
+    return NextResponse.json({ error: 'Time slot must be exactly 15 minutes' }, { status: 400 })
+  }
   const { data, error } = await db.insert({ slot_date, start_time, end_time, capacity }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

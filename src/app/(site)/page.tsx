@@ -7,6 +7,7 @@ import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
 import { DrawLine } from '@/components/ui/DrawLine'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { FloatingCTA } from '@/components/layout/FloatingCTA'
+import { HomeBookingBar } from '@/components/booking/HomeBookingBar'
 import { Hand, Lightbulb, Paintbrush } from 'lucide-react'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -55,7 +56,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* BOOKING BAR */}
-      <BookingBar />
+      <HomeBookingBar />
 
       {/* FEATURES */}
       <section id="services" className="py-24">
@@ -329,32 +330,5 @@ export default function HomePage() {
         </div>
       </footer>
     </>
-  )
-}
-
-function BookingBar() {
-  return (
-    <div className="bg-sand px-10">
-      <div className="max-w-6xl mx-auto flex items-center h-[90px] gap-0">
-        <div className="flex-1 flex flex-col gap-1 px-6">
-          <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">บริการ</span>
-          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกบริการ →</Link>
-        </div>
-        <div className="w-px h-10 bg-white/30" />
-        <div className="flex-1 flex flex-col gap-1 px-6">
-          <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">วันที่</span>
-          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกวันที่ →</Link>
-        </div>
-        <div className="w-px h-10 bg-white/30" />
-        <div className="flex-1 flex flex-col gap-1 px-6">
-          <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/70">เวลา</span>
-          <Link href="/booking" className="text-sm font-medium text-white hover:text-white/80 transition-colors">เลือกเวลา →</Link>
-        </div>
-        <Link href="/booking"
-          className="ml-6 rounded-full bg-white text-sand-deep text-xs font-medium tracking-widest uppercase px-8 py-3 hover:bg-cream hover:scale-105 transition-all active:scale-95 whitespace-nowrap">
-          จองนัด
-        </Link>
-      </div>
-    </div>
   )
 }

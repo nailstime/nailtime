@@ -60,7 +60,10 @@ export interface Database {
           guest_phone: string | null
           guest_line_uid: string | null
           service_id: string
-          slot_id: string
+          slot_id: string | null
+          slot_date: string
+          start_time: string
+          end_time: string
           note: string | null
           status: BookingStatus
           created_at: string

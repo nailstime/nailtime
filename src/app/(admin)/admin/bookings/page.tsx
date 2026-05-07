@@ -14,7 +14,7 @@ export default async function AdminBookingsPage({
 
   let query = supabase
     .from('bookings')
-    .select(`*, services(name), time_slots(slot_date, start_time, end_time), profiles(full_name, phone)`, { count: 'exact' })
+    .select(`*, services(name, duration), time_slots(slot_date, start_time, end_time), profiles(full_name, phone)`, { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, from + limit - 1)
 
