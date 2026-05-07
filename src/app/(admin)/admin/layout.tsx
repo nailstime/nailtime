@@ -1,12 +1,29 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { RegisterSW } from '@/components/admin/RegisterSW'
+import type { Metadata, Viewport } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Nail Time Admin',
+  manifest: '/manifest-admin.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'NailTime',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#1c1c1e',
+  width: 'device-width',
+  initialScale: 1,
+}
 
 const NAV = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/bookings', label: 'การจอง' },
   { href: '/admin/services', label: 'บริการ' },
-  { href: '/admin/slots', label: 'เวลาว่าง' },
   { href: '/admin/seo', label: 'SEO' },
 ]
 
@@ -20,6 +37,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-cream flex flex-col">
+      <RegisterSW />
       <header className="bg-site-dark text-white sticky top-0 z-20">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-6">

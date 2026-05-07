@@ -1,0 +1,19 @@
+{
+  "name": "Nail Time Admin",
+  "short_name": "NailTime",
+  "description": "ระบบจัดการ Nail Time & Spa",
+  "start_url": "/admin/bookings",
+  "scope": "/admin/",
+  "display": "standalone",
+  "background_color": "#1c1c1e",
+  "theme_color": "#1c1c1e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-admin.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
