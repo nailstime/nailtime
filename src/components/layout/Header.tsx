@@ -30,6 +30,11 @@ export function Header() {
           ))}
         </nav>
 
+        <Link href="/booking/status"
+          className="hidden md:inline-flex text-xs font-medium text-site-gray hover:text-sand transition-colors shrink-0">
+          ตรวจสอบคิวนัด
+        </Link>
+
         <Link href="/booking"
           className="hidden md:inline-flex items-center rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-6 py-2.5 hover:bg-site-dark hover:text-white transition-all">
           จองนัด
@@ -49,6 +54,10 @@ export function Header() {
               {l.label}
             </a>
           ))}
+          <Link href="/booking/status" onClick={() => setOpen(false)}
+            className="text-sm font-medium text-site-gray">
+            ตรวจสอบคิวนัด
+          </Link>
           <Link href="/booking" onClick={() => setOpen(false)}
             className="text-sm font-medium uppercase tracking-widest text-sand">
             จองนัด →

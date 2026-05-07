@@ -1,6 +1,7 @@
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { getBookableSlots, getBookableSlotsForServices } from '@/lib/booking/availability'
+import { notifyNewBooking } from '@/lib/telegram'
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -67,10 +68,23 @@ export async function POST(request: Request) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (adminSupabase.from('bookings') as any)
     .insert(insertPayload)
-    .select('booking_no')
+    .select('booking_no, slot_date, start_time, end_time, guest_name, guest_phone, note, services(name)')
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Fire-and-forget Telegram notification (don't block response)
+  notifyNewBooking({
+    booking_no: data.booking_no,
+    guest_name: data.guest_name ?? '—',
+    guest_phone: data.guest_phone ?? null,
+    service_name: data.services?.name ?? '',
+    slot_date: data.slot_date,
+    start_time: data.start_time,
+    end_time: data.end_time,
+    note: data.note ?? null,
+  }).catch(() => {})
+
   return NextResponse.json({ booking_no: data.booking_no }, { status: 201 })
 }
 
