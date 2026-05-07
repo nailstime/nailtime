@@ -16,7 +16,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-cream/93 backdrop-blur-md border-b border-sand/20">
       <div className="max-w-6xl mx-auto px-6 flex items-center gap-10 h-17">
-        <Link href="/" className="font-bold text-xl tracking-tight text-site-dark shrink-0">
+        <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="font-bold text-xl tracking-tight text-site-dark shrink-0">
           Nail Time <span className="text-sand">&amp; Spa</span>
         </Link>
 
