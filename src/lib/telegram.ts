@@ -50,6 +50,18 @@ export async function notifyNewBooking(b: BookingNotification) {
   })
 }
 
+export async function notifyReminder(b: Pick<BookingNotification, 'guest_name' | 'guest_phone' | 'service_name' | 'start_time' | 'end_time'>) {
+  if (!TOKEN || !CHAT_ID) return
+  const time = `${b.start_time.slice(0, 5)}–${b.end_time.slice(0, 5)}`
+  const lines = [
+    `⏰ *แจ้งเตือนคิว* — อีก 15 นาที`,
+    `👤 ${b.guest_name}${b.guest_phone ? `  ·  ${b.guest_phone}` : ''}`,
+    `💅 ${b.service_name}`,
+    `🕐 ${time}`,
+  ].join('\n')
+  await tgFetch('sendMessage', { chat_id: CHAT_ID, text: lines, parse_mode: 'Markdown' })
+}
+
 export async function answerCallback(callbackQueryId: string, text: string) {
   return tgFetch('answerCallbackQuery', { callback_query_id: callbackQueryId, text, show_alert: false })
 }
