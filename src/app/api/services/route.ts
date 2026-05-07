@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET() {
-  let supabase: ReturnType<typeof createAdminClient>
-
-  try {
-    supabase = createAdminClient()
-  } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 })
-  }
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('services')
