@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { CalendarDays, Check, ChevronDown, Clock, Scissors } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 
 type Service = {
   id: string
@@ -45,7 +44,6 @@ function formatDate(date: string) {
 }
 
 export function HomeBookingBar() {
-  const supabase = useMemo(() => createClient(), [])
   const dates = useMemo(() => getDates(), [])
   const [services, setServices] = useState<Service[]>([])
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
@@ -75,15 +73,11 @@ export function HomeBookingBar() {
   useEffect(() => {
     if (!mounted) return
 
-    supabase
-      .from('services')
-      .select('id, name, duration, price')
-      .eq('is_active', true)
-      .order('sort_order')
-      .then(({ data }) => {
-        if (data) setServices(data)
-      })
-  }, [mounted, supabase])
+    fetch('/api/services')
+      .then(res => res.json())
+      .then(data => setServices(Array.isArray(data) ? data : []))
+      .catch(() => setServices([]))
+  }, [mounted])
 
   useEffect(() => {
     if (!mounted) return
