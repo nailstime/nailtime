@@ -78,6 +78,26 @@ export function HomeBookingBar() {
   }, [])
 
   useEffect(() => {
+    function onSelectService(e: Event) {
+      const id = (e as CustomEvent<{ id: string }>).detail.id
+      setSelectedServiceIds([id])
+      setSelectedDate('')
+      setSelectedSlot(null)
+      setSlots([])
+      setOpenPanel('date')
+    }
+    function onOpenServicesPanel() {
+      setOpenPanel('services')
+    }
+    window.addEventListener('select-service', onSelectService)
+    window.addEventListener('open-services-panel', onOpenServicesPanel)
+    return () => {
+      window.removeEventListener('select-service', onSelectService)
+      window.removeEventListener('open-services-panel', onOpenServicesPanel)
+    }
+  }, [])
+
+  useEffect(() => {
     if (!mounted) return
 
     fetch('/api/services')
@@ -153,7 +173,7 @@ export function HomeBookingBar() {
   }
 
   return (
-    <div className="relative z-30 bg-sand px-4 md:px-10">
+    <div id="book" className="relative z-30 bg-sand px-4 md:px-10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 gap-0 md:grid-cols-[1fr_1fr_1fr_auto] md:items-center md:min-h-[90px]">
         <div className="relative border-b border-white/20 md:border-b-0 md:border-r md:border-white/30">
           <button

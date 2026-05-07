@@ -8,6 +8,7 @@ import { DrawLine } from '@/components/ui/DrawLine'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { FloatingCTA } from '@/components/layout/FloatingCTA'
 import { HomeBookingBar } from '@/components/booking/HomeBookingBar'
+import { ServicesSection } from '@/components/sections/ServicesSection'
 import { Hand, Lightbulb, Paintbrush } from 'lucide-react'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,22 +32,24 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const services = [
-  { name: 'ทำเล็บเจล',     en: 'Gel Nails',       icon: '✨', desc: 'เจลคุณภาพสูง ติดทนนาน 3–4 สัปดาห์' },
-  { name: 'เพ้นท์เล็บ',    en: 'Nail Art',        icon: '🎨', desc: 'ลายอิสระ สไตล์ญี่ปุ่น ทุกแบบ' },
-  { name: 'ต่อเล็บเจล',    en: 'Gel Extension',   icon: '🌸', desc: 'ยาวสวย แข็งแรง รูปทรงตามต้องการ' },
-  { name: 'อะคีลิก',       en: 'Acrylic',         icon: '💎', desc: 'ทนทานเป็นพิเศษ รูปทรงสวย' },
-  { name: 'PVC / แก้ว',    en: 'Glass Effect',    icon: '✦',  desc: 'เทรนด์ฮิต effect ใส โมเดิร์น' },
-  { name: 'สปามือ & เท้า', en: 'Nail Spa',        icon: '🦶', desc: 'ดูแลครบวงจร ขัดผิว นวดผ่อนคลาย' },
-]
-
 const featureServices = [
   { title: 'Nail Care', icon: Hand, desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
   { title: 'Nail Art', icon: Paintbrush, desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
   { title: 'Tips & Trends', icon: Lightbulb, desc: 'อัพเดตเทรนด์ใหม่ แนะนำสีและลาย เปลี่ยนทุกซีซั่น' },
 ]
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: dbServices } = await supabase
+    .from('services')
+    .select('id, name, description, duration, price')
+    .eq('is_active', true)
+    .order('sort_order')
+
+  const services = (dbServices ?? []) as {
+    id: string; name: string; description: string | null; duration: number; price: number | null
+  }[]
+
   return (
     <>
       <Header />
@@ -172,19 +175,7 @@ export default function HomePage() {
               <DrawLine className="w-36 mt-2" delay={0.5} />
             </h2>
           </Reveal>
-          <StaggerParent className="flex flex-col divide-y divide-sand/20">
-            {services.map(s => (
-              <StaggerChild key={s.name}>
-                <div className="flex items-start justify-between py-4 gap-4 group hover:px-2 transition-all duration-300">
-                  <div>
-                    <strong className="text-sm font-semibold text-site-dark group-hover:text-sand transition-colors duration-300">{s.name}</strong>
-                    <p className="text-xs text-site-gray mt-0.5">{s.desc}</p>
-                  </div>
-                  <span className="text-xs font-semibold text-sand whitespace-nowrap pt-0.5">สอบถาม</span>
-                </div>
-              </StaggerChild>
-            ))}
-          </StaggerParent>
+          <ServicesSection services={services} />
           <Reveal delay={0.2}>
             <a href="tel:0647451946"
               className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
