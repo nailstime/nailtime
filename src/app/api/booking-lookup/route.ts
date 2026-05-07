@@ -12,12 +12,15 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Bangkok' }).format(new Date())
+
   // Exact match on booking_no OR guest_phone — must be precise, not a filter
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('bookings') as any)
     .select('booking_no, status, slot_date, start_time, end_time, guest_name, note, services(name)')
     .or(`booking_no.eq.${q},guest_phone.eq.${q}`)
-    .order('slot_date', { ascending: false })
+    .gte('slot_date', today)
+    .order('slot_date', { ascending: true })
     .limit(10)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
