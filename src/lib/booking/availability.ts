@@ -181,3 +181,64 @@ export async function getBookableSlotsForDuration(
 
   return { data: bookableSlots, error: null }
 }
+
+export async function getAllSlotsWithAvailability(
+  supabase: SupabaseClient<Database>,
+  date: string,
+  duration: number
+) {
+  const { data: slots, error: slotsError } = await supabase
+    .from('time_slots')
+    .select('id, slot_date, start_time, end_time, capacity, is_active, created_at')
+    .eq('slot_date', date)
+    .eq('is_active', true)
+    .order('start_time')
+
+  if (slotsError) return { data: null, error: slotsError }
+
+  const { data: bookings, error: bookingsError } = await supabase
+    .from('bookings')
+    .select('services(duration), time_slots!inner(slot_date, start_time)')
+    .in('status', ['pending', 'confirmed'])
+    .eq('time_slots.slot_date', date)
+
+  if (bookingsError) return { data: null, error: bookingsError }
+
+  const slotRows = (slots ?? []) as Slot[]
+  const occupiedCounts = buildOccupiedCounts((bookings ?? []) as unknown as BookingRange[])
+  const slotMap = new Map(slotRows.map(slot => [timeToMinutes(slot.start_time), slot]))
+  const requiredCount = slotCountForDuration(duration)
+  const minimumStartMinutes = getMinimumStartMinutes(date)
+
+  const result = slotRows.map(slot => {
+    const start = timeToMinutes(slot.start_time)
+    const isPast = minimumStartMinutes !== null && start < minimumStartMinutes
+
+    const requiredSlots = Array.from({ length: requiredCount }, (_, index) =>
+      slotMap.get(start + index * SLOT_MINUTES)
+    )
+    const allExist = requiredSlots.every(s => s != null)
+
+    let available = 0
+    if (!isPast && allExist) {
+      const remaining = requiredSlots.map(s => {
+        const minute = timeToMinutes(s!.start_time)
+        return s!.capacity - (occupiedCounts[minute] ?? 0)
+      })
+      available = Math.max(0, Math.min(...remaining))
+    }
+
+    return {
+      id: slot.id,
+      slot_date: slot.slot_date,
+      start_time: slot.start_time,
+      end_time: minutesToTime(start + requiredCount * SLOT_MINUTES),
+      capacity: slot.capacity,
+      booked_count: slot.capacity - available,
+      available,
+      required_slot_ids: allExist ? requiredSlots.map(s => s!.id) : [],
+    }
+  })
+
+  return { data: result, error: null }
+}

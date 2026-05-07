@@ -1,12 +1,13 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { getBookableSlots, getBookableSlotsForServices } from '@/lib/booking/availability'
+import { getBookableSlots, getBookableSlotsForServices, getAllSlotsWithAvailability } from '@/lib/booking/availability'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const date = searchParams.get('date')
   const serviceId = searchParams.get('service_id')
   const serviceIds = searchParams.get('service_ids')
+  const showAll = searchParams.get('show_all') === '1'
 
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: 'Invalid date' }, { status: 400 })
@@ -22,6 +23,18 @@ export async function GET(request: Request) {
 
   if (serviceIds) {
     const ids = serviceIds.split(',').map(id => id.trim()).filter(Boolean)
+    if (showAll) {
+      // Compute total duration for the selected services, then return all slots
+      const { data: services } = await supabase
+        .from('services')
+        .select('duration')
+        .in('id', ids)
+        .eq('is_active', true)
+      const totalDuration = (services ?? []).reduce((sum: number, s: { duration: number }) => sum + s.duration, 0)
+      const { data, error } = await getAllSlotsWithAvailability(supabase, date, totalDuration || 60)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json(data)
+    }
     const { data, error } = await getBookableSlotsForServices(supabase, date, ids)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json(data)

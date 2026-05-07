@@ -117,6 +117,7 @@ export function HomeBookingBar() {
     const params = new URLSearchParams({
       date: selectedDate,
       service_ids: selectedServiceIds.join(','),
+      show_all: '1',
     })
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -271,20 +272,26 @@ export function HomeBookingBar() {
               ) : slots.length === 0 ? (
                 <p className="py-6 text-center text-sm text-site-gray">ไม่มีเวลาที่พอสำหรับบริการที่เลือก</p>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  {slots.map(slot => (
-                    <button
-                      type="button"
-                      key={slot.id}
-                      onClick={() => {
-                        setSelectedSlot(slot)
-                        setOpenPanel(null)
-                      }}
-                      className={`rounded-xl px-3 py-3 text-center text-sm font-semibold transition-colors ${selectedSlot?.id === slot.id ? 'bg-sand text-white' : 'bg-cream text-site-dark hover:bg-sand/10'}`}
-                    >
-                      {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
-                    </button>
-                  ))}
+                <div className="grid grid-cols-3 gap-2">
+                  {slots.map(slot => {
+                    const bookable = slot.available > 0
+                    const isSelected = selectedSlot?.id === slot.id
+                    return (
+                      <button
+                        type="button"
+                        key={slot.id}
+                        disabled={!bookable}
+                        onClick={() => {
+                          setSelectedSlot(slot)
+                          setOpenPanel(null)
+                        }}
+                        className={`rounded-xl px-3 py-3 text-center text-sm font-semibold transition-colors
+                          ${isSelected ? 'bg-sand text-white' : bookable ? 'bg-cream text-site-dark hover:bg-sand/10' : 'bg-stone-100 text-stone-300 cursor-not-allowed'}`}
+                      >
+                        {formatTime(slot.start_time)}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </div>
