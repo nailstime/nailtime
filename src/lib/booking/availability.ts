@@ -29,6 +29,31 @@ function minutesToTime(minutes: number) {
   return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:00`
 }
 
+function getBangkokNow() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date())
+
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]))
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    minutes: Number(values.hour) * 60 + Number(values.minute),
+  }
+}
+
+function getMinimumStartMinutes(date: string) {
+  const now = getBangkokNow()
+  if (date !== now.date) return null
+
+  return Math.ceil(now.minutes / SLOT_MINUTES) * SLOT_MINUTES
+}
+
 function slotCountForDuration(duration: number) {
   return Math.max(1, Math.ceil(duration / SLOT_MINUTES))
 }
@@ -120,9 +145,12 @@ export async function getBookableSlotsForDuration(
   const occupiedCounts = buildOccupiedCounts((bookings ?? []) as unknown as BookingRange[])
   const slotMap = new Map(slotRows.map(slot => [timeToMinutes(slot.start_time), slot]))
   const requiredCount = slotCountForDuration(duration)
+  const minimumStartMinutes = getMinimumStartMinutes(date)
 
   const bookableSlots = slotRows.reduce<BookableSlot[]>((acc, slot) => {
     const start = timeToMinutes(slot.start_time)
+    if (minimumStartMinutes !== null && start < minimumStartMinutes) return acc
+
     const requiredSlots = Array.from({ length: requiredCount }, (_, index) => {
       return slotMap.get(start + index * SLOT_MINUTES)
     })

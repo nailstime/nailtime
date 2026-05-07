@@ -24,9 +24,16 @@ function getDates(days = 30) {
   for (let i = 0; i < days; i++) {
     const d = new Date(today)
     d.setDate(today.getDate() + i)
-    result.push(d.toISOString().slice(0, 10))
+    result.push(formatDateValue(d))
   }
   return result
+}
+
+function formatDateValue(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 function BookingContent() {
@@ -239,7 +246,7 @@ function BookingContent() {
             <div className="grid grid-cols-2 gap-3">
               {dates.map(date => {
                 const d = new Date(date + 'T00:00:00')
-                const isToday = date === new Date().toISOString().slice(0, 10)
+                const isToday = date === formatDateValue(new Date())
                 return (
                   <button key={date} onClick={() => { setSelectedDate(date); setStep(2) }}
                     className={`bg-white rounded-2xl p-4 shadow-sm border border-sand/20 text-left hover:border-sand hover:shadow-md transition-all
