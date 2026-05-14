@@ -32,6 +32,24 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+const REVIEWS = [
+  {
+    name: 'คุณนุ่น',
+    date: 'เมษายน 2026',
+    text: 'ทำเล็บสวยมากค่ะ ช่างใจเย็น พูดคุยง่าย สีออกมาตรงใจเลย ครั้งหน้าจะมาอีกแน่นอน ❤️',
+  },
+  {
+    name: 'คุณแอน',
+    date: 'มีนาคม 2026',
+    text: 'ร้านสะอาดมาก อุปกรณ์ใหม่เอี่ยม เล็บอยู่ทนมากกว่า 3 สัปดาห์ ไม่หลุดเลยค่ะ แนะนำเลย',
+  },
+  {
+    name: 'คุณฝน',
+    date: 'กุมภาพันธ์ 2026',
+    text: 'มาทำทั้งมือและเท้า ช่างฝีมือดีมาก ลายที่ขอมาออกมาสวยเกินคาด ประทับใจมากๆ ค่ะ',
+  },
+]
+
 const featureServices = [
   { title: 'Nail Care', icon: Hand, desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
   { title: 'Nail Art', icon: Paintbrush, desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
@@ -223,6 +241,33 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-cream">
+        <div className="max-w-5xl mx-auto px-6">
+          <Reveal className="text-center mb-14">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">Happy Clients</p>
+            <h2 className="text-4xl font-bold text-site-dark inline-block">
+              เสียงจากลูกค้า
+              <DrawLine className="w-28 mx-auto mt-2" />
+            </h2>
+          </Reveal>
+          <StaggerParent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {REVIEWS.map((r) => (
+              <StaggerChild key={r.name}>
+                <div className="bg-white rounded-2xl p-6 shadow-[0_4px_24px_rgba(89,64,38,0.06)] flex flex-col gap-3 h-full">
+                  <div className="flex gap-0.5 text-sand text-base">★★★★★</div>
+                  <p className="text-sm text-site-gray leading-relaxed flex-1">"{r.text}"</p>
+                  <div>
+                    <p className="text-sm font-semibold text-site-dark">{r.name}</p>
+                    <p className="text-[11px] text-site-gray mt-0.5">{r.date}</p>
+                  </div>
+                </div>
+              </StaggerChild>
+            ))}
+          </StaggerParent>
+        </div>
+      </section>
+
       {/* INSTAGRAM CTA */}
       <section id="gallery" className="relative overflow-hidden">
         <div className="grid grid-cols-5 grid-rows-2">
@@ -247,7 +292,15 @@ export default async function HomePage() {
 
       {/* CONTACT */}
       <section id="contact" className="grid grid-cols-1 md:grid-cols-2 min-h-[440px]">
-        <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1000')] bg-center bg-cover" />
+        <div className="hidden md:block relative min-h-[400px]">
+          <iframe
+            src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
+            className="absolute inset-0 w-full h-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Nail Time Studio แผนที่"
+          />
+        </div>
         <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-4">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Contact Our Salon</p>
@@ -262,17 +315,42 @@ export default async function HomePage() {
             </a>
           </Reveal>
           <Reveal delay={0.3}>
-            <div className="flex flex-col gap-2 text-sm text-site-gray">
-              <p>📍 เทศบาลดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล</p>
-              <p>📷 Instagram: <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener" className="text-sand hover:underline">@nail_time_bytt</a></p>
+            <div className="flex flex-col gap-3 text-sm text-site-gray">
+              <div className="flex items-start gap-2">
+                <span className="shrink-0">📍</span>
+                <span>เทศบาลดอนหัวฬอ ชลบุรี<br />ตรงข้ามที่ทำการเทศบาล</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🕘</span>
+                <span>เปิดทุกวัน <strong className="text-site-dark">09:00 – 19:00 น.</strong></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>📷</span>
+                <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener" className="text-sand hover:underline">@nail_time_bytt</a>
+              </div>
             </div>
           </Reveal>
-          <Reveal delay={0.4}>
-            <div className="flex items-end gap-4 border-b border-[#c8b0a0] pb-2 mt-4 max-w-sm group">
-              <input type="email" placeholder="กรอกอีเมลเพื่อรับโปรโมชั่น"
-                className="flex-1 bg-transparent outline-none text-sm text-site-dark placeholder:text-site-gray" />
-              <button className="text-xs font-bold uppercase tracking-widest text-sand whitespace-nowrap hover:text-sand-dark transition-colors">Subscribe</button>
+          {/* Map on mobile */}
+          <Reveal delay={0.4} className="block md:hidden">
+            <div className="relative w-full h-56 rounded-xl overflow-hidden">
+              <iframe
+                src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
+                className="absolute inset-0 w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Nail Time Studio แผนที่"
+              />
             </div>
+          </Reveal>
+          <Reveal delay={0.5}>
+            <a
+              href="https://maps.app.goo.gl/m6ivA9WGWFaRu6MRA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95"
+            >
+              เปิดใน Google Maps →
+            </a>
           </Reveal>
         </div>
       </section>
@@ -313,11 +391,8 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="border-t border-white/15 px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/60">
-          <p>© 2026 Nail Time &amp; Spa ネイルタイム</p>
-          <div className="flex gap-5">
-            <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          </div>
+          <p>© 2026 Nail Time &amp; Spa ネイルタイム · ดอนหัวฬอ ชลบุรี</p>
+          <p>เปิดทุกวัน 09:00 – 19:00 น.</p>
         </div>
       </footer>
     </>
