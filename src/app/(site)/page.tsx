@@ -365,11 +365,8 @@ export default async function HomePage() {
               </div>
             </div>
           </Reveal>
-          <Reveal delay={0.4}>
-            <LineCouponForm />
-          </Reveal>
           {/* Map on mobile */}
-          <Reveal delay={0.5} className="block md:hidden">
+          <Reveal delay={0.4} className="block md:hidden">
             <div className="relative w-full h-56 rounded-xl overflow-hidden">
               <iframe
                 src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
@@ -389,6 +386,28 @@ export default async function HomePage() {
             >
               เปิดใน Google Maps →
             </a>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* COUPON */}
+      <section className="bg-site-dark py-20 px-6">
+        <div className="max-w-xl mx-auto flex flex-col items-center gap-6 text-center">
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-sand">First Visit Offer</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif leading-snug">
+              รับส่วนลด <span className="text-sand">50 บาท</span><br />สำหรับการทำเล็บครั้งแรก
+            </h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="text-sm text-white/60 leading-relaxed">
+              กรอกชื่อและเบอร์โทร แล้วเพิ่มเพื่อน LINE OA ของเรา<br />แจ้งแชทว่า <strong className="text-white/90">"คูปองใหม่"</strong> เพื่อรับสิทธิ์
+            </p>
+          </Reveal>
+          <Reveal delay={0.3} className="w-full">
+            <LineCouponForm />
           </Reveal>
         </div>
       </section>
