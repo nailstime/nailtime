@@ -9,6 +9,7 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { FloatingCTA } from '@/components/layout/FloatingCTA'
 import { HomeBookingBar } from '@/components/booking/HomeBookingBar'
 import { ServicesSection } from '@/components/sections/ServicesSection'
+import { LineCouponForm } from '@/components/sections/LineCouponForm'
 import { Hand, Lightbulb, Paintbrush } from 'lucide-react'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -70,6 +71,40 @@ export default async function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'NailSalon',
+            name: 'Nail Time & Spa ネイルタイム',
+            image: 'https://nailtimebytt.com/og.jpg',
+            url: 'https://nailtimebytt.com',
+            telephone: '+660647451946',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: 'ตรงข้ามที่ทำการเทศบาล ดอนหัวฬอ',
+              addressLocality: 'เมืองชลบุรี',
+              addressRegion: 'ชลบุรี',
+              postalCode: '20000',
+              addressCountry: 'TH',
+            },
+            openingHoursSpecification: {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+              opens: '09:00',
+              closes: '19:00',
+            },
+            sameAs: [
+              'https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/',
+              'https://www.instagram.com/nail_time_bytt',
+            ],
+            priceRange: '฿฿',
+            currenciesAccepted: 'THB',
+            paymentAccepted: 'Cash, PromptPay',
+          }),
+        }}
+      />
       <Header />
       <FloatingCTA />
 
@@ -330,8 +365,11 @@ export default async function HomePage() {
               </div>
             </div>
           </Reveal>
+          <Reveal delay={0.4}>
+            <LineCouponForm />
+          </Reveal>
           {/* Map on mobile */}
-          <Reveal delay={0.4} className="block md:hidden">
+          <Reveal delay={0.5} className="block md:hidden">
             <div className="relative w-full h-56 rounded-xl overflow-hidden">
               <iframe
                 src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
