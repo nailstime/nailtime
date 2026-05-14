@@ -35,6 +35,9 @@ create policy "Users can view own profile"
 create policy "Users can update own profile"
   on public.profiles for update using (auth.uid() = id);
 
+grant select, update on public.profiles to authenticated;
+grant all on public.profiles to service_role;
+
 -- Auto-create profile on signup
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer as $$
@@ -74,6 +77,10 @@ create policy "Admins can manage services"
     exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
 
+grant select on public.services to anon;
+grant select on public.services to authenticated;
+grant all on public.services to service_role;
+
 -- Seed บริการเริ่มต้น
 insert into public.services (name, name_en, description, duration, price, sort_order) values
   ('ทำเล็บเจล',     'Gel Nails',       'เจลคุณภาพสูง ติดทนนาน 3–4 สัปดาห์', 60,  null, 1),
@@ -107,6 +114,10 @@ create policy "Admins can manage slots"
   on public.time_slots for all using (
     exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
+
+grant select on public.time_slots to anon;
+grant select on public.time_slots to authenticated;
+grant all on public.time_slots to service_role;
 
 -- ============================================================
 -- BOOKINGS (การจอง)
@@ -167,6 +178,10 @@ create policy "Admins can manage all bookings"
     exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
 
+grant select, insert on public.bookings to anon;
+grant select, insert, update on public.bookings to authenticated;
+grant all on public.bookings to service_role;
+
 -- Auto-update updated_at
 create or replace function public.set_updated_at()
 returns trigger language plpgsql as $$
@@ -194,6 +209,9 @@ select
 from public.time_slots s
 left join public.bookings b on b.slot_id = s.id
 group by s.id;
+
+grant select on public.slot_availability to anon;
+grant select on public.slot_availability to authenticated;
 
 -- ============================================================
 -- SLOT GENERATOR
@@ -266,6 +284,10 @@ create policy "Admins can manage SEO"
   on public.seo_settings for all using (
     exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
+
+grant select on public.seo_settings to anon;
+grant select on public.seo_settings to authenticated;
+grant all on public.seo_settings to service_role;
 
 -- Seed SEO หน้าหลัก
 insert into public.seo_settings (page_key, title, description, keywords) values
