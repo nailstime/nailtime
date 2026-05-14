@@ -52,14 +52,14 @@ export function LineCouponForm() {
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); handleSubmit() }} className="flex flex-col gap-3 w-full max-w-sm mx-auto">
-      <div className="flex items-center gap-0 border border-white/20 rounded-full bg-white/8 overflow-hidden focus-within:border-sand/60 transition-colors">
+      <div className="flex items-center gap-3 border border-white/20 rounded-full bg-white/8 focus-within:border-sand/60 transition-colors pl-5 pr-1.5 py-1.5">
         <input
           type="text"
           placeholder="ชื่อ"
           value={name}
           onChange={e => setName(e.target.value)}
           required
-          className="w-24 bg-transparent outline-none text-sm text-white placeholder:text-white/40 pl-5 py-3.5"
+          className="w-20 bg-transparent outline-none text-sm text-white placeholder:text-white/40 shrink-0"
         />
         <span className="text-white/20 shrink-0">|</span>
         <input
@@ -68,12 +68,12 @@ export function LineCouponForm() {
           value={phone}
           onChange={e => setPhone(e.target.value)}
           required
-          className="flex-1 bg-transparent outline-none text-sm text-white placeholder:text-white/40 pl-3 py-3.5"
+          className="flex-1 min-w-0 bg-transparent outline-none text-sm text-white placeholder:text-white/40"
         />
         <button
           type="submit"
           disabled={state === 'loading'}
-          className="shrink-0 text-xs font-bold uppercase tracking-widest text-site-dark bg-sand hover:bg-sand-dark transition-colors disabled:opacity-50 px-5 py-3.5 rounded-full"
+          className="shrink-0 text-xs font-bold uppercase tracking-widest text-site-dark bg-sand hover:bg-sand-dark transition-colors disabled:opacity-50 px-5 py-2.5 rounded-full"
         >
           {state === 'loading' ? '...' : 'รับคูปอง'}
         </button>
