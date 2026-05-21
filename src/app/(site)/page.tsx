@@ -72,7 +72,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Preload LCP hero image so browser discovers it immediately */}
-      <link rel="preload" as="image" href="/images/hero.webp" fetchPriority="high" />
+      <link rel="preload" as="image" href="/_next/image?url=%2Fimages%2Fhero.webp&w=1920&q=75" fetchPriority="high" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

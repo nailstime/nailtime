@@ -29,6 +29,7 @@ export function HeroSection() {
           className="object-cover object-[50%_50%]"
           sizes="100vw"
           priority
+          fetchPriority="high"
         />
       </motion.div>
 
