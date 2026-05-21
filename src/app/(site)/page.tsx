@@ -322,6 +322,22 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* CATALOG */}
+      <section className="bg-site-dark py-10 overflow-hidden">
+        <Reveal className="text-center mb-6">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Catalog Idea</p>
+        </Reveal>
+        <div className="relative">
+          <div className="flex gap-3 animate-marquee w-max">
+            {[...Array.from({length:11},(_,i)=>`/images/catalog/${i+1}.webp`),...Array.from({length:11},(_,i)=>`/images/catalog/${i+1}.webp`)].map((src,i)=>(
+              <div key={i} className="shrink-0 w-40 h-40 sm:w-48 sm:h-48 rounded-xl overflow-hidden">
+                <Image src={src} alt="" width={192} height={192} className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="bg-cream py-16 sm:py-20 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
