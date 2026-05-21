@@ -124,7 +124,7 @@ export default async function AdminDashboard() {
   }
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-site-dark mb-8">ภาพรวม</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">

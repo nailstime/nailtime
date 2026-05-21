@@ -126,7 +126,7 @@ export default function ServicesClient({ services }: { services: Service[] }) {
   }
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-site-dark">บริการ</h1>

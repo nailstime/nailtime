@@ -21,12 +21,10 @@ export function DrawLine({ className, color = '#d8b192', delay = 0 }: Props) {
 
     const timer = setTimeout(() => {
       import('animejs').then((mod) => {
-        const anime = ('default' in mod ? mod.default : mod) as (opts: object) => void
-        anime({
-          targets: path,
+        mod.animate(path, {
           strokeDashoffset: [len, 0],
           duration: 900,
-          easing: 'easeOutCubic',
+          ease: 'outCubic',
         })
       })
     }, delay * 1000)

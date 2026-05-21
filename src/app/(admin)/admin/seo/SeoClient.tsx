@@ -40,7 +40,7 @@ export default function SeoClient({ settings: initial }: { settings: SeoPage[] }
   ]
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-site-dark mb-6">ตั้งค่า SEO</h1>
 
       {/* Page tabs */}
