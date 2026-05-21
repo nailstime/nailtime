@@ -191,7 +191,7 @@ export function HomeBookingBar() {
           </button>
 
           {openPanel === 'services' && (
-            <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-80 overflow-y-auto rounded-2xl border border-sand/20 bg-white p-2 shadow-xl md:left-4 md:right-4">
+            <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-[70svh] overflow-y-auto rounded-2xl border border-sand/20 bg-white p-2 shadow-xl md:left-4 md:right-4 md:max-h-80">
               {services.map(service => {
                 const selected = selectedServiceIds.includes(service.id)
                 return (
@@ -229,7 +229,7 @@ export function HomeBookingBar() {
           </button>
 
           {openPanel === 'date' && (
-            <div className="absolute left-0 right-0 top-full z-40 mt-2 grid max-h-80 grid-cols-3 gap-2 overflow-y-auto rounded-2xl border border-sand/20 bg-white p-3 shadow-xl md:left-4 md:right-4">
+            <div className="absolute left-0 right-0 top-full z-40 mt-2 grid max-h-[70svh] grid-cols-2 gap-2 overflow-y-auto rounded-2xl border border-sand/20 bg-white p-3 shadow-xl sm:grid-cols-3 md:left-4 md:right-4 md:max-h-80">
               {dates.map(date => (
                 <button
                   type="button"
@@ -266,13 +266,13 @@ export function HomeBookingBar() {
           </button>
 
           {openPanel === 'time' && (
-            <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-80 overflow-y-auto rounded-2xl border border-sand/20 bg-white p-3 shadow-xl md:left-4 md:right-4">
+            <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-[70svh] overflow-y-auto rounded-2xl border border-sand/20 bg-white p-3 shadow-xl md:left-4 md:right-4 md:max-h-80">
               {loadingSlots ? (
                 <p className="py-6 text-center text-sm text-site-gray">กำลังโหลดเวลา...</p>
               ) : slots.length === 0 ? (
                 <p className="py-6 text-center text-sm text-site-gray">ไม่มีเวลาที่พอสำหรับบริการที่เลือก</p>
               ) : (
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {slots.map(slot => {
                     const bookable = slot.available > 0
                     const isSelected = selectedSlot?.id === slot.id

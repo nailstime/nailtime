@@ -115,11 +115,11 @@ export default async function HomePage() {
       <HomeBookingBar />
 
       {/* FEATURES */}
-      <section id="services" className="py-24">
+      <section id="services" className="py-16 sm:py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">What We Do</p>
-            <h2 className="text-4xl font-bold text-site-dark inline-block relative">
+            <h2 className="relative inline-block text-3xl font-bold text-site-dark sm:text-4xl">
               บริการของเรา
               <DrawLine className="w-32 mx-auto mt-2" />
             </h2>
@@ -141,21 +141,21 @@ export default async function HomePage() {
       </section>
 
       {/* STORY */}
-      <section id="story" className="grid grid-cols-1 md:grid-cols-2 min-h-[560px]">
-        <div className="relative bg-[#e0d0ba] overflow-hidden min-h-[320px]">
-          <Reveal y={0} delay={0} className="absolute left-16 top-10 w-[260px] bottom-10">
+      <section id="story" className="grid min-h-[560px] grid-cols-1 md:grid-cols-2">
+        <div className="relative min-h-[320px] overflow-hidden bg-[#e0d0ba] sm:min-h-[420px]">
+          <Reveal y={0} delay={0} className="absolute bottom-8 left-6 top-8 w-[58%] max-w-[260px] sm:bottom-10 sm:left-16 sm:top-10">
             <div className="w-full h-full rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800')] bg-center bg-cover shadow-2xl" />
           </Reveal>
-          <Reveal y={20} delay={0.15} className="absolute right-10 bottom-14 w-[180px] h-[260px]">
+          <Reveal y={20} delay={0.15} className="absolute bottom-10 right-5 h-[220px] w-[42%] max-w-[180px] sm:bottom-14 sm:right-10 sm:h-[260px]">
             <div className="w-full h-full rounded-[100px_100px_0_0] bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600')] bg-top bg-cover shadow-[-20px_-20px_30px_rgba(0,0,0,0.16)]" />
           </Reveal>
         </div>
-        <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-4">
+        <div className="flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Story</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-3xl font-bold sm:text-4xl">
               เกี่ยวกับร้านของเรา
               <DrawLine className="w-40 mt-2" delay={0.6} />
             </h2>
@@ -188,13 +188,13 @@ export default async function HomePage() {
       </section>
 
       {/* MIX & MATCH POLISHES */}
-      <section className="bg-sand py-24 px-10 overflow-hidden">
+      <section className="overflow-hidden bg-sand px-4 py-16 sm:px-10 sm:py-20 md:py-24">
         <Reveal>
           <h2 className="text-center text-2xl font-bold uppercase tracking-[0.1em] text-white mb-14">
             Mix &amp; Match Polishes
           </h2>
         </Reveal>
-        <StaggerParent className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+        <StaggerParent className="mx-auto grid max-w-4xl grid-cols-2 gap-x-4 gap-y-10 sm:gap-8 md:grid-cols-4">
           {[
             { src: '/images/bottle-base.png',  name: 'Base Coat',    sub: 'Film shadow / No.5 oz' },
             { src: '/images/bottle-gel.png',   name: 'Gel Polish',   sub: 'Sorbet fine / No.5 oz' },
@@ -217,13 +217,13 @@ export default async function HomePage() {
       </section>
 
       {/* TREATMENTS & PRICES */}
-      <section id="prices" className="grid grid-cols-1 md:grid-cols-2 min-h-[500px]">
-        <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-6">
+      <section id="prices" className="grid min-h-[500px] grid-cols-1 md:grid-cols-2">
+        <div className="flex flex-col justify-center gap-6 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Treatments &amp; Prices</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-3xl font-bold sm:text-4xl">
               บริการและราคา
               <DrawLine className="w-36 mt-2" delay={0.5} />
             </h2>
@@ -240,11 +240,11 @@ export default async function HomePage() {
       </section>
 
       {/* GALLERY */}
-      <section id="products" className="py-24 bg-white">
+      <section id="products" className="bg-white py-16 sm:py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <Reveal className="text-center mb-12">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-2">Our Work</p>
-            <h2 className="text-4xl font-bold text-site-dark">
+            <h2 className="text-3xl font-bold text-site-dark sm:text-4xl">
               ผลงานของเรา
               <DrawLine className="w-32 mx-auto mt-2" delay={0.4} />
             </h2>
@@ -277,11 +277,11 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-cream">
+      <section className="bg-cream py-16 sm:py-20 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <Reveal className="text-center mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">Happy Clients</p>
-            <h2 className="text-4xl font-bold text-site-dark inline-block">
+            <h2 className="inline-block text-3xl font-bold text-site-dark sm:text-4xl">
               เสียงจากลูกค้า
               <DrawLine className="w-28 mx-auto mt-2" />
             </h2>
@@ -305,21 +305,21 @@ export default async function HomePage() {
 
       {/* INSTAGRAM CTA */}
       <section id="gallery" className="relative overflow-hidden">
-        <div className="grid grid-cols-5 grid-rows-2">
+        <div className="grid grid-cols-2 grid-rows-5 sm:grid-cols-5 sm:grid-rows-2">
           {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="h-48"
+            <div key={i} className="h-28 sm:h-48"
               style={{ background: ['#d8b192','#c8a07a','#e0c8a8','#b89060','#d4b090','#c4a07a','#dcc0a0','#b89868','#d0b090','#c8a880'][i] }} />
           ))}
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
           <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
-            className="bg-cream shadow-2xl px-16 py-10 text-center flex flex-col items-center gap-2 hover:shadow-3xl hover:-translate-y-1 transition-all duration-300">
+            className="mx-4 flex flex-col items-center gap-2 bg-cream px-8 py-8 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-3xl sm:px-16 sm:py-10">
             <svg className="w-10 h-10 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <rect x="2" y="2" width="20" height="20" rx="5"/>
               <circle cx="12" cy="12" r="4"/>
               <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
             </svg>
-            <p className="text-3xl font-bold uppercase tracking-wider text-sand">Follow Us</p>
+            <p className="text-2xl font-bold uppercase tracking-wider text-sand sm:text-3xl">Follow Us</p>
             <p className="text-sm text-site-gray">@nail_time_bytt</p>
           </a>
         </div>
@@ -336,16 +336,16 @@ export default async function HomePage() {
             title="Nail Time Studio แผนที่"
           />
         </div>
-        <div className="flex flex-col justify-center px-10 md:px-16 py-16 bg-cream gap-4">
+        <div className="flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Contact Our Salon</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h2 className="text-4xl font-bold">ติดต่อร้านของเรา</h2>
+            <h2 className="text-3xl font-bold sm:text-4xl">ติดต่อร้านของเรา</h2>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="text-xs uppercase tracking-widest text-site-gray mt-2">โทรนัดหมาย</p>
-            <a href="tel:0647451946" className="text-3xl font-bold text-sand hover:text-sand-dark transition-colors">
+            <a href="tel:0647451946" className="text-2xl font-bold text-sand transition-colors hover:text-sand-dark sm:text-3xl">
               064 745 1946
             </a>
           </Reveal>
@@ -391,7 +391,7 @@ export default async function HomePage() {
       </section>
 
       {/* COUPON */}
-      <section className="bg-site-dark py-20 px-6">
+      <section className="bg-site-dark px-4 py-16 sm:px-6 sm:py-20">
         <div className="max-w-xl mx-auto flex flex-col items-center gap-6 text-center">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.25em] uppercase text-sand">First Visit Offer</p>
@@ -414,7 +414,7 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="bg-sand pt-16">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-14 pb-14">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 pb-14 sm:px-6 md:grid-cols-3 md:gap-14">
           <div>
             <span className="font-bold text-xl text-white">Nail Time <span className="text-white/80">&amp; Spa</span></span>
             <p className="mt-4 text-sm text-white/80 leading-relaxed">ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />ดอนหัวฬอ ชลบุรี</p>

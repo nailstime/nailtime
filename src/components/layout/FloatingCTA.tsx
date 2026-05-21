@@ -71,17 +71,17 @@ export function FloatingCTA() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, delay: 1.8, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-white/96 backdrop-blur-md shadow-[0_-1px_20px_rgba(0,0,0,0.08)] border-t border-sand/15 md:rounded-2xl md:border md:border-sand/20 md:shadow-[0_8px_32px_rgba(0,0,0,0.13)] md:gap-3 md:px-5">
+      <div className="flex items-center justify-between gap-2 border-t border-sand/15 bg-white/96 px-2 py-2.5 shadow-[0_-1px_20px_rgba(0,0,0,0.08)] backdrop-blur-md sm:px-4 md:gap-3 md:rounded-2xl md:border md:border-sand/20 md:px-5 md:shadow-[0_8px_32px_rgba(0,0,0,0.13)]">
 
         {/* Contact icons */}
-        <div className="flex items-center">
+        <div className="flex min-w-0 flex-1 items-center justify-around md:flex-none">
           {CONTACTS.map((c) => (
             <Link
               key={c.label}
               href={c.href}
               target={c.href.startsWith('http') ? '_blank' : undefined}
               rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors text-site-dark/60 ${c.color}`}
+              className={`flex min-w-0 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-site-dark/60 transition-colors sm:px-3 ${c.color}`}
             >
               {c.icon}
               <span className="text-[8px] tracking-wide">{c.label}</span>
@@ -95,7 +95,7 @@ export function FloatingCTA() {
         {/* Booking button */}
         <Link
           href="/booking"
-          className="rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase px-5 py-2.5 hover:bg-sand-dark transition-all hover:shadow-md active:scale-95 whitespace-nowrap shrink-0"
+          className="shrink-0 rounded-full bg-sand px-4 py-2.5 text-xs font-medium tracking-widest text-white uppercase whitespace-nowrap transition-all hover:bg-sand-dark hover:shadow-md active:scale-95 sm:px-5"
         >
           จองคิว
         </Link>
