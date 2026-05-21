@@ -142,7 +142,7 @@ export default async function HomePage() {
 
       {/* STORY */}
       <section id="story" className="grid min-h-[640px] grid-cols-1 bg-[#dfceb7] md:grid-cols-[1.08fr_0.92fr]">
-        <div className="relative min-h-[520px] overflow-hidden border-y border-site-dark/10 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.38),transparent_28%),linear-gradient(135deg,#e6d7c1_0%,#d8c4aa_100%)] sm:min-h-[620px]">
+        <div className="relative hidden md:block min-h-[520px] overflow-hidden border-y border-site-dark/10 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.38),transparent_28%),linear-gradient(135deg,#e6d7c1_0%,#d8c4aa_100%)] sm:min-h-[620px]">
           <div className="absolute inset-x-8 top-8 h-px bg-site-dark/12" />
           <div className="absolute bottom-8 left-8 top-8 w-px bg-site-dark/12" />
           <div className="absolute bottom-8 right-8 top-8 w-px bg-white/25" />
@@ -378,7 +378,7 @@ export default async function HomePage() {
             {/* Instagram */}
             <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
               className="flex flex-col items-center justify-center gap-3 bg-cream px-8 py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-66 sm:w-72">
-              <svg className="w-12 h-12 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
                 <circle cx="12" cy="12" r="4"/>
                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
@@ -388,8 +388,8 @@ export default async function HomePage() {
             </a>
             {/* Facebook */}
             <a href="https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/" target="_blank" rel="noopener"
-              className="flex flex-col items-center justify-center gap-3 bg-cream px-8 py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-64 sm:w-72">
-              <svg className="w-12 h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
+              className="flex flex-col items-center justify-center gap-2 bg-cream px-6 py-6 sm:px-8 sm:py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-52 sm:w-64 md:w-72">
+              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
               <p className="text-sm font-bold uppercase tracking-widest text-sand">Facebook</p>
@@ -397,8 +397,8 @@ export default async function HomePage() {
             </a>
             {/* LINE */}
             <a href="https://line.me/ti/p/~nailtimetk22" target="_blank" rel="noopener"
-              className="flex flex-col items-center justify-center gap-3 bg-cream px-8 py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-64 sm:w-72">
-              <svg className="w-12 h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
+              className="flex flex-col items-center justify-center gap-2 bg-cream px-6 py-6 sm:px-8 sm:py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-52 sm:w-64 md:w-72">
+              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
               </svg>
               <p className="text-sm font-bold uppercase tracking-widest text-sand">LINE</p>
