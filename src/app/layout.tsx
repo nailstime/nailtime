@@ -29,6 +29,9 @@ export const metadata: Metadata = {
   title: 'Nail Time & Spa ネイルタイム — ดอนหัวฬอ ชลบุรี',
   description: 'ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น ดอนหัวฬอ ชลบุรี',
   keywords: 'ร้านทำเล็บ,เล็บเจล,ดอนหัวฬอ,ชลบุรี,nail salon',
+  verification: {
+    google: 'eLHJHsUt8feWNa30v3bYDIPgRPAqfepLHTQVRGB7PpI',
+  },
   metadataBase: new URL('https://nailtimebytt.com'),
   openGraph: {
     title: 'Nail Time & Spa ネイルタイム',
