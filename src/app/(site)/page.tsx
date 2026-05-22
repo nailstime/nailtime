@@ -140,11 +140,23 @@ export default async function HomePage() {
             ))}
           </StaggerParent>
         </div>
+
       </section>
 
       {/* STORY */}
-      <section id="story" className="grid min-h-[640px] grid-cols-1 bg-[#dfceb7] md:grid-cols-[1.08fr_0.92fr]">
-        <div className="relative hidden md:block min-h-[520px] overflow-hidden border-y border-site-dark/10 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.38),transparent_28%),linear-gradient(135deg,#e6d7c1_0%,#d8c4aa_100%)] sm:min-h-[620px]">
+      <section id="story" className="relative grid grid-cols-1 overflow-hidden bg-[#dfceb7] md:grid-cols-2">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.42),transparent_28%),radial-gradient(circle_at_82%_74%,rgba(116,82,51,0.12),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-x-6 top-8 h-px bg-white/20 sm:inset-x-10" />
+        <div className="pointer-events-none absolute inset-x-6 bottom-8 h-px bg-site-dark/10 sm:inset-x-10" />
+        <div className="pointer-events-none absolute left-7 top-1/2 hidden -translate-y-1/2 flex-col items-center gap-4 md:flex">
+          <span className="h-14 w-px bg-site-dark/16" />
+          <span className="h-1.5 w-1.5 rounded-full bg-site-dark/32" />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.34em] text-site-dark/38 [writing-mode:vertical-rl]">Since 2019</span>
+          <span className="h-14 w-px bg-site-dark/16" />
+        </div>
+        <div className="pointer-events-none absolute left-[15%] top-20 hidden h-24 w-24 rounded-full border border-white/35 md:block" />
+        <div className="pointer-events-none absolute bottom-24 right-[14%] hidden h-28 w-28 rounded-full border border-site-dark/10 md:block" />
+        <div className="hidden">
           <div className="absolute inset-x-8 top-8 h-px bg-site-dark/12" />
           <div className="absolute bottom-8 left-8 top-8 w-px bg-site-dark/12" />
           <div className="absolute bottom-8 right-8 top-8 w-px bg-white/25" />
@@ -190,9 +202,9 @@ export default async function HomePage() {
             </p>
           </Reveal>
         </div>
-        <div className="flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
+        <div className="relative order-2 z-10 flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
           <Reveal>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Story</p>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">About Us</p>
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="text-3xl font-bold sm:text-4xl">
@@ -202,7 +214,7 @@ export default async function HomePage() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="text-sm text-site-gray leading-relaxed">
-              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคีลิก PVC และสปามือเท้า
+              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคริลิก PVC และสปามือเท้า
               ตั้งอยู่ที่ดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล
             </p>
           </Reveal>
@@ -224,6 +236,31 @@ export default async function HomePage() {
               ดูเพจ Facebook →
             </a>
           </Reveal>
+        </div>
+
+        <div className="relative order-1 z-10 flex flex-col justify-center px-6 py-16 text-center sm:px-10 md:px-16 md:py-20">
+          <Reveal className="mx-auto w-full max-w-4xl text-center">
+            <p className="mb-5 text-[13px] font-bold uppercase tracking-[0.48em] text-site-dark/48 sm:text-sm">
+              Nail Time Story
+            </p>
+            <div className="mx-auto mb-8 flex max-w-[220px] items-center gap-4">
+              <span className="h-px flex-1 bg-site-dark/25" />
+              <span className="h-1.5 w-1.5 rounded-full bg-site-dark/38" />
+              <span className="h-px flex-1 bg-site-dark/25" />
+            </div>
+            <h2 className="text-[28px] font-bold leading-tight text-site-dark sm:text-[34px] md:text-[38px]">
+              Because Nail Time is<br />your time for happiness.
+            </h2>
+            <div className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-5 text-left text-[13px] font-normal leading-7 text-site-dark/66 sm:text-sm sm:leading-8">
+              <p>
+                จากจุดเริ่มต้นของร้านเล็กๆ ในย่านดอนหัวฬ่อ ที่เกิดขึ้นจากความรักในการทำเล็บ วันนี้ Nail Time &amp; Spa เติบโตขึ้นด้วยแพสชันที่ไม่เคยหยุดพัฒนา เราเชื่อว่าเล็บที่สวยไม่ใช่แค่เรื่องของแฟชั่น แต่คือสิ่งที่จะช่วยเติมเต็มความมั่นใจและรอยยิ้มให้กับคุณในทุกๆ วัน
+              </p>
+              <p>
+                เราคัดสรรสีเจลและผลิตภัณฑ์พรีเมียมแบรนด์แท้นำเข้าจากเกาหลี เพื่อให้ได้ลุคที่ละมุน เรียบหรู และดูสุขภาพดี ควบคู่กับเทคนิคการเพ้นท์และต่อเล็บที่ประณีตจากช่างผู้เชี่ยวชาญ ภายในพื้นที่ส่วนตัวที่ดูแลลูกค้าตามคิวจองอย่างใส่ใจ เพื่อให้ทุกนาทีที่คุณอยู่กับเรา เป็นช่วงเวลาแห่งการพักผ่อนและการดูแลตัวเองอย่างแท้จริง
+              </p>
+            </div>
+          </Reveal>
+
         </div>
       </section>
 
@@ -533,7 +570,7 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="border-t border-white/15 px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/60">
-          <p>© 2026 Nail Time &amp; Spa ネイルタイム · ดอนหัวฬอ ชลบุรี</p>
+          <p>© 2019 Nail Time &amp; Spa ネイルタイム · ดอนหัวฬอ ชลบุรี</p>
           <p>เปิดทุกวัน 09:00 – 19:00 น.</p>
         </div>
       </footer>

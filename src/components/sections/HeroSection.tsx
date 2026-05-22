@@ -9,7 +9,7 @@ const ease = cubicBezier(0.76, 0, 0.24, 1)
 const HEADLINE = [
   { text: 'ความสวยงาม', className: 'text-site-dark' },
   { text: 'เริ่มต้น',     className: 'text-site-dark' },
-  { text: 'ที่ปลายนิ้ว', className: 'text-sand' },
+  { text: 'ที่ปลายนิ้ว', className: 'text-sand-dark/78' },
 ]
 
 export function HeroSection() {
@@ -60,11 +60,11 @@ export function HeroSection() {
         </motion.div>
 
         {/* Headline */}
-        <div className="flex flex-col items-center gap-0">
+        <div className="flex flex-col items-center gap-1 sm:gap-1.5">
           {HEADLINE.map((line, i) => (
-            <div key={line.text} className="overflow-hidden">
+            <div key={line.text} className="-my-3 overflow-visible py-3">
               <motion.h1
-                className={`text-[clamp(2.35rem,12vw,3.1rem)] sm:text-5xl md:text-[3.3rem] lg:text-[3.75rem] font-bold leading-[1.08] font-serif ${line.className}`}
+                className={`font-[family-name:var(--font-thai-soft)] text-[clamp(2.15rem,10vw,2.85rem)] font-semibold leading-[1.12] sm:text-[3.15rem] md:text-[3.35rem] lg:text-[3.8rem] ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.9, ease, delay: 0.2 + i * 0.13 }}
@@ -109,7 +109,7 @@ export function HeroSection() {
 
         {/* Stats */}
         <motion.div
-          className="mt-2 grid w-full max-w-[520px] grid-cols-[1fr_auto_1fr_auto_1fr] items-center justify-center gap-0 overflow-hidden rounded-none border border-sand/20 bg-cream/24 py-4 shadow-[0_12px_36px_rgba(89,64,38,0.05)] backdrop-blur-[2px] sm:py-5"
+          className="mt-2 grid w-full max-w-[520px] grid-cols-[1fr_auto_1fr_auto_1fr] items-center justify-center gap-0 overflow-hidden rounded-3xl border border-sand/18 bg-cream/38 py-4 shadow-[0_16px_44px_rgba(89,64,38,0.08)] backdrop-blur-[3px] sm:py-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.0 }}

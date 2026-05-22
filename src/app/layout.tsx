@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Fraunces, Kanit } from 'next/font/google'
+import { Montserrat, Fraunces, Kanit, Noto_Serif_Thai } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
@@ -23,6 +23,13 @@ const kanit = Kanit({
   variable: '--font-thai-modern',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
+})
+
+const notoSerifThai = Noto_Serif_Thai({
+  subsets: ['thai', 'latin'],
+  variable: '--font-thai-soft',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -64,7 +71,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th" className={`${montserrat.variable} ${fraunces.variable} ${kanit.variable}`}>
+    <html lang="th" className={`${montserrat.variable} ${fraunces.variable} ${kanit.variable} ${notoSerifThai.variable}`}>
       <body className="font-sans antialiased min-h-full">
         {children}
         {FB_PIXEL_ID && (
