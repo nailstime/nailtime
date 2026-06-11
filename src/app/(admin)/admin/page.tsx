@@ -112,12 +112,19 @@ export default async function AdminDashboard() {
     }
   }
 
-  let pastComplete = 0, pastEmpty = 0, futureBooked = 0, futureAvailable = 0
+  // Count past bookings (distinct) — not slots
+  const pastComplete = activeBookings.filter(b => {
+    if (!b.slot_date || !b.start_time) return false
+    return b.slot_date < today || (b.slot_date === today && toMins(b.start_time) < nowMins)
+  }).length
+
+  let pastEmpty = 0, futureBooked = 0, futureAvailable = 0
+  // Track which slot start-times are already counted for future booked
   for (const slot of slots) {
     const key = `${slot.slot_date}_${slot.start_time}`
     const isPast = slot.slot_date < today || (slot.slot_date === today && toMins(slot.start_time) < nowMins)
     if (isPast) {
-      if (occupiedKeys.has(key)) { pastComplete++ } else { pastEmpty++ }
+      if (!occupiedKeys.has(key)) { pastEmpty++ }
     } else {
       if (upcomingBookedKeys.has(key)) { futureBooked++ } else { futureAvailable++ }
     }

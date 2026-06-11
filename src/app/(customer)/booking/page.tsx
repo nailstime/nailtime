@@ -1,7 +1,7 @@
 'use client'
 import { Suspense, useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 type Service = { id: string; name: string; name_en: string | null; duration: number; price: number | null }
@@ -48,11 +48,11 @@ function BookingContent() {
   const [loading, setLoading] = useState(false)
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [bookingNo, setBookingNo] = useState('')
   const [userProfile, setUserProfile] = useState<{ full_name: string | null; phone: string | null } | null>(null)
 
   const dates = getDates(30)
   const supabase = createClient()
+  const router = useRouter()
   const selectedServices = services.filter(service => selectedServiceIds.includes(service.id))
   const selectedServiceNames = selectedServices.map(service => service.name).join(', ')
   const totalDuration = selectedServices.reduce((total, service) => total + service.duration, 0)
@@ -145,33 +145,14 @@ function BookingContent() {
     })
     const data = await res.json()
     if (!res.ok) { setError(data.error || 'เกิดข้อผิดพลาด'); setLoading(false); return }
-    setBookingNo(data.booking_no)
-    setStep(4)
-    setLoading(false)
-  }
-
-  // Success screen
-  if (step === 4) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center px-6">
-        <div className="w-full max-w-md text-center">
-          <div className="text-5xl mb-6">✓</div>
-          <h1 className="text-2xl font-bold text-site-dark mb-2">จองสำเร็จ!</h1>
-          <p className="text-site-gray mb-1">หมายเลขการจอง</p>
-          <p className="text-2xl font-bold text-sand mb-6">{bookingNo}</p>
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-sand/20 text-left mb-6 space-y-3 text-sm">
-            <div className="flex justify-between gap-4"><span className="text-site-gray">บริการ</span><span className="font-medium text-right">{selectedServiceNames}</span></div>
-            <div className="flex justify-between"><span className="text-site-gray">วันที่</span><span className="font-medium">{formatDateThai(selectedSlot!.slot_date)}</span></div>
-            <div className="flex justify-between"><span className="text-site-gray">เวลา</span><span className="font-medium">{formatTime(selectedSlot!.start_time)} – {formatTime(selectedSlot!.end_time)} น.</span></div>
-            <div className="flex justify-between"><span className="text-site-gray">ชื่อ</span><span className="font-medium">{form.name || userProfile?.full_name}</span></div>
-          </div>
-          <p className="text-xs text-site-gray mb-6">กรุณาตรงต่อเวลา หากต้องการยกเลิกกรุณาแจ้งล่วงหน้า 2 ชั่วโมง</p>
-          <Link href="/" className="block rounded-full bg-sand text-white text-xs font-medium tracking-widest uppercase py-3.5 text-center hover:bg-sand-dark transition-all">
-            กลับหน้าหลัก
-          </Link>
-        </div>
-      </div>
-    )
+    const params = new URLSearchParams({
+      no: data.booking_no,
+      service: selectedServiceNames,
+      date: formatDateThai(selectedSlot!.slot_date),
+      time: `${formatTime(selectedSlot!.start_time)} – ${formatTime(selectedSlot!.end_time)}`,
+      name: form.name || userProfile?.full_name || '',
+    })
+    router.push(`/booking/confirmed?${params.toString()}`)
   }
 
   return (
