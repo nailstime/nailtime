@@ -60,11 +60,11 @@ export function HeroSection() {
         </motion.div>
 
         {/* Headline */}
-        <div className="flex flex-col items-center gap-1 sm:gap-1.5">
+        <div className="flex flex-col items-center gap-0.5 sm:gap-1">
           {HEADLINE.map((line, i) => (
-            <div key={line.text} className="-my-3 overflow-visible py-3">
+            <div key={line.text} className="overflow-visible py-1.5">
               <motion.h1
-                className={`font-[family-name:var(--font-thai-soft)] text-[clamp(2.15rem,10vw,2.85rem)] font-semibold leading-[1.12] sm:text-[3.15rem] md:text-[3.35rem] lg:text-[3.8rem] ${line.className}`}
+                className={`font-[family-name:var(--font-thai-soft)] text-[clamp(2.05rem,9.5vw,2.75rem)] font-semibold leading-[1.22] sm:text-[3rem] md:text-[3.2rem] lg:text-[3.6rem] ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.9, ease, delay: 0.2 + i * 0.13 }}
