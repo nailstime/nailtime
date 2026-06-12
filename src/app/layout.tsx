@@ -74,6 +74,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="th" className={`${montserrat.variable} ${fraunces.variable} ${kanit.variable} ${notoSerifThai.variable}`}>
       <body className="font-sans antialiased min-h-full">
         {children}
+        <Script id="gtag" strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-18147547311" />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18147547311');
+        `}</Script>
         {FB_PIXEL_ID && (
           <>
             <Script id="fb-pixel" strategy="afterInteractive">
