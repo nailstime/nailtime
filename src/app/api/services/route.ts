@@ -8,6 +8,7 @@ export async function GET() {
     .from('services')
     .select('id, name, duration, price')
     .eq('is_active', true)
+    .eq('is_bookable', true)
     .order('sort_order')
     .order('name')
 

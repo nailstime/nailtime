@@ -43,7 +43,7 @@ export default function LiffBookingPage() {
   const dates = getDates(21)
 
   useEffect(() => {
-    const liffId = process.env.NEXT_PUBLIC_LIFF_ID
+    const liffId = process.env.NEXT_PUBLIC_BOOKING_LIFF_ID
     if (!liffId) { setLiffError('LIFF ID not configured'); return }
 
     const script = document.createElement('script')
@@ -66,7 +66,7 @@ export default function LiffBookingPage() {
   }, [])
 
   useEffect(() => {
-    supabase.from('services').select('id, name, duration, price').eq('is_active', true).order('sort_order')
+    supabase.from('services').select('id, name, duration, price').eq('is_active', true).eq('is_bookable', true).order('sort_order')
       .then(({ data }) => { if (data) setServices(data) })
   }, [])
 

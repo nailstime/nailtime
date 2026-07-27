@@ -30,6 +30,7 @@ export async function GET(request: Request) {
         .select('duration')
         .in('id', ids)
         .eq('is_active', true)
+        .eq('is_bookable', true)
       const totalDuration = (services ?? []).reduce((sum: number, s: { duration: number }) => sum + s.duration, 0)
       const { data, error } = await getAllSlotsWithAvailability(supabase, date, totalDuration || 60)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })

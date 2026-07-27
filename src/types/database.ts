@@ -32,10 +32,15 @@ export interface Database {
           duration: number
           price: number | null
           is_active: boolean
+          is_bookable: boolean
           sort_order: number
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['services']['Row'], 'id' | 'created_at'>
+        Insert: Omit<Database['public']['Tables']['services']['Row'], 'id' | 'created_at' | 'is_bookable'> & {
+          // Managed from the POS catalog. Omitting it preserves the database
+          // default on create and the existing value on website-admin edits.
+          is_bookable?: boolean
+        }
         Update: Partial<Database['public']['Tables']['services']['Insert']>
       }
       time_slots: {

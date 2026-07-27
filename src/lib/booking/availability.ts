@@ -2,7 +2,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 
 export const SLOT_MINUTES = 15
-export const LAST_START_MINUTES = 18 * 60 + 45  // 18:45 — latest allowed booking start
+// ลูกค้าเริ่มคิวสุดท้ายได้ 18:00 แต่บริการอาจต่อเนื่องถึง 19:30
+export const LAST_START_MINUTES = 18 * 60
 
 type Slot = Database['public']['Tables']['time_slots']['Row']
 type Service = Pick<Database['public']['Tables']['services']['Row'], 'id' | 'duration'>
@@ -85,6 +86,7 @@ export async function getBookableSlots(
     .select('id, duration')
     .eq('id', serviceId)
     .eq('is_active', true)
+    .eq('is_bookable', true)
     .single()
 
   if (serviceError || !service) {
@@ -110,6 +112,7 @@ export async function getBookableSlotsForServices(
     .select('id, duration')
     .in('id', uniqueServiceIds)
     .eq('is_active', true)
+    .eq('is_bookable', true)
 
   if (servicesError) return { data: null, error: servicesError }
   if (!services || services.length !== uniqueServiceIds.length) {

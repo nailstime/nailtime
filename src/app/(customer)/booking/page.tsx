@@ -58,7 +58,7 @@ function BookingContent() {
   const totalDuration = selectedServices.reduce((total, service) => total + service.duration, 0)
 
   useEffect(() => {
-    supabase.from('services').select('id, name, name_en, duration, price').eq('is_active', true).order('sort_order')
+    supabase.from('services').select('id, name, name_en, duration, price').eq('is_active', true).eq('is_bookable', true).order('sort_order')
       .then(({ data }) => { if (data) setServices(data) })
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
