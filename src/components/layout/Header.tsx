@@ -21,7 +21,7 @@ export function Header() {
           <span className="font-serif text-xl font-semibold tracking-tight text-site-dark">
             Nail Time <span className="font-light text-sand">&amp; Spa</span>
           </span>
-          <span className="text-[10px] tracking-[0.22em] text-sand/70 font-light">ネイルタイム</span>
+          <span className="text-[10px] tracking-[0.22em] text-sand-dark font-light">ネイルタイム</span>
         </Link>
 
         <nav className="hidden md:flex gap-7 flex-1 ml-2">

@@ -51,7 +51,7 @@ export function HeroSection() {
           <span className="text-sm font-medium tracking-[0.28em] text-site-dark/85 uppercase whitespace-nowrap sm:text-lg sm:tracking-[0.44em] md:text-xl lg:text-2xl">
             Nail Time & Spa
           </span>
-          <span className="text-[11px] tracking-[0.28em] text-sand font-light">ネイルタイム</span>
+          <span className="text-[11px] tracking-[0.28em] text-sand-dark">ネイルタイム</span>
           <div className="flex items-center justify-center gap-3">
             <span className="block w-6 h-px bg-sand/55 shrink-0" />
             <span className="text-[9px] tracking-[0.3em] uppercase text-site-gray">
