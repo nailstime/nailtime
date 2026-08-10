@@ -17,8 +17,11 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white border-b border-sand/15 shadow-[0_1px_12px_rgba(89,64,38,0.05)]">
       <div className="max-w-6xl mx-auto flex h-[68px] items-center gap-6 px-4 sm:px-6">
         <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="shrink-0 font-serif text-xl font-semibold tracking-tight text-site-dark">
-          Nail Time <span className="font-light text-sand">&amp; Spa</span>
+          className="shrink-0 flex flex-col leading-none gap-0.5">
+          <span className="font-serif text-xl font-semibold tracking-tight text-site-dark">
+            Nail Time <span className="font-light text-sand">&amp; Spa</span>
+          </span>
+          <span className="text-[10px] tracking-[0.22em] text-sand/70 font-light">ネイルタイム</span>
         </Link>
 
         <nav className="hidden md:flex gap-7 flex-1 ml-2">
