@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
@@ -12,17 +12,9 @@ const navLinks = [
 
 export function Header() {
   const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-cream/93 backdrop-blur-md border-b border-sand/20 shadow-[0_1px_12px_rgba(89,64,38,0.06)]' : 'bg-transparent border-b border-transparent'}`}>
+    <header className="sticky top-0 z-50 bg-white border-b border-sand/15 shadow-[0_1px_12px_rgba(89,64,38,0.05)]">
       <div className="max-w-6xl mx-auto flex h-16 items-center gap-6 px-4 sm:px-6 md:h-17 md:gap-10">
         <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="shrink-0 text-lg font-bold tracking-tight text-site-dark sm:text-xl">
