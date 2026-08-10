@@ -11,6 +11,7 @@ type Service = {
   duration: number
   price: number | null
   is_active: boolean
+  is_bookable: boolean
   sort_order: number
 }
 
@@ -236,7 +237,7 @@ export default function ServicesClient({ services }: { services: Service[] }) {
           <table className="w-full text-sm">
             <thead className="bg-cream/50">
               <tr>
-                {['บริการ', 'เวลา', 'ราคา', 'สถานะ', 'จัดการ'].map(header => (
+                {['บริการ', 'เวลา', 'ราคา', 'สถานะบริการ', 'การจองออนไลน์', 'จัดการ'].map(header => (
                   <th key={header} className="text-left px-4 py-3 text-xs font-semibold text-site-gray uppercase tracking-wide whitespace-nowrap">{header}</th>
                 ))}
               </tr>
@@ -258,8 +259,14 @@ export default function ServicesClient({ services }: { services: Service[] }) {
                   </td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${service.is_active ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
-                      {service.is_active ? 'เปิด' : 'ปิด'}
+                      {service.is_active ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}
                     </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${service.is_active && service.is_bookable ? 'bg-green-100 text-green-600' : 'bg-stone-100 text-stone-500'}`}>
+                      {service.is_active && service.is_bookable ? 'เปิดให้จอง' : 'ปิดรับจอง'}
+                    </span>
+                    <p className="mt-1 text-[11px] text-site-gray">ตั้งค่าจาก POS</p>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-2">

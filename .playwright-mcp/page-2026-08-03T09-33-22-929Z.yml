@@ -1,0 +1,236 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]: Hello We support Parity Purchasing, use code “pduxdbtv30” to get 30% off.
+  - generic [ref=e11]:
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - main [ref=e12]:
+      - generic [ref=e13]:
+        - navigation [ref=e14]:
+          - generic [ref=e15]:
+            - link [ref=e16] [cursor=pointer]:
+              - /url: /
+              - img "MotionSites logo" [ref=e17]
+            - generic [ref=e18]:
+              - link "Sites" [ref=e19] [cursor=pointer]:
+                - /url: /
+              - link "Apps New" [ref=e20] [cursor=pointer]:
+                - /url: /apps
+                - text: Apps
+                - generic [ref=e21]: New
+          - button "Search" [ref=e24] [cursor=pointer]
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]: Fresh Drops Everyday
+            - heading [level=1] [ref=e31]:
+              - generic [ref=e32]:
+                - text: Unlock
+                - emphasis [ref=e33]: your
+                - text: AI
+              - generic [ref=e34]:
+                - text: Design
+                - generic [ref=e35]:
+                  - text: Superpowers
+                  - generic: Superpowers
+            - paragraph [ref=e36]: Build beautiful landing pages in minutes with our ready-to-use prompts. Just copy, paste, and launch.
+            - link "Go Unlimited →" [ref=e37] [cursor=pointer]:
+              - /url: /unlimited
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - button "Featured" [ref=e40] [cursor=pointer]
+              - button "Popular" [ref=e41] [cursor=pointer]
+              - button "Recent" [ref=e42] [cursor=pointer]
+            - generic [ref=e43]:
+              - button "Type" [ref=e44] [cursor=pointer]
+              - button "Pricing" [ref=e48] [cursor=pointer]
+          - generic [ref=e52]:
+            - generic [ref=e53] [cursor=pointer]:
+              - img "Synth Mode" [ref=e57]
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - heading "Synth Mode" [level=3] [ref=e61]
+                  - text: Fashion
+                - button "Copy prompt" [ref=e63]: Copy
+            - generic [ref=e67] [cursor=pointer]:
+              - img "Mostar Guide" [ref=e69]
+              - generic [ref=e71]:
+                - generic [ref=e72]:
+                  - heading "Mostar Guide" [level=3] [ref=e73]
+                  - text: Travel
+                - button "Copy prompt" [ref=e75]: Copy
+            - link "Design Rocket Learn to design beautiful Websites using AI tools. Master AI-powered design Start Learning for Free" [ref=e79] [cursor=pointer]:
+              - /url: https://designrocket.io/?utm_source=motionsites&utm_medium=site&utm_campaign=promo
+              - img "Design Rocket" [ref=e80]
+              - generic [ref=e81]:
+                - heading "Learn to design beautiful Websites using AI tools." [level=3] [ref=e82]
+                - paragraph [ref=e83]: Master AI-powered design
+                - generic [ref=e84]: Start Learning for Free
+            - generic [ref=e85] [cursor=pointer]:
+              - img "Personal Showcase" [ref=e87]
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - heading "Personal Showcase" [level=3] [ref=e91]
+                  - text: Portfolio
+                - button "Copy prompt" [ref=e93]: Copy
+            - generic [ref=e97] [cursor=pointer]:
+              - img "Dreamcore Landing" [ref=e99]
+              - generic [ref=e100]:
+                - generic [ref=e101]:
+                  - heading "Dreamcore Landing" [level=3] [ref=e102]
+                  - text: Landing Page
+                - button "Unlock prompt" [ref=e104]: Premium
+            - generic [ref=e108] [cursor=pointer]:
+              - img "OYLA" [ref=e110]
+              - generic [ref=e112]:
+                - generic [ref=e113]:
+                  - heading "OYLA" [level=3] [ref=e114]
+                  - text: Ecommerce
+                - button "Unlock prompt" [ref=e116]: Premium
+            - generic [ref=e120] [cursor=pointer]:
+              - img "3D Portfolio" [ref=e122]
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - heading "3D Portfolio" [level=3] [ref=e126]
+                  - text: Portfolio
+                - button "Copy prompt" [ref=e128]: Copy
+            - generic [ref=e132] [cursor=pointer]:
+              - img "Sentinel" [ref=e134]
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - heading "Sentinel" [level=3] [ref=e138]
+                  - text: Cybersecurity
+                - button "Unlock prompt" [ref=e140]: Premium
+            - generic [ref=e144] [cursor=pointer]:
+              - img "Remote Dev Collective" [ref=e148]
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - heading "Remote Dev Collective" [level=3] [ref=e152]
+                  - text: Agency Website
+                - button "Unlock prompt" [ref=e154]: Premium
+            - generic [ref=e158] [cursor=pointer]:
+              - img "Data Storytelling" [ref=e162]
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - heading "Data Storytelling" [level=3] [ref=e166]
+                  - text: SaaS
+                - button "Unlock prompt" [ref=e168]: Premium
+            - generic [ref=e172] [cursor=pointer]:
+              - img "Creator Guild" [ref=e176]
+              - generic [ref=e178]:
+                - generic [ref=e179]:
+                  - heading "Creator Guild" [level=3] [ref=e180]
+                  - text: Community
+                - button "Unlock prompt" [ref=e182]: Premium
+            - generic [ref=e186] [cursor=pointer]:
+              - img "Bold Studio" [ref=e190]
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - heading "Bold Studio" [level=3] [ref=e193]
+                  - text: Hero
+                - button "Copy prompt" [ref=e195]: Copy
+            - generic [ref=e199] [cursor=pointer]:
+              - img "Silent Velocity" [ref=e203]
+              - generic [ref=e205]:
+                - generic [ref=e206]:
+                  - heading "Silent Velocity" [level=3] [ref=e207]
+                  - text: Technology
+                - button "Unlock prompt" [ref=e209]: Premium
+            - link "MotionSites logo Backgrounds Animated backgrounds designed to convert, impress, and amaze. Explore Videos" [ref=e213] [cursor=pointer]:
+              - /url: /backgrounds
+              - generic [ref=e214]:
+                - img "MotionSites logo" [ref=e215]
+                - generic [ref=e216]: Backgrounds
+              - generic [ref=e217]:
+                - heading "Animated backgrounds designed to convert, impress, and amaze." [level=3] [ref=e218]
+                - generic [ref=e219]: Explore Videos
+            - generic [ref=e220] [cursor=pointer]:
+              - img "Prisma Creative Studio" [ref=e224]
+              - generic [ref=e225]:
+                - generic [ref=e226]:
+                  - heading "Prisma Creative Studio" [level=3] [ref=e227]
+                  - text: Landing Page
+                - button "Copy prompt" [ref=e229]: Copy
+            - generic [ref=e233] [cursor=pointer]:
+              - img "Interactive Discovery" [ref=e237]
+              - generic [ref=e238]:
+                - generic [ref=e239]:
+                  - heading "Interactive Discovery" [level=3] [ref=e240]
+                  - text: Hero
+                - button "Copy prompt" [ref=e242]: Copy
+            - generic [ref=e246] [cursor=pointer]:
+              - img "Agent Crew" [ref=e250]
+              - generic [ref=e252]:
+                - generic [ref=e253]:
+                  - heading "Agent Crew" [level=3] [ref=e254]
+                  - text: AI
+                - button "Unlock prompt" [ref=e256]: Premium
+            - generic [ref=e260] [cursor=pointer]:
+              - img "Skybridge 404" [ref=e264]
+              - generic [ref=e266]:
+                - generic [ref=e267]:
+                  - heading "Skybridge 404" [level=3] [ref=e268]
+                  - text: "404"
+                - button "Copy prompt" [ref=e270]: Copy
+            - generic [ref=e277] [cursor=pointer]:
+              - generic [ref=e278]:
+                - heading "Art Landing" [level=3] [ref=e279]
+                - text: Landing Page
+              - button "Unlock prompt" [ref=e281]: Premium
+            - generic [ref=e285] [cursor=pointer]:
+              - img "Velorah" [ref=e289]
+              - generic [ref=e290]:
+                - generic [ref=e291]:
+                  - heading "Velorah" [level=3] [ref=e292]
+                  - text: Agency
+                - button "Copy prompt" [ref=e294]: Copy
+            - generic [ref=e298] [cursor=pointer]:
+              - img "Intelligent Operations" [ref=e302]
+              - generic [ref=e304]:
+                - generic [ref=e305]:
+                  - heading "Intelligent Operations" [level=3] [ref=e306]
+                  - text: Agency
+                - button "Copy prompt" [ref=e308]: Copy
+            - generic [ref=e312] [cursor=pointer]:
+              - img "Web3 EOS Hero" [ref=e316]
+              - generic [ref=e317]:
+                - generic [ref=e318]:
+                  - heading "Web3 EOS Hero" [level=3] [ref=e319]
+                  - text: Web3
+                - button "Unlock prompt" [ref=e321]: Premium
+            - generic [ref=e325] [cursor=pointer]:
+              - img "Augmented Sight" [ref=e329]
+              - generic [ref=e331]:
+                - generic [ref=e332]:
+                  - heading "Augmented Sight" [level=3] [ref=e333]
+                  - text: Technology
+                - button "Unlock prompt" [ref=e335]: Premium
+            - generic [ref=e339] [cursor=pointer]:
+              - img "Aetheris Voyage" [ref=e343]
+              - generic [ref=e344]:
+                - generic [ref=e345]:
+                  - heading "Aetheris Voyage" [level=3] [ref=e346]
+                  - text: Hero Section
+                - button "Copy prompt" [ref=e348]: Copy
+            - generic [ref=e352] [cursor=pointer]:
+              - img "Cloud Kicks" [ref=e356]
+              - generic [ref=e358]:
+                - generic [ref=e359]:
+                  - heading "Cloud Kicks" [level=3] [ref=e360]
+                  - text: Fashion
+                - button "Unlock prompt" [ref=e362]: Premium
+            - generic [ref=e366] [cursor=pointer]:
+              - img "CoderCrest" [ref=e370]
+              - generic [ref=e371]:
+                - generic [ref=e372]:
+                  - heading "CoderCrest" [level=3] [ref=e373]
+                  - text: SaaS
+                - button "Unlock prompt" [ref=e375]: Premium
+          - generic [ref=e381]:
+            - generic [ref=e382]:
+              - img "MotionSites logo" [ref=e383]
+              - heading "Develop Your AI Design Skills That Stand Out." [level=2] [ref=e384]
+              - paragraph [ref=e385]: "\"Give Me Just a Few Days And I'll Show You How To Create AI Design Websites That Most Agencies Charge $5,000 For\""
+              - link "Explore the Full Library" [ref=e386] [cursor=pointer]:
+                - /url: https://designrocket.io/
+            - img "Design Rocket preview"
+          - paragraph [ref=e389]: Built with Design Rocket 🚀
