@@ -9,7 +9,7 @@ const ease = cubicBezier(0.76, 0, 0.24, 1)
 const HEADLINE = [
   { text: 'ความสวยงาม', className: 'text-site-dark' },
   { text: 'เริ่มต้น',     className: 'text-site-dark' },
-  { text: 'ที่ปลายนิ้ว', className: 'text-sand-dark/78' },
+  { text: 'ที่ปลายนิ้ว', className: 'text-sand-dark' },
 ]
 
 export function HeroSection() {
@@ -34,8 +34,8 @@ export function HeroSection() {
       </motion.div>
 
       {/* Left gradient — minimal so leaf shadow shows through */}
-      <div className="absolute inset-0 bg-gradient-to-b from-cream/88 via-cream/55 to-cream/20 pointer-events-none md:bg-gradient-to-r md:from-cream/80 md:via-cream/40 md:to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/18 via-transparent to-cream/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-cream/72 via-cream/38 to-cream/8 pointer-events-none md:bg-gradient-to-r md:from-cream/70 md:via-cream/28 md:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent pointer-events-none" />
 
       {/* Text content — left side overlay */}
       <div className="relative z-10 flex min-h-[560px] w-full flex-col items-center justify-center px-4 py-8 text-center sm:min-h-[600px] sm:px-6 md:h-full md:min-h-0 md:w-[48%] md:px-12 lg:px-20">
@@ -64,7 +64,7 @@ export function HeroSection() {
           {HEADLINE.map((line, i) => (
             <div key={line.text} className="overflow-visible py-1.5">
               <motion.h1
-                className={`font-[family-name:var(--font-thai-soft)] text-[clamp(2.05rem,9.5vw,2.75rem)] font-semibold leading-[1.22] sm:text-[3rem] md:text-[3.2rem] lg:text-[3.6rem] ${line.className}`}
+                className={`font-[family-name:var(--font-thai-soft)] text-[clamp(2.05rem,9.5vw,2.75rem)] font-bold leading-[1.22] sm:text-[3rem] md:text-[3.2rem] lg:text-[3.6rem] ${line.className}`}
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.9, ease, delay: 0.2 + i * 0.13 }}
