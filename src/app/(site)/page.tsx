@@ -1,16 +1,22 @@
 import { createClient } from '@/lib/supabase/server'
-import { Header } from '@/components/layout/Header'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { ArrowRight, ArrowUpRight, Clock, MapPin, Phone, Star } from 'lucide-react'
 import { Reveal, StaggerParent, StaggerChild } from '@/components/ui/Reveal'
-import { DrawLine } from '@/components/ui/DrawLine'
-import { HeroSection } from '@/components/sections/HeroSection'
 import { FloatingCTA } from '@/components/layout/FloatingCTA'
 import { HomeBookingBar } from '@/components/booking/HomeBookingBar'
-import { ServicesSection } from '@/components/sections/ServicesSection'
 import { LineCouponForm } from '@/components/sections/LineCouponForm'
-import { Hand, Lightbulb, Paintbrush } from 'lucide-react'
+import { SiteNav } from '@/components/site/SiteNav'
+import { GelStudio } from '@/components/site/studio/GelStudio'
+import { ServiceMenu } from '@/components/site/ServiceMenu'
+import { WorksGallery } from '@/components/site/WorksGallery'
+import { Parallax } from '@/components/site/Parallax'
+import { LeafShadow } from '@/components/site/LeafShadow'
+import { FacebookIcon, InstagramIcon, LineIcon } from '@/components/site/SocialIcons'
+import { CATALOG, PILLARS, POLISHES, REVIEWS, SHOP } from '@/components/site/data'
+import { anuphan, shippori } from '@/components/site/fonts'
+import s from '@/components/site/site.module.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -33,29 +39,14 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const REVIEWS = [
-  {
-    name: 'คุณนุ่น',
-    date: 'เมษายน 2026',
-    text: 'ทำเล็บสวยมากค่ะ ช่างใจเย็น พูดคุยง่าย สีออกมาตรงใจเลย ครั้งหน้าจะมาอีกแน่นอน ❤️',
-  },
-  {
-    name: 'คุณแอน',
-    date: 'มีนาคม 2026',
-    text: 'ร้านสะอาดมาก อุปกรณ์ใหม่เอี่ยม เล็บอยู่ทนมากกว่า 3 สัปดาห์ ไม่หลุดเลยค่ะ แนะนำเลย',
-  },
-  {
-    name: 'คุณฝน',
-    date: 'กุมภาพันธ์ 2026',
-    text: 'มาทำทั้งมือและเท้า ช่างฝีมือดีมาก ลายที่ขอมาออกมาสวยเกินคาด ประทับใจมากๆ ค่ะ',
-  },
-]
-
-const featureServices = [
-  { title: 'Nail Care', icon: Hand, desc: 'ดูแลเล็บมือเท้าครบครัน ทำความสะอาด ตกแต่งผิว' },
-  { title: 'Nail Art', icon: Paintbrush, desc: 'เพ้นท์ลายอิสระ สไตล์ญี่ปุ่น ลาย custom ทุกแบบ' },
-  { title: 'Tips & Trends', icon: Lightbulb, desc: 'อัพเดตเทรนด์ใหม่ แนะนำสีและลาย เปลี่ยนทุกซีซั่น' },
-]
+function Kicker({ children, light }: { children: React.ReactNode; light?: boolean }) {
+  return (
+    <p className={`flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.22em] ${light ? 'text-[#e6cdb6]' : 'text-[var(--nt-accent)]'}`}>
+      <span className={`h-px w-8 ${light ? 'bg-[#e6cdb6]/60' : 'bg-[var(--nt-accent)]/50'}`} />
+      {children}
+    </p>
+  )
+}
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -70,9 +61,7 @@ export default async function HomePage() {
   }[]
 
   return (
-    <>
-      {/* Preload LCP hero image so browser discovers it immediately */}
-      <link rel="preload" as="image" href="/_next/image?url=%2Fimages%2Fhero.webp&w=1920&q=75" fetchPriority="high" />
+    <div className={`${s.root} ${anuphan.variable} ${shippori.variable}`}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -107,473 +96,393 @@ export default async function HomePage() {
           }),
         }}
       />
-      <Header />
+      <div className={s.grain} aria-hidden="true" />
+      <SiteNav />
       <FloatingCTA />
 
-      {/* HERO */}
-      <HeroSection />
+      <main>
+        {/* ── HERO · Gel Studio ─────────────────────────────────────── */}
+        <section className="relative overflow-hidden pt-[68px]">
+          <LeafShadow className={s.leaves} />
+          <LeafShadow className={`${s.leaves} ${s.leavesLeft}`} />
+          <p aria-hidden="true" className={`${s.jp} pointer-events-none absolute right-5 top-28 hidden text-sm tracking-[0.6em] text-[var(--nt-ink)]/35 [writing-mode:vertical-rl] xl:block`}>
+            ネイルタイム ─ 指先から、きれいを。
+          </p>
 
-      {/* BOOKING BAR */}
-      <HomeBookingBar />
-
-      {/* FEATURES */}
-      <section id="services" className="py-16 sm:py-20 md:py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">What We Do</p>
-            <h2 className="relative inline-block text-3xl font-bold text-site-dark sm:text-4xl">
-              บริการของเรา
-              <DrawLine className="w-32 mx-auto mt-2" />
-            </h2>
-          </Reveal>
-          <StaggerParent className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-            {featureServices.map(({ icon: Icon, ...f }) => (
-              <StaggerChild key={f.title}>
-                <div className="group cursor-default">
-                  <div className="w-20 h-20 mx-auto mb-5 rounded-full border border-sand/40 flex items-center justify-center group-hover:border-sand group-hover:bg-sand/5 transition-all duration-300">
-                    <Icon size={28} strokeWidth={1.5} className="text-sand transition-transform duration-300 group-hover:-translate-y-0.5" aria-hidden="true" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2 group-hover:text-sand transition-colors duration-300">{f.title}</h3>
-                  <p className="text-sm text-site-gray leading-relaxed">{f.desc}</p>
+          <div className="relative mx-auto grid max-w-7xl gap-10 px-5 pb-14 pt-8 sm:px-8 lg:min-h-[calc(100svh-68px)] lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-6 lg:pb-12">
+            <div className="flex flex-col gap-6 lg:pr-4">
+              <Reveal y={16}>
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-[var(--nt-ink-2)]">
+                  <span className={`${s.jp} text-[var(--nt-accent)]`}>ネイルタイム</span>
+                  <span className="h-px w-6 bg-[var(--nt-ink)]/25" />
+                  Nail Time &amp; Spa · ดอนหัวฬอ ชลบุรี
+                </p>
+              </Reveal>
+              <h1 className={`${s.thaiDisplay} text-[clamp(2.6rem,9vw,4.6rem)] font-semibold leading-[1.18] tracking-tight text-[var(--nt-ink)]`}>
+                <Reveal y={40} delay={0.05}><span className="block whitespace-nowrap">ความสวยงาม</span></Reveal>
+                <Reveal y={40} delay={0.12}><span className="block whitespace-nowrap">เริ่มต้น</span></Reveal>
+                <Reveal y={40} delay={0.19}><span className="block whitespace-nowrap text-[var(--nt-accent)]">ที่ปลายนิ้ว</span></Reveal>
+              </h1>
+              <Reveal delay={0.25}>
+                <p className="max-w-[34ch] text-[17px] leading-relaxed text-[var(--nt-ink-2)]">
+                  ร้านทำเล็บเจลสไตล์ญี่ปุ่นในดอนหัวฬอ ลองเลือกสีบนเล็บตัวอย่างข้างๆ นี้ก่อน แล้วจองคิวมาทำจริงกับช่างของเรา
+                </p>
+              </Reveal>
+              <Reveal delay={0.35}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/booking"
+                    className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-[var(--nt-ink)] px-7 text-[15px] font-semibold text-white transition-colors hover:bg-[#4a3a2a]"
+                  >
+                    จองคิวออนไลน์
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                  <a href="#works" className="inline-flex min-h-12 items-center px-4 text-[15px] text-[var(--nt-ink)] underline decoration-[var(--nt-ink)]/25 underline-offset-[6px] transition-colors hover:decoration-[var(--nt-ink)]">
+                    ดูผลงานจริง
+                  </a>
                 </div>
-              </StaggerChild>
-            ))}
-          </StaggerParent>
-        </div>
-
-      </section>
-
-      {/* STORY */}
-      <section id="story" className="relative grid grid-cols-1 overflow-hidden bg-[#dfceb7] md:grid-cols-2">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.42),transparent_28%),radial-gradient(circle_at_82%_74%,rgba(116,82,51,0.12),transparent_30%)]" />
-        <div className="pointer-events-none absolute inset-x-6 top-8 h-px bg-white/20 sm:inset-x-10" />
-        <div className="pointer-events-none absolute inset-x-6 bottom-8 h-px bg-site-dark/10 sm:inset-x-10" />
-        <div className="pointer-events-none absolute left-7 top-1/2 hidden -translate-y-1/2 flex-col items-center gap-4 md:flex">
-          <span className="h-14 w-px bg-site-dark/16" />
-          <span className="h-1.5 w-1.5 rounded-full bg-site-dark/32" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.34em] text-site-dark/38 [writing-mode:vertical-rl]">Since 2019</span>
-          <span className="h-14 w-px bg-site-dark/16" />
-        </div>
-        <div className="pointer-events-none absolute left-[15%] top-20 hidden h-24 w-24 rounded-full border border-white/35 md:block" />
-        <div className="pointer-events-none absolute bottom-24 right-[14%] hidden h-28 w-28 rounded-full border border-site-dark/10 md:block" />
-        <div className="hidden">
-          <div className="absolute inset-x-8 top-8 h-px bg-site-dark/12" />
-          <div className="absolute bottom-8 left-8 top-8 w-px bg-site-dark/12" />
-          <div className="absolute bottom-8 right-8 top-8 w-px bg-white/25" />
-          <div className="absolute left-[52%] top-16 hidden h-28 w-28 rounded-full border border-white/35 md:block" />
-          <div className="absolute bottom-14 right-[24%] hidden h-20 w-20 rounded-full border border-site-dark/10 md:block" />
-          <div className="absolute left-10 top-10 text-[10px] font-semibold uppercase tracking-[0.32em] text-site-dark/35 [writing-mode:vertical-rl]">Since 2019</div>
-          {/* Main arch — left */}
-          <Reveal y={0} delay={0} className="absolute bottom-10 left-[11%] top-12 w-[38%] min-w-[190px] max-w-[300px] sm:bottom-14 sm:top-14">
-            <div className="relative h-full w-full rounded-[999px_999px_12px_12px] bg-[#efe4d5] p-2 shadow-[0_28px_70px_rgba(54,38,24,0.24)]">
-              <div className="h-full w-full rounded-[999px_999px_8px_8px] bg-[url('/images/portfolio/1.webp')] bg-cover bg-center" />
-              <div className="absolute -bottom-5 -right-5 h-20 w-20 border-b border-r border-site-dark/18" />
-            </div>
-          </Reveal>
-          {/* Small arch — right bottom */}
-          <Reveal y={20} delay={0.15} className="absolute bottom-14 right-[7%] h-[210px] w-[27%] min-w-[132px] max-w-[190px] sm:bottom-20 sm:h-[270px]">
-            <div className="relative h-full w-full rounded-[999px_999px_10px_10px] bg-white/55 p-1.5 shadow-[-18px_22px_46px_rgba(54,38,24,0.2)]">
-              <div className="h-full w-full rounded-[999px_999px_7px_7px] bg-[url('/images/portfolio/2.webp')] bg-cover bg-top" />
-              <span className="absolute -left-12 top-12 h-px w-14 bg-site-dark/22" />
-            </div>
-          </Reveal>
-          {/* Extra small arch — right top */}
-          <Reveal y={-10} delay={0.25} className="absolute right-[11%] top-12 h-[145px] w-[22%] min-w-[104px] max-w-[150px] sm:top-16 sm:h-[185px]">
-            <div className="relative h-full w-full rounded-[999px_999px_10px_10px] bg-white/50 p-1.5 shadow-[0_18px_36px_rgba(54,38,24,0.18)]">
-              <div className="h-full w-full rounded-[999px_999px_7px_7px] bg-[url('/images/portfolio/6.webp')] bg-cover bg-center" />
-            </div>
-          </Reveal>
-          {/* Center wording */}
-          <Reveal delay={0.3} className="pointer-events-none absolute left-[37%] right-[23%] top-1/2 z-10 flex -translate-y-1/2 flex-col items-center text-center max-md:left-[24%] max-md:right-[24%]">
-            <p className="mb-4 text-[13px] font-bold uppercase tracking-[0.46em] text-site-dark/50 sm:text-sm">Nail time Story</p>
-            <div className="mb-6 flex w-full max-w-[180px] items-center gap-4">
-              <span className="h-px flex-1 bg-site-dark/25" />
-              <span className="h-1.5 w-1.5 rounded-full bg-site-dark/38" />
-              <span className="h-px flex-1 bg-site-dark/25" />
-            </div>
-            <p className="mb-4 whitespace-nowrap font-[family-name:var(--font-thai-modern)] text-4xl font-semibold leading-none text-site-dark drop-shadow-[0_1px_0_rgba(255,255,255,0.5)] sm:text-[46px]">
-              เรื่องราวของเรา
-            </p>
-            <p className="mb-3 whitespace-nowrap font-[family-name:var(--font-thai-modern)] text-sm font-normal leading-relaxed text-site-dark/64">
-              ร้านเล็กๆ ที่ไม่เคยหยุดพัฒนา
-            </p>
-            <p className="max-w-[280px] font-[family-name:var(--font-thai-modern)] text-sm font-normal leading-relaxed text-site-dark/64">
-              กับฝีมือและผลิตภัณฑ์ระดับพรีเมี่ยม
-            </p>
-          </Reveal>
-        </div>
-        <div className="relative order-2 z-10 flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
-          <Reveal>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">About Us</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              เกี่ยวกับร้านของเรา
-              <DrawLine className="w-40 mt-2" delay={0.6} />
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-sm text-site-gray leading-relaxed">
-              ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคริลิก PVC และสปามือเท้า
-              ตั้งอยู่ที่ดอนหัวฬอ ชลบุรี ตรงข้ามที่ทำการเทศบาล
-            </p>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <p className="text-sm text-site-gray leading-relaxed">
-              เราเน้นสไตล์ญี่ปุ่น ใช้วัสดุนำเข้าคุณภาพสูง ไม่แพ้ผิว ช่างมืออาชีพ ใส่ใจทุกรายละเอียด
-            </p>
-          </Reveal>
-          <Reveal delay={0.4}>
-            <ul className="flex flex-col gap-2 my-2 text-sm text-site-gray">
-              <li><strong className="text-site-dark">Always Clean</strong> — อุปกรณ์สะอาด ปลอดภัยทุกครั้ง</li>
-              <li><strong className="text-site-dark">Always Leading</strong> — ตามเทรนด์ญี่ปุ่น อัพเดตทุกซีซั่น</li>
-            </ul>
-          </Reveal>
-          <Reveal delay={0.5}>
-            <a href="https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/"
-              target="_blank" rel="noopener"
-              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
-              ดูเพจ Facebook →
-            </a>
-          </Reveal>
-        </div>
-
-        <div className="relative order-1 z-10 flex flex-col justify-center px-6 py-16 text-center sm:px-10 md:px-16 md:py-20">
-          <Reveal className="mx-auto w-full max-w-4xl text-center">
-            <p className="mb-5 text-[13px] font-bold uppercase tracking-[0.48em] text-site-dark/48 sm:text-sm">
-              Nail Time Story
-            </p>
-            <div className="mx-auto mb-8 flex max-w-[220px] items-center gap-4">
-              <span className="h-px flex-1 bg-site-dark/25" />
-              <span className="h-1.5 w-1.5 rounded-full bg-site-dark/38" />
-              <span className="h-px flex-1 bg-site-dark/25" />
-            </div>
-            <h2 className="text-[28px] font-bold leading-tight text-site-dark sm:text-[34px] md:text-[38px]">
-              Because Nail Time is<br />your time for happiness.
-            </h2>
-            <div className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-5 text-left text-[13px] font-normal leading-7 text-site-dark/66 sm:text-sm sm:leading-8">
-              <p>
-                จากจุดเริ่มต้นของร้านเล็กๆ ในย่านดอนหัวฬ่อ ที่เกิดขึ้นจากความรักในการทำเล็บ วันนี้ Nail Time &amp; Spa เติบโตขึ้นด้วยแพสชันที่ไม่เคยหยุดพัฒนา เราเชื่อว่าเล็บที่สวยไม่ใช่แค่เรื่องของแฟชั่น แต่คือสิ่งที่จะช่วยเติมเต็มความมั่นใจและรอยยิ้มให้กับคุณในทุกๆ วัน
-              </p>
-              <p>
-                เราคัดสรรสีเจลและผลิตภัณฑ์พรีเมียมแบรนด์แท้นำเข้าจากเกาหลี เพื่อให้ได้ลุคที่ละมุน เรียบหรู และดูสุขภาพดี ควบคู่กับเทคนิคการเพ้นท์และต่อเล็บที่ประณีตจากช่างผู้เชี่ยวชาญ ภายในพื้นที่ส่วนตัวที่ดูแลลูกค้าตามคิวจองอย่างใส่ใจ เพื่อให้ทุกนาทีที่คุณอยู่กับเรา เป็นช่วงเวลาแห่งการพักผ่อนและการดูแลตัวเองอย่างแท้จริง
-              </p>
-            </div>
-          </Reveal>
-
-        </div>
-      </section>
-
-      {/* MIX & MATCH POLISHES */}
-      <section className="overflow-hidden bg-sand px-4 py-16 sm:px-10 sm:py-20 md:py-24">
-        <Reveal>
-          <div className="flex flex-col items-center gap-3 mb-14">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase bg-white/30 text-site-dark px-4 py-1.5 rounded-full">
-              GellyFit · Korea Professional
-            </span>
-            <h2 className="text-center text-2xl font-bold uppercase tracking-[0.1em] text-site-dark">
-              Mix &amp; Match Polishes
-            </h2>
-            <p className="text-center text-sm text-site-dark/60">
-              Combination สุดฮิตที่ร้านเลือกมาให้
-            </p>
-          </div>
-        </Reveal>
-        <StaggerParent className="mx-auto grid max-w-4xl grid-cols-2 gap-x-4 gap-y-10 sm:gap-8 md:grid-cols-4">
-          {[
-            { src: '/images/bottle-base.png',  name: 'Base Coat',    sub: 'Film shadow / No.5 oz' },
-            { src: '/images/bottle-gel.png',   name: 'Gel Polish',   sub: 'Sorbet fine / No.5 oz' },
-            { src: '/images/bottle-top.png',   name: 'Top Coat',     sub: 'Summer mirage / No.5 oz' },
-            { src: '/images/bottle-matte.png', name: 'Matte Polish', sub: 'Blue Paletts / No.5 oz' },
-          ].map(b => (
-            <StaggerChild key={b.name}>
-              <div className="text-center group">
-                <div className="overflow-visible pt-4">
-                  <Image src={b.src} alt={b.name} width={100} height={240}
-                    className="mx-auto mb-6 object-contain drop-shadow-[-16px_-6px_20px_rgba(0,0,0,0.18)] group-hover:-translate-y-3 group-hover:drop-shadow-[-16px_-12px_28px_rgba(0,0,0,0.28)] transition-all duration-500"
-                    style={{ height: 240, width: 'auto' }} />
-                </div>
-                <p className="text-sm font-bold text-white">{b.name}</p>
-                <p className="text-xs text-white/70 mt-1">{b.sub}</p>
-              </div>
-            </StaggerChild>
-          ))}
-        </StaggerParent>
-      </section>
-
-      {/* TREATMENTS & PRICES */}
-      <section id="prices" className="grid min-h-[500px] grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col justify-center gap-6 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
-          <Reveal>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Treatments &amp; Prices</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              บริการและราคา
-              <DrawLine className="w-36 mt-2" delay={0.5} />
-            </h2>
-          </Reveal>
-          <ServicesSection services={services} />
-          <Reveal delay={0.2}>
-            <a href="tel:0647451946"
-              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
-              โทรสอบถามราคา
-            </a>
-          </Reveal>
-        </div>
-        <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1000')] bg-center bg-cover min-h-[400px]" />
-      </section>
-
-      {/* GALLERY */}
-      <section id="products" className="bg-white py-16 sm:py-20 md:py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-12">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-2">Our Work</p>
-            <h2 className="text-3xl font-bold text-site-dark sm:text-4xl">
-              ผลงานของเรา
-              <DrawLine className="w-32 mx-auto mt-2" delay={0.4} />
-            </h2>
-          </Reveal>
-          <StaggerParent className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {[
-              '/images/portfolio/1.webp',
-              '/images/portfolio/2.webp',
-              '/images/portfolio/3.webp',
-              '/images/portfolio/4.webp',
-              '/images/portfolio/5.webp',
-              '/images/portfolio/6.webp',
-            ].map((src, i) => (
-              <StaggerChild key={i}>
-                <div className="relative overflow-hidden rounded-xl aspect-square bg-cream group cursor-pointer">
-                  <div className="absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${src})` }} />
-                  <div className="absolute inset-0 bg-site-dark/0 group-hover:bg-site-dark/20 transition-all duration-300" />
-                </div>
-              </StaggerChild>
-            ))}
-          </StaggerParent>
-          <Reveal delay={0.2} className="text-center mt-10">
-            <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
-              className="inline-flex items-center gap-2 rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-8 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95">
-              ดูผลงานทั้งหมดบน Instagram →
-            </a>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* CATALOG */}
-      <section className="bg-site-dark py-10 overflow-hidden">
-        <Reveal className="text-center mb-6">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Our Catalog Idea</p>
-        </Reveal>
-        <div className="relative">
-          <div className="flex gap-3 animate-marquee w-max">
-            {[...Array.from({length:11},(_,i)=>`/images/catalog/${i+1}.webp`),...Array.from({length:11},(_,i)=>`/images/catalog/${i+1}.webp`)].map((src,i)=>(
-              <div key={i} className="shrink-0 w-40 h-40 sm:w-48 sm:h-48 rounded-xl overflow-hidden">
-                <Image src={src} alt="" width={192} height={192} className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="bg-cream py-16 sm:py-20 md:py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand mb-3">Happy Clients</p>
-            <h2 className="inline-block text-3xl font-bold text-site-dark sm:text-4xl">
-              เสียงจากลูกค้า
-              <DrawLine className="w-28 mx-auto mt-2" />
-            </h2>
-          </Reveal>
-          <StaggerParent className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {REVIEWS.map((r) => (
-              <StaggerChild key={r.name}>
-                <div className="bg-white rounded-2xl p-6 shadow-[0_4px_24px_rgba(89,64,38,0.06)] flex flex-col gap-3 h-full">
-                  <div className="flex gap-0.5 text-sand text-base">★★★★★</div>
-                  <p className="text-sm text-site-gray leading-relaxed flex-1">"{r.text}"</p>
+              </Reveal>
+              <Reveal delay={0.45}>
+                <dl className="mt-2 grid max-w-md grid-cols-3 border-t border-[var(--nt-ink)]/12 pt-5 text-sm">
                   <div>
-                    <p className="text-sm font-semibold text-site-dark">{r.name}</p>
-                    <p className="text-[11px] text-site-gray mt-0.5">{r.date}</p>
+                    <dt className="text-[var(--nt-ink-2)]">เปิดทุกวัน</dt>
+                    <dd className="mt-1 font-semibold tabular-nums">09 – 19 น.</dd>
                   </div>
+                  <div className="border-l border-[var(--nt-ink)]/12 pl-4">
+                    <dt className="text-[var(--nt-ink-2)]">ดูแลลูกค้า</dt>
+                    <dd className="mt-1 font-semibold">ตั้งแต่ 2019</dd>
+                  </div>
+                  <div className="border-l border-[var(--nt-ink)]/12 pl-4">
+                    <dt className="text-[var(--nt-ink-2)]">สีเจล</dt>
+                    <dd className="mt-1 font-semibold">นำเข้าเกาหลี</dd>
+                  </div>
+                </dl>
+              </Reveal>
+            </div>
+
+            <div className="lg:h-[min(680px,calc(100svh-200px))]">
+              <GelStudio />
+            </div>
+          </div>
+        </section>
+
+        {/* Booking bar: the existing, unchanged booking component. */}
+        <HomeBookingBar />
+
+        {/* ── SERVICES · What we do ─────────────────────────────────── */}
+        <section id="services" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-20 sm:px-8 md:py-28">
+          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            <Reveal>
+              <Kicker>What we do</Kicker>
+              <h2 className={`${s.thaiDisplay} mt-5 text-4xl font-semibold leading-tight sm:text-5xl`}>บริการของเรา</h2>
+              <p className="mt-5 max-w-[36ch] leading-relaxed text-[var(--nt-ink-2)]">
+                ทำเล็บเจล เพ้นท์เล็บ ต่อเล็บเจล อะคริลิก PVC และสปามือเท้า ทุกบริการเริ่มจากการดูแลเล็บและผิวรอบเล็บก่อนลงสีเสมอ
+              </p>
+            </Reveal>
+            <StaggerParent className="grid gap-px overflow-hidden rounded-3xl border border-[var(--nt-ink)]/10 bg-[var(--nt-ink)]/10 sm:grid-cols-3">
+              {PILLARS.map((p, i) => (
+                <StaggerChild key={p.en} className="flex flex-col gap-4 bg-[var(--nt-cream)] p-6 sm:min-h-[280px] sm:p-7">
+                  <span className="text-xs tabular-nums text-[var(--nt-accent)]">0{i + 1}</span>
+                  <span className={`${s.jp} whitespace-nowrap text-2xl text-[var(--nt-ink)]/80 lg:text-3xl`} aria-hidden="true">{p.jp}</span>
+                  <h3 className={`${s.display} mt-auto text-2xl italic`}>{p.en}</h3>
+                  <p className="text-[15px] leading-relaxed text-[var(--nt-ink-2)]">{p.th}</p>
+                </StaggerChild>
+              ))}
+            </StaggerParent>
+          </div>
+        </section>
+
+        {/* ── STORY ─────────────────────────────────────────────────── */}
+        <section id="story" className="relative scroll-mt-20 overflow-hidden bg-[var(--nt-paper)] py-20 md:py-28">
+          <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 md:grid-cols-2 md:gap-16">
+            <div className="relative mx-auto h-[440px] w-full max-w-[520px] sm:h-[540px]">
+              <Parallax amount={30} className="absolute left-0 top-0 h-[82%] w-[62%]">
+                <div className="relative h-full w-full overflow-hidden rounded-b-2xl rounded-t-full bg-[#e8dccb] shadow-[0_30px_60px_-30px_rgba(42,32,23,0.45)]">
+                  <Image src="/images/portfolio/1.webp" alt="เล็บเจลลายผีเสื้อโทนชมพูจากร้าน Nail Time" fill sizes="(min-width: 768px) 320px, 60vw" className="object-cover" />
                 </div>
+              </Parallax>
+              <Parallax amount={70} className="absolute bottom-0 right-0 h-[52%] w-[44%]">
+                <div className="relative h-full w-full overflow-hidden rounded-b-2xl rounded-t-full bg-[#e8dccb] ring-8 ring-[var(--nt-paper)]">
+                  <Image src="/images/portfolio/2.webp" alt="ผลงานเล็บเจลจากร้าน Nail Time" fill sizes="(min-width: 768px) 240px, 45vw" className="object-cover" />
+                </div>
+              </Parallax>
+              <Parallax amount={110} className="absolute right-[6%] top-[4%]">
+                <p className={`${s.jp} text-[13px] tracking-[0.5em] text-[var(--nt-ink)]/45 [writing-mode:vertical-rl]`} aria-hidden="true">
+                  爪の時間、あなたの時間。
+                </p>
+              </Parallax>
+            </div>
+
+            <div>
+              <Reveal>
+                <Kicker>Nail Time Story · Since 2019</Kicker>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className={`${s.display} mt-5 text-[clamp(2.2rem,4.5vw,3.6rem)] leading-[1.05]`}>
+                  Because Nail Time is <em>your time</em> for happiness.
+                </h2>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <div className="mt-7 flex max-w-[60ch] flex-col gap-5 leading-[1.85] text-[var(--nt-ink-2)]">
+                  <p>
+                    จากจุดเริ่มต้นของร้านเล็กๆ ในย่านดอนหัวฬ่อ ที่เกิดขึ้นจากความรักในการทำเล็บ วันนี้ Nail Time &amp; Spa เติบโตขึ้นด้วยแพสชันที่ไม่เคยหยุดพัฒนา เราเชื่อว่าเล็บที่สวยไม่ใช่แค่เรื่องของแฟชั่น แต่คือสิ่งที่ช่วยเติมเต็มความมั่นใจและรอยยิ้มให้คุณในทุกๆ วัน
+                  </p>
+                  <p>
+                    เราคัดสรรสีเจลและผลิตภัณฑ์พรีเมียมแบรนด์แท้นำเข้าจากเกาหลี ควบคู่กับเทคนิคการเพ้นท์และต่อเล็บที่ประณีต ในพื้นที่ส่วนตัวที่ดูแลลูกค้าตามคิวจองอย่างใส่ใจ
+                  </p>
+                </div>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <ul className="mt-8 grid gap-4 border-t border-[var(--nt-ink)]/12 pt-6 sm:grid-cols-2">
+                  <li>
+                    <p className="font-semibold">Always Clean</p>
+                    <p className="mt-1 text-sm text-[var(--nt-ink-2)]">อุปกรณ์สะอาด ปลอดภัยทุกครั้ง</p>
+                  </li>
+                  <li>
+                    <p className="font-semibold">Always Leading</p>
+                    <p className="mt-1 text-sm text-[var(--nt-ink-2)]">ตามเทรนด์ญี่ปุ่น อัปเดตทุกซีซั่น</p>
+                  </li>
+                </ul>
+              </Reveal>
+              <Reveal delay={0.4}>
+                <a href={SHOP.facebook} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-11 items-center gap-2 text-[15px] font-medium underline decoration-[var(--nt-ink)]/25 underline-offset-[6px] hover:decoration-[var(--nt-ink)]">
+                  <FacebookIcon size={16} /> ติดตามร้านบน Facebook
+                </a>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* ── WORKS ─────────────────────────────────────────────────── */}
+        <section id="works" className="mx-auto max-w-7xl scroll-mt-20 px-5 pb-16 pt-20 sm:px-8 md:pb-24 md:pt-28">
+          <div className="mb-12 flex flex-col justify-between gap-6 md:mb-16 md:flex-row md:items-end">
+            <Reveal>
+              <Kicker>Our work · 作品</Kicker>
+              <h2 className={`${s.thaiDisplay} mt-5 text-4xl font-semibold sm:text-5xl`}>ผลงานจากมือช่างจริง</h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <a href={SHOP.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--nt-ink)]/20 px-5 text-sm transition-colors hover:border-[var(--nt-ink)]">
+                <InstagramIcon size={16} /> ดูทั้งหมดบน Instagram {SHOP.instagramHandle}
+              </a>
+            </Reveal>
+          </div>
+          <WorksGallery />
+        </section>
+
+        {/* ── CATALOG ───────────────────────────────────────────────── */}
+        <section className="overflow-hidden bg-[var(--nt-ink)] py-16 text-white md:py-20" aria-labelledby="catalog-title">
+          <div className="mx-auto mb-10 flex max-w-7xl flex-col justify-between gap-4 px-5 sm:px-8 md:flex-row md:items-end">
+            <div>
+              <Kicker light>Catalog idea</Kicker>
+              <h2 id="catalog-title" className={`${s.thaiDisplay} mt-4 text-3xl font-semibold sm:text-4xl`}>ยังไม่มีลายในใจ? เลือกจากแคตตาล็อกได้</h2>
+            </div>
+            <p className="max-w-[40ch] text-sm leading-relaxed text-white/70">แคปลายที่ชอบไว้ แล้วส่งให้ช่างดูตอนจอง หรือทักทาง LINE {SHOP.lineId}</p>
+          </div>
+          <div className={`${s.marqueeWrap} flex flex-col gap-3`}>
+            {[false, true].map((reverse) => (
+              <div key={String(reverse)} className={`${s.marquee} ${reverse ? s.marqueeReverse : ''}`}>
+                {[...CATALOG, ...CATALOG].map((src, i) => (
+                  <div key={i} className="relative h-44 w-44 shrink-0 overflow-hidden rounded-2xl sm:h-52 sm:w-52">
+                    <Image src={src} alt="" fill sizes="208px" className="object-cover" />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── MENU & PRICES ─────────────────────────────────────────── */}
+        <section id="menu" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-20 sm:px-8 md:py-28">
+          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+            <div className="lg:sticky lg:top-28 lg:self-start">
+              <Reveal>
+                <Kicker>Treatments &amp; Prices</Kicker>
+                <h2 className={`${s.thaiDisplay} mt-5 text-4xl font-semibold sm:text-5xl`}>เมนูและราคา</h2>
+                <p className="mt-5 max-w-[34ch] leading-relaxed text-[var(--nt-ink-2)]">
+                  กดที่บริการเพื่อเลือกวันและเวลาได้ทันที ราคาอาจเปลี่ยนตามความยาวเล็บและรายละเอียดลาย
+                </p>
+              </Reveal>
+              <Reveal delay={0.1} className="mt-8 hidden lg:block">
+                <div className="relative aspect-[4/5] w-full max-w-[340px] overflow-hidden rounded-b-3xl rounded-t-full">
+                  <Image src="/images/portfolio/3.webp" alt="ผลงานเล็บเจลจากร้าน Nail Time" fill sizes="340px" className="object-cover" />
+                </div>
+              </Reveal>
+            </div>
+            <div>
+              <ServiceMenu services={services} />
+              <a href={SHOP.tel} className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm text-[var(--nt-ink-2)] hover:text-[var(--nt-ink)]">
+                <Phone size={15} aria-hidden="true" /> สอบถามราคาลายพิเศษ โทร {SHOP.phone}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── POLISHES ──────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden bg-[var(--nt-sand)] px-5 py-20 sm:px-8 md:py-24">
+          <div className="mx-auto max-w-6xl">
+            <Reveal className="mb-14 flex flex-col items-center gap-3 text-center">
+              <span className="rounded-full bg-white/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--nt-ink)]">GellyFit · Korea Professional</span>
+              <h2 className={`${s.display} text-4xl italic text-[var(--nt-ink)] sm:text-5xl`}>Mix &amp; Match Polishes</h2>
+              <p className="text-[15px] text-[var(--nt-ink)]/75">Combination สุดฮิตที่ร้านเลือกมาให้</p>
+            </Reveal>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-4">
+              {POLISHES.map((b, i) => (
+                <Parallax key={b.name} amount={[20, 60, 30, 70][i]} className="group text-center">
+                  <Image
+                    src={b.src}
+                    alt={b.name}
+                    width={120}
+                    height={260}
+                    className="mx-auto mb-6 h-[220px] w-auto object-contain drop-shadow-[-18px_18px_22px_rgba(42,32,23,0.22)] transition-transform duration-500 group-hover:-translate-y-3 sm:h-[260px]"
+                  />
+                  <p className="font-semibold text-[var(--nt-ink)]">{b.name}</p>
+                  <p className="mt-1 text-sm text-[var(--nt-ink)]/70">{b.sub}</p>
+                </Parallax>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── REVIEWS ───────────────────────────────────────────────── */}
+        <section id="reviews" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-20 sm:px-8 md:py-28">
+          <Reveal className="mb-12 md:mb-16">
+            <Kicker>Happy clients · お客様の声</Kicker>
+            <h2 className={`${s.thaiDisplay} mt-5 text-4xl font-semibold sm:text-5xl`}>เสียงจากลูกค้า</h2>
+          </Reveal>
+          <StaggerParent className="grid gap-5 md:grid-cols-3">
+            {REVIEWS.map((r, i) => (
+              <StaggerChild key={r.name} className={i === 1 ? 'md:translate-y-10' : ''}>
+                <figure className="flex h-full flex-col gap-6 rounded-3xl border border-[var(--nt-ink)]/10 bg-white/70 p-7">
+                  <div className="flex gap-1 text-[#b98a5e]" role="img" aria-label="5 ดาว">
+                    {Array.from({ length: 5 }).map((_, k) => <Star key={k} size={16} fill="currentColor" strokeWidth={0} aria-hidden="true" />)}
+                  </div>
+                  <blockquote className={`${s.thaiDisplay} flex-1 text-xl leading-relaxed text-[var(--nt-ink)]`}>“{r.text}”</blockquote>
+                  <figcaption className="flex items-center justify-between border-t border-[var(--nt-ink)]/10 pt-4 text-sm">
+                    <span className="font-semibold">{r.name}</span>
+                    <span className="text-[var(--nt-ink-2)]">{r.date}</span>
+                  </figcaption>
+                </figure>
               </StaggerChild>
             ))}
           </StaggerParent>
-        </div>
-      </section>
+        </section>
 
-      {/* SOCIAL CTA */}
-      <section id="gallery" className="relative overflow-hidden">
-        <div className="grid grid-cols-2 grid-rows-5 sm:grid-cols-5 sm:grid-rows-2">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="h-28 sm:h-48"
-              style={{ background: ['#d8b192','#c8a07a','#e0c8a8','#b89060','#d4b090','#c4a07a','#dcc0a0','#b89868','#d0b090','#c8a880'][i] }} />
-          ))}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-            {/* Instagram */}
-            <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener"
-              className="flex flex-col items-center justify-center gap-3 bg-cream px-8 py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-66 sm:w-72">
-              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="2" y="2" width="20" height="20" rx="5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-              </svg>
-              <p className="text-sm font-bold uppercase tracking-widest text-sand">Instagram</p>
-              <p className="text-xs text-site-gray">@nail_time_bytt</p>
-            </a>
-            {/* Facebook */}
-            <a href="https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/" target="_blank" rel="noopener"
-              className="flex flex-col items-center justify-center gap-2 bg-cream px-6 py-6 sm:px-8 sm:py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-52 sm:w-64 md:w-72">
-              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-              <p className="text-sm font-bold uppercase tracking-widest text-sand">Facebook</p>
-              <p className="text-xs text-site-gray">Nail Time &amp; Spa</p>
-            </a>
-            {/* LINE */}
-            <a href="https://line.me/ti/p/~nailtimetk22" target="_blank" rel="noopener"
-              className="flex flex-col items-center justify-center gap-2 bg-cream px-6 py-6 sm:px-8 sm:py-10 text-center shadow-2xl transition-all duration-300 hover:-translate-y-1 w-52 sm:w-64 md:w-72">
-              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-sand" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-              </svg>
-              <p className="text-sm font-bold uppercase tracking-widest text-sand">LINE</p>
-              <p className="text-xs text-site-gray">@nailtimetk22</p>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section id="contact" className="grid grid-cols-1 md:grid-cols-2 min-h-[440px]">
-        <div className="hidden md:block relative min-h-[400px]">
-          <iframe
-            src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
-            className="absolute inset-0 w-full h-full border-0"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Nail Time Studio แผนที่"
-          />
-        </div>
-        <div className="flex flex-col justify-center gap-4 bg-cream px-6 py-12 sm:px-10 md:px-16 md:py-16">
-          <Reveal>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-sand">Contact Our Salon</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-3xl font-bold sm:text-4xl">ติดต่อร้านของเรา</h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-xs uppercase tracking-widest text-site-gray mt-2">โทรนัดหมาย</p>
-            <a href="tel:0647451946" className="text-2xl font-bold text-sand transition-colors hover:text-sand-dark sm:text-3xl">
-              064 745 1946
-            </a>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <div className="flex flex-col gap-3 text-sm text-site-gray">
-              <div className="flex items-start gap-2">
-                <span className="shrink-0">📍</span>
-                <span>เทศบาลดอนหัวฬอ ชลบุรี<br />ตรงข้ามที่ทำการเทศบาล</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>🕘</span>
-                <span>เปิดทุกวัน <strong className="text-site-dark">09:00 – 19:00 น.</strong></span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>📷</span>
-                <a href="https://www.instagram.com/nail_time_bytt/" target="_blank" rel="noopener" className="text-sand hover:underline">@nail_time_bytt</a>
-              </div>
+        {/* ── VISIT ─────────────────────────────────────────────────── */}
+        <section id="visit" className="scroll-mt-20 bg-[var(--nt-paper)]">
+          <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 md:grid-cols-2 md:py-24">
+            <div className="flex flex-col">
+              <Reveal>
+                <Kicker>Visit the salon</Kicker>
+                <h2 className={`${s.thaiDisplay} mt-5 text-4xl font-semibold sm:text-5xl`}>แวะมาหาเรา</h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <a href={SHOP.tel} className={`${s.display} mt-8 inline-block text-4xl tabular-nums text-[var(--nt-ink)] transition-colors hover:text-[var(--nt-accent)] sm:text-5xl`}>
+                  {SHOP.phone}
+                </a>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <ul className="mt-8 flex flex-col gap-4 text-[15px] text-[var(--nt-ink-2)]">
+                  <li className="flex gap-3">
+                    <MapPin size={18} className="mt-0.5 shrink-0 text-[var(--nt-accent)]" aria-hidden="true" />
+                    <span>เทศบาลดอนหัวฬอ ชลบุรี<br />ตรงข้ามที่ทำการเทศบาล</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <Clock size={18} className="mt-0.5 shrink-0 text-[var(--nt-accent)]" aria-hidden="true" />
+                    <span>เปิดทุกวัน <strong className="text-[var(--nt-ink)]">{SHOP.hours} น.</strong></span>
+                  </li>
+                </ul>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  <a href={SHOP.maps} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--nt-ink)] px-5 text-sm font-semibold text-white hover:bg-[#4a3a2a]">
+                    เปิดใน Google Maps <ArrowUpRight size={16} aria-hidden="true" />
+                  </a>
+                  <a href={SHOP.line} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--nt-ink)]/20 px-5 text-sm hover:border-[var(--nt-ink)]">
+                    <LineIcon size={16} /> LINE
+                  </a>
+                  <a href={SHOP.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--nt-ink)]/20 px-5 text-sm hover:border-[var(--nt-ink)]">
+                    <InstagramIcon size={16} /> Instagram
+                  </a>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
-          {/* Map on mobile */}
-          <Reveal delay={0.4} className="block md:hidden">
-            <div className="relative w-full h-56 rounded-xl overflow-hidden">
+            <Reveal delay={0.1} className="min-h-[320px] overflow-hidden rounded-3xl border border-[var(--nt-ink)]/10">
               <iframe
-                src="https://maps.google.com/maps?q=C2CM%2BQW+Don+Hua+Lo,+Chon+Buri+District,+Chon+Buri&output=embed&hl=th&z=17"
-                className="absolute inset-0 w-full h-full border-0"
+                src={SHOP.mapEmbed}
+                className="h-full min-h-[320px] w-full border-0 grayscale-[35%] sepia-[15%]"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Nail Time Studio แผนที่"
+                title="แผนที่ร้าน Nail Time & Spa"
               />
-            </div>
-          </Reveal>
-          <Reveal delay={0.5}>
-            <a
-              href="https://maps.app.goo.gl/m6ivA9WGWFaRu6MRA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="self-start rounded-full border border-site-dark text-xs font-medium uppercase tracking-widest px-7 py-3 hover:bg-site-dark hover:text-white transition-all active:scale-95"
-            >
-              เปิดใน Google Maps →
-            </a>
-          </Reveal>
-        </div>
-      </section>
+            </Reveal>
+          </div>
+        </section>
 
-      {/* COUPON */}
-      <section className="bg-site-dark px-4 py-16 sm:px-6 sm:py-20">
-        <div className="max-w-xl mx-auto flex flex-col items-center gap-6 text-center">
-          <Reveal>
-            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-sand">First Visit Offer</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif leading-snug">
-              รับส่วนลด <span className="text-sand">50 บาท</span><br />สำหรับการทำเล็บครั้งแรก
+        {/* ── COUPON (existing form, unchanged) ─────────────────────── */}
+        <section className="relative overflow-hidden bg-[var(--nt-ink)] px-5 py-20 sm:px-8 md:py-24">
+          <p aria-hidden="true" className={`${s.jp} pointer-events-none absolute -right-6 top-1/2 -translate-y-1/2 select-none text-[22vw] leading-none text-white/[0.04]`}>
+            初回
+          </p>
+          <div className="relative mx-auto flex max-w-xl flex-col items-center gap-6 text-center">
+            <Kicker light>First visit offer</Kicker>
+            <h2 className={`${s.thaiDisplay} text-3xl font-semibold leading-snug text-white md:text-4xl`}>
+              รับส่วนลด <span className="text-[#e6cdb6]">50 บาท</span><br />สำหรับการทำเล็บครั้งแรก
             </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-sm text-white/60 leading-relaxed">
-              กรอกชื่อและเบอร์โทร แล้วเพิ่มเพื่อน LINE OA ของเรา<br />แจ้งแชทว่า <strong className="text-white/90">"คูปองใหม่"</strong> เพื่อรับสิทธิ์
+            <p className="text-[15px] leading-relaxed text-white/70">
+              กรอกชื่อและเบอร์โทร แล้วเพิ่มเพื่อน LINE OA ของเรา<br />แจ้งแชทว่า <strong className="text-white">&ldquo;คูปองใหม่&rdquo;</strong> เพื่อรับสิทธิ์
             </p>
-          </Reveal>
-          <Reveal delay={0.3} className="w-full">
-            <LineCouponForm />
-          </Reveal>
-        </div>
-      </section>
+            <div className="w-full">
+              <LineCouponForm />
+            </div>
+          </div>
+        </section>
+      </main>
 
-      {/* FOOTER */}
-      <footer className="bg-sand pt-16">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 pb-14 sm:px-6 md:grid-cols-3 md:gap-14">
+      {/* ── FOOTER ──────────────────────────────────────────────────── */}
+      <footer className="bg-[var(--nt-cream)] pb-28 pt-16 md:pb-10">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <span className="font-bold text-xl text-white">Nail Time <span className="text-white/80">&amp; Spa</span></span>
-            <p className="mt-4 text-sm text-white/80 leading-relaxed">ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น<br />ดอนหัวฬอ ชลบุรี</p>
-            <div className="flex gap-3 mt-5">
+            <p className={`${s.display} text-3xl italic`}>Nail Time &amp; Spa</p>
+            <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-[var(--nt-ink-2)]">ร้านทำเล็บเจล เพ้นท์เล็บ ต่อเล็บ สไตล์ญี่ปุ่น ดอนหัวฬอ ชลบุรี</p>
+            <div className="mt-5 flex gap-2">
               {[
-                { href: 'https://www.instagram.com/nail_time_bytt/', label: 'IG' },
-                { href: 'https://www.facebook.com/p/Nail-Time-Spa-%E3%83%8D%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0-100065117245969/', label: 'FB' },
-              ].map(s => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener"
-                  className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-xs text-white font-semibold hover:bg-white/20 hover:scale-110 transition-all">
-                  {s.label}
+                { href: SHOP.instagram, label: 'Instagram', icon: <InstagramIcon size={17} /> },
+                { href: SHOP.facebook, label: 'Facebook', icon: <FacebookIcon size={17} /> },
+                { href: SHOP.line, label: 'LINE', icon: <LineIcon size={17} /> },
+              ].map((l) => (
+                <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" aria-label={l.label} className="grid h-11 w-11 place-items-center rounded-full border border-[var(--nt-ink)]/15 text-[var(--nt-ink-2)] transition-colors hover:border-[var(--nt-ink)] hover:text-[var(--nt-ink)]">
+                  {l.icon}
                 </a>
               ))}
             </div>
           </div>
+          <nav aria-label="ลิงก์ส่วนท้าย">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--nt-accent)]">เมนู</p>
+            <ul className="mt-4 flex flex-col text-[15px]">
+              {[['#services', 'บริการ'], ['#works', 'ผลงาน'], ['#menu', 'ราคา'], ['#visit', 'ติดต่อ']].map(([href, label]) => (
+                <li key={href}><a href={href} className="inline-flex min-h-10 items-center text-[var(--nt-ink-2)] hover:text-[var(--nt-ink)]">{label}</a></li>
+              ))}
+              <li><Link href="/booking" className="inline-flex min-h-10 items-center text-[var(--nt-ink-2)] hover:text-[var(--nt-ink)]">จองคิว</Link></li>
+              <li><Link href="/booking/status" className="inline-flex min-h-10 items-center text-[var(--nt-ink-2)] hover:text-[var(--nt-ink)]">เช็กสถานะการจอง</Link></li>
+            </ul>
+          </nav>
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">เมนู</h4>
-            {[['/#services','บริการ'],['/#story','เกี่ยวกับ'],['/#products','ผลงาน'],['/booking','จองนัด']].map(([href,label]) => (
-              href.startsWith('/#') ? (
-                <a key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</a>
-              ) : (
-                <Link key={href} href={href} className="block text-sm text-white/75 mb-2 hover:text-white hover:translate-x-1 transition-all">{label}</Link>
-              )
-            ))}
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">ติดต่อ</h4>
-            <p className="text-sm text-white/75 mb-2">064 745 1946</p>
-            <p className="text-sm text-white/75 mb-2">เทศบาลดอนหัวฬอ ชลบุรี</p>
-            <p className="text-sm text-white/75">ตรงข้ามที่ทำการเทศบาล</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--nt-accent)]">ติดต่อ</p>
+            <p className="mt-4 text-[15px] leading-8 text-[var(--nt-ink-2)]">
+              <a href={SHOP.tel} className="hover:text-[var(--nt-ink)]">{SHOP.phone}</a><br />
+              เทศบาลดอนหัวฬอ ชลบุรี<br />
+              เปิดทุกวัน {SHOP.hours} น.
+            </p>
           </div>
         </div>
-        <div className="border-t border-white/15 px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/60">
-          <p>© 2019 Nail Time &amp; Spa ネイルタイム · ดอนหัวฬอ ชลบุรี</p>
-          <p>เปิดทุกวัน 09:00 – 19:00 น.</p>
+        <p aria-hidden="true" className={`${s.jp} mx-auto mt-14 max-w-7xl select-none overflow-hidden whitespace-nowrap px-5 text-center text-[clamp(3rem,13vw,11rem)] leading-none text-[var(--nt-ink)]/[0.07] sm:px-8`}>
+          ネイルタイム
+        </p>
+        <div className="mx-auto mt-6 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-[var(--nt-ink)]/10 px-5 pt-6 text-xs text-[var(--nt-ink-2)] sm:px-8 md:flex-row">
+          <p>© 2019–2026 Nail Time &amp; Spa ネイルタイム · ดอนหัวฬอ ชลบุรี</p>
+          <p>เปิดทุกวัน {SHOP.hours} น.</p>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
