@@ -9,7 +9,7 @@ const LINKS = [
   ['#services', 'บริการ'],
   ['#works', 'ผลงาน'],
   ['#menu', 'ราคา'],
-  ['#reviews', 'รีวิว'],
+  ['#studio', 'ลองสี 3D'],
   ['#visit', 'ติดต่อ'],
 ] as const
 
@@ -38,12 +38,12 @@ export function SiteNav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300 ${solid || open ? 'bg-[#fcf8ef]/90 shadow-[0_1px_0_rgba(42,32,23,0.08)] backdrop-blur-md' : 'bg-transparent'}`}
+      className={`fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/95 backdrop-blur-md transition-shadow duration-300 ${solid || open ? 'shadow-sm' : ''}`}
     >
       <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
         <Link href="/" className="flex min-h-11 items-center gap-3" aria-label="Nail Time & Spa หน้าแรก">
-          <span className={`${styles.display} text-xl italic tracking-tight text-[var(--nt-ink)]`}>Nail Time</span>
-          <span className={`${styles.jp} hidden text-xs tracking-[0.3em] text-[var(--nt-accent)] sm:inline`}>ネイルタイム</span>
+          <span className={`${styles.display} text-[27px] tracking-[-0.07em] text-[var(--nt-ink)]`}>nail time<span className="ml-1 align-top text-[11px]">®</span></span>
+          <span className="hidden border-l border-[var(--nt-ink)]/20 pl-3 text-[8px] leading-relaxed tracking-[0.15em] text-[var(--nt-accent)] sm:inline">NAIL ART<br />& SELF-CARE</span>
         </Link>
 
         <nav aria-label="เมนูหลัก" className="hidden items-center gap-7 text-[15px] text-[var(--nt-ink-2)] md:flex">
@@ -60,9 +60,9 @@ export function SiteNav() {
           </a>
           <Link
             href="/booking"
-            className="inline-flex min-h-11 items-center rounded-full bg-[var(--nt-ink)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#4a3a2a]"
+            className="inline-flex min-h-11 items-center gap-4 border border-[var(--nt-accent)] px-5 text-sm text-[var(--nt-accent)] transition-colors hover:bg-[var(--nt-accent)] hover:text-white"
           >
-            จองคิว
+            จองคิว ↗
           </Link>
           <button
             type="button"
@@ -78,7 +78,7 @@ export function SiteNav() {
       </div>
 
       {open && (
-        <nav id="nt-menu" aria-label="เมนูมือถือ" className="h-[calc(100svh-68px)] overflow-y-auto border-t border-[#2a2017]/10 bg-[#fcf8ef] px-5 pb-10 pt-4 md:hidden">
+        <nav id="nt-menu" aria-label="เมนูมือถือ" className="h-[calc(100svh-68px)] overflow-y-auto border-t border-black/10 bg-white px-5 pb-10 pt-4 md:hidden">
           {LINKS.map(([href, label], i) => (
             <a
               key={href}

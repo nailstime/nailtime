@@ -55,6 +55,8 @@ export function LineCouponForm() {
       <div className="flex items-center gap-3 border border-white/20 rounded-full bg-white/8 focus-within:border-sand/60 transition-colors pl-5 pr-1.5 py-1.5">
         <input
           type="text"
+          aria-label="ชื่อผู้รับคูปอง"
+          autoComplete="name"
           placeholder="ชื่อ"
           value={name}
           onChange={e => setName(e.target.value)}
@@ -64,6 +66,8 @@ export function LineCouponForm() {
         <span className="text-white/20 shrink-0">|</span>
         <input
           type="tel"
+          aria-label="เบอร์โทรศัพท์สำหรับรับคูปอง"
+          autoComplete="tel"
           placeholder="เบอร์โทรศัพท์"
           value={phone}
           onChange={e => setPhone(e.target.value)}

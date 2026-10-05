@@ -1,10 +1,8 @@
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import {
-  createDishGeometry,
   createGlitterNormalMap,
   createNailGeometry,
-  createSpeckleTexture,
 } from './nailGeometry'
 
 export type Finish = 'gloss' | 'matte' | 'glitter' | 'chrome'
@@ -26,9 +24,14 @@ const FINISHES: Record<Finish, Partial<THREE.MeshPhysicalMaterialParameters>> = 
   chrome: { roughness: 0.12, metalness: 0.85, clearcoat: 1, clearcoatRoughness: 0.02, iridescence: 1, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 520], sheen: 0 },
 }
 
+// Contact-shadow strength on the light lavender vs dark plum backdrop.
+const SHADOW_LIGHT = 0.12
+const SHADOW_DARK = 0.22
+const BACKDROP_FADE = 0.4
+
 /**
- * A small product-photography scene: five gel press-on tips on a speckled
- * ceramic dish. Colour changes sweep from cuticle to tip like a brush stroke.
+ * Five floating gel tips, lit as a studio product photograph.
+ * Colour changes sweep from cuticle to tip like a brush stroke.
  * Framework-free so the React wrapper stays thin and the module lazy-loads.
  */
 export class NailScene {
@@ -49,9 +52,14 @@ export class NailScene {
   private io: IntersectionObserver
   private ro: ResizeObserver
   private reducedMotion: boolean
+  private scrollProgress = 0
+  private pointerEvents = new AbortController()
+  private environmentTarget: THREE.WebGLRenderTarget
+  private groundMat = new THREE.ShadowMaterial({ opacity: SHADOW_LIGHT })
+  private shadowFade: { from: number; to: number; start: number } | null = null
   onHover?: (index: number | null) => void
 
-  constructor(private canvas: HTMLCanvasElement, opts: { color: string; finish: Finish; reducedMotion: boolean }) {
+  constructor(private canvas: HTMLCanvasElement, opts: { color: string; finish: Finish; reducedMotion: boolean; darkBackdrop?: boolean }) {
     this.reducedMotion = opts.reducedMotion
     const mobile = window.matchMedia('(max-width: 767px)').matches
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
@@ -59,46 +67,44 @@ export class NailScene {
     this.renderer.setClearColor(0x000000, 0)
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 0.95
+    this.renderer.toneMappingExposure = 0.85
     this.renderer.shadowMap.enabled = true
-    this.renderer.shadowMap.type = THREE.PCFShadowMap
+    this.renderer.shadowMap.type = THREE.VSMShadowMap
 
     const pmrem = new THREE.PMREMGenerator(this.renderer)
-    this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.03).texture
-    this.scene.environmentIntensity = 0.4
+    const room = new RoomEnvironment()
+    this.environmentTarget = pmrem.fromScene(room, 0.03)
+    this.scene.environment = this.environmentTarget.texture
+    room.dispose()
+    this.scene.environmentIntensity = 0.65
     pmrem.dispose()
 
-    this.camera.position.set(0, 6.3, 3.1)
-    this.camera.lookAt(0, 0, 0.12)
+    this.camera.position.set(0, 5.5, 3.5)
+    this.camera.zoom = 1.22
+    this.camera.lookAt(0, 0.35, 0)
 
     // Warm window light from the upper left, like the salon's product shots.
-    const key = new THREE.DirectionalLight('#fff3e3', 1.9)
+    const key = new THREE.DirectionalLight('#ffffff', 2.4)
     key.position.set(-3, 5, 2)
     key.castShadow = true
     key.shadow.mapSize.set(1024, 1024)
     Object.assign(key.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3, near: 1, far: 12 })
     key.shadow.bias = -0.0005
     key.shadow.normalBias = 0.02
-    key.shadow.radius = 6
-    this.scene.add(key, new THREE.HemisphereLight('#ffffff', '#d9c8b4', 0.45))
-    const rimLight = new THREE.DirectionalLight('#ffe1d6', 0.6)
+    key.shadow.radius = 5
+    key.shadow.blurSamples = 8
+    this.scene.add(key, new THREE.HemisphereLight('#ffffff', '#746174', 0.7))
+    const rimLight = new THREE.DirectionalLight('#ecdbed', 1.4)
     rimLight.position.set(3, 2, -3)
     this.scene.add(rimLight)
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20).rotateX(-Math.PI / 2), new THREE.ShadowMaterial({ opacity: 0.14 }))
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20).rotateX(-Math.PI / 2), this.groundMat)
+    this.groundMat.opacity = opts.darkBackdrop ? SHADOW_DARK : SHADOW_LIGHT
     ground.receiveShadow = true
     this.scene.add(ground)
 
-    const dish = new THREE.Mesh(
-      createDishGeometry(),
-      new THREE.MeshStandardMaterial({ map: createSpeckleTexture(), roughness: 0.62, metalness: 0 }),
-    )
-    dish.castShadow = true
-    dish.receiveShadow = true
-    this.rig.add(dish)
-
     this.glitter = createGlitterNormalMap()
-    const geo = createNailGeometry()
+    const geo = createNailGeometry({ arch: 0.75, thickness: 0.025 })
     const color = new THREE.Color(opts.color)
     for (let i = 0; i < 5; i++) {
       const uniforms = {
@@ -129,9 +135,11 @@ export class NailScene {
       const mesh = new THREE.Mesh(geo, mat)
       mesh.castShadow = true
       mesh.receiveShadow = true
-      const x = (i - 2) * 0.5
-      const base = new THREE.Vector3(x, 0.085 + 0.012 * Math.abs(i - 2), 0.02 + 0.05 * Math.abs(i - 2) ** 1.4)
-      const baseRot = -(i - 2) * 0.06
+      const x = (i - 2) * 0.56
+      const base = new THREE.Vector3(x, 0.25 + 0.07 * (2 - Math.abs(i - 2)), 0.04 + 0.15 * Math.abs(i - 2) ** 1.4)
+      const baseRot = -(i - 2) * 0.16
+      const size = [0.84, 0.96, 1.06, 0.96, 0.8][i]
+      mesh.scale.setScalar(size)
       mesh.position.copy(base)
       mesh.rotation.set(0, baseRot, 0)
       mesh.userData.index = i
@@ -162,13 +170,15 @@ export class NailScene {
     if (!w || !h) return
     this.renderer.setSize(w, h, false)
     this.camera.aspect = w / h
-    // Keep the whole dish in frame on tall (mobile) canvases.
-    this.camera.fov = w / h < 1 ? 28 / Math.max(0.62, w / h) : 28
+    // Keep all five tips in frame on tall mobile canvases.
+    this.camera.fov = w / h < 1.3 ? 34 / Math.max(0.55, w / h) : 28
+    this.camera.zoom = w / h < 1.3 ? 1 : 1.22
     this.camera.updateProjectionMatrix()
   }
 
   private bindPointer() {
     const el = this.canvas
+    const options = { signal: this.pointerEvents.signal }
     const toLocal = (e: PointerEvent) => {
       const r = el.getBoundingClientRect()
       return { x: ((e.clientX - r.left) / r.width) * 2 - 1, y: -((e.clientY - r.top) / r.height) * 2 + 1 }
@@ -182,19 +192,19 @@ export class NailScene {
         this.spin.velocity = dx * 0.006
         this.spin.angle += dx * 0.006
       }
-    })
+    }, options)
     el.addEventListener('pointerleave', () => {
       this.pointer.set(9, 9)
       this.spin.dragging = false
-    })
+    }, options)
     el.addEventListener('pointerdown', (e) => {
       this.spin.dragging = true
       this.spin.lastX = e.clientX
       el.setPointerCapture(e.pointerId)
-    })
+    }, options)
     const end = () => (this.spin.dragging = false)
-    el.addEventListener('pointerup', end)
-    el.addEventListener('pointercancel', end)
+    el.addEventListener('pointerup', end, options)
+    el.addEventListener('pointercancel', end, options)
     // Page-level parallax: the whole set tilts gently toward the cursor.
     window.addEventListener('pointermove', this.onWindowPointer)
   }
@@ -217,12 +227,27 @@ export class NailScene {
     })
   }
 
+  /** Deepen the contact shadows to match the CSS backdrop behind the canvas. */
+  setDarkBackdrop(dark: boolean) {
+    const to = dark ? SHADOW_DARK : SHADOW_LIGHT
+    if (this.reducedMotion) {
+      this.groundMat.opacity = to
+      this.shadowFade = null
+      return
+    }
+    this.shadowFade = { from: this.groundMat.opacity, to, start: this.timer.getElapsed() }
+  }
+
+  setScrollProgress(progress: number) {
+    this.scrollProgress = this.reducedMotion ? 0 : Math.max(0, Math.min(1, progress))
+  }
+
   setFinish(finish: Finish) {
     for (const n of this.nails) {
       n.mat.setValues(FINISHES[finish])
       n.mat.normalMap = finish === 'glitter' ? this.glitter : null
       n.mat.normalScale.set(0.55, 0.55)
-      n.uniforms.uLift.value = finish === 'chrome' ? 0.5 : 0
+      n.uniforms.uLift.value = finish === 'chrome' ? 0.12 : 0
       n.mat.needsUpdate = true
     }
   }
@@ -243,7 +268,7 @@ export class NailScene {
     }
     const idle = this.reducedMotion ? 0 : Math.sin(t * 0.4) * 0.05
     const k = 1 - Math.exp(-dt * 4)
-    this.rig.rotation.y += (-0.12 + this.spin.angle + idle + this.tilt.y - this.rig.rotation.y) * k
+    this.rig.rotation.y += (-0.12 + this.scrollProgress * 0.55 + this.spin.angle + idle + this.tilt.y - this.rig.rotation.y) * k
     this.rig.rotation.x += (this.tilt.x - this.rig.rotation.x) * k
 
     // Hover: the tip under the cursor lifts off the dish.
@@ -260,8 +285,9 @@ export class NailScene {
       const target = n === this.hovered ? 1 : 0
       n.lift += (target - n.lift) * (1 - Math.exp(-dt * 8))
       const bob = this.reducedMotion ? 0 : Math.sin(t * 1.3 + i * 0.8) * 0.006
-      n.mesh.position.set(n.base.x, n.base.y + n.lift * 0.22 + bob, n.base.z - n.lift * 0.08)
-      n.mesh.rotation.set(-n.lift * 0.45, n.baseRot, n.lift * 0.08 * (i - 2))
+      const spread = this.scrollProgress
+      n.mesh.position.set(n.base.x * (1 + spread * 0.18), n.base.y + n.lift * 0.22 + bob + spread * (0.35 + (2 - Math.abs(i - 2)) * 0.13), n.base.z - n.lift * 0.08)
+      n.mesh.rotation.set(-n.lift * 0.45 - spread * 0.18, n.baseRot + spread * (i - 2) * 0.1, n.lift * 0.08 * (i - 2))
 
       if (n.anim) {
         const p = (t - n.anim.start) / 0.75
@@ -273,11 +299,18 @@ export class NailScene {
       }
     })
 
+    if (this.shadowFade) {
+      const p = Math.min(1, (t - this.shadowFade.start) / BACKDROP_FADE)
+      this.groundMat.opacity = this.shadowFade.from + (this.shadowFade.to - this.shadowFade.from) * p
+      if (p >= 1) this.shadowFade = null
+    }
+
     this.renderer.render(this.scene, this.camera)
   }
 
   dispose() {
     cancelAnimationFrame(this.raf)
+    this.pointerEvents.abort()
     window.removeEventListener('pointermove', this.onWindowPointer)
     document.removeEventListener('visibilitychange', this.loop)
     this.io.disconnect()
@@ -289,6 +322,7 @@ export class NailScene {
       mat?.dispose()
     })
     this.glitter.dispose()
+    this.environmentTarget.dispose()
     this.renderer.dispose()
   }
 }

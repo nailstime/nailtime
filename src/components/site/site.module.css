@@ -1,13 +1,20 @@
 /* Homepage-only styles. Class names are hashed, so nothing leaks into booking or admin. */
 
 .root {
-  --nt-ink: #2a2017;
-  --nt-ink-2: #5e4d3d;
-  --nt-accent: #6f563c; /* sand-deep, darkened to pass 4.5:1 on cream */
-  --nt-cream: #fcf8ef;
-  --nt-paper: #f6efe3;
-  --nt-sand: #d8b192;
-  --nt-blush: #efd9d0;
+  --nt-ink: #252329;
+  --nt-ink-2: #625d65;
+  --nt-accent: #945466;
+  --nt-cream: #ffffff;
+  --nt-paper: #f7f7f8;
+  --nt-sand: #eee0e5;
+  --nt-blush: #faf3f5;
+  --color-cream: #ffffff;
+  --color-sand: #945466;
+  --color-sand-dark: #7d4253;
+  --color-sand-deep: #804959;
+  --color-site-dark: #252329;
+  --color-site-gray: #625d65;
+  color-scheme: light;
   font-family: var(--font-nt-body), var(--font-thai-modern), system-ui, sans-serif;
   color: var(--nt-ink);
   background: var(--nt-cream);
@@ -22,7 +29,18 @@
 }
 
 .thaiDisplay {
-  font-family: var(--font-thai-soft), serif;
+  font-family: var(--font-nt-body), var(--font-thai-modern), sans-serif;
+}
+
+.root :is(a, button, input):focus-visible {
+  outline: 2px solid var(--nt-accent);
+  outline-offset: 4px;
+}
+
+.root section[id] { scroll-margin-top: 88px; }
+
+.studio {
+  padding: 8px;
 }
 
 /* Paper grain over the whole page, very faint. */

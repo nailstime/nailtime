@@ -71,7 +71,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th" className={`${montserrat.variable} ${fraunces.variable} ${kanit.variable} ${notoSerifThai.variable}`}>
+    <html lang="th" data-scroll-behavior="smooth" className={`${montserrat.variable} ${fraunces.variable} ${kanit.variable} ${notoSerifThai.variable}`}>
       <body className="font-sans antialiased min-h-full">
         {children}
         <Script id="gtag" strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-18147547311" />
