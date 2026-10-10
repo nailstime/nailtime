@@ -1,30 +1,51 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react'
-import type { TimeScene } from './studio/TimeScene'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import s from './story.module.css'
 
 const chapters = ['Time', 'Pause', 'Beauty', 'Craft', 'Your time']
+const FRAME_COUNT = 193
+const frameSrc = (dir: string, i: number) => `/hero/${dir}/${String(i + 1).padStart(4, '0')}.webp`
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 const ease = (v: number) => { const t = clamp(v); return t * t * (3 - 2 * t) }
 
 export function StoryHero() {
   const root = useRef<HTMLElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
-  const scene = useRef<TimeScene | null>(null)
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     const el = root.current, target = canvas.current
-    if (!el || !target) return
+    const ctx = target?.getContext('2d')
+    if (!el || !target || !ctx) return
     const media = matchMedia('(prefers-reduced-motion: reduce)')
     const panels = Array.from(el.querySelectorAll<HTMLElement>('[data-panel]'))
-    let raf = 0, cancelled = false, current = -1
+    const dir = innerWidth < 760 ? 'mobile' : 'desktop'
+    const frames: HTMLImageElement[] = []
+    const loaded: boolean[] = []
+    let raf = 0, current = -1, frame = 0, drawn = -1
+
+    const draw = () => {
+      // Fall back to the nearest earlier frame that has finished loading.
+      if (!target.width || !target.height) return
+      let i = frame
+      while (i > 0 && !loaded[i]) i--
+      if (!loaded[i] || i === drawn) return
+      drawn = i
+      const img = frames[i], w = target.width, h = target.height
+      const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight)
+      const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale
+      ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh)
+      target.dataset.ready = ''
+    }
+    const size = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2)
+      target.width = Math.round(target.clientWidth * dpr)
+      target.height = Math.round(target.clientHeight * dpr)
+      drawn = -1
+    }
     const update = () => {
       raf = 0
       const reduced = media.matches
@@ -37,7 +58,8 @@ export function StoryHero() {
       if (current !== index) { current = index; setActive(index) }
       panels.forEach((panel, i) => {
         const distance = t - i
-        const opacity = 1 - ease((Math.abs(distance) - .28) / .44)
+        // Fully gone by the midpoint between chapters so two headlines never overlap.
+        const opacity = 1 - ease((Math.abs(distance) - .18) / .3)
         panel.style.setProperty('--alpha', String(opacity))
         panel.style.setProperty('--shift', `${-distance * 38}px`)
         panel.inert = !reduced && index !== i
@@ -45,41 +67,35 @@ export function StoryHero() {
         else panel.setAttribute('aria-hidden', String(index !== i))
       })
       el.style.setProperty('--progress', String(p))
-      el.style.setProperty('--time-scale', String(1 + ease(t / .9) * 2.2))
-      el.style.setProperty('--time-alpha', String(1 - ease(t / .8)))
-      el.style.setProperty('--pause-alpha', String(1 - ease((Math.abs(t - 1) - .2) / .6)))
-      el.style.setProperty('--beauty-alpha', String(1 - ease((Math.abs(t - 2) - .25) / .65)))
-      el.style.setProperty('--craft-alpha', String(1 - ease((Math.abs(t - 3) - .25) / .55)))
-      el.style.setProperty('--photo-y', `${(1 - t) * 65}px`)
-      el.style.setProperty('--detail-scale', String(1.02 + clamp(t - 2.5) * .18))
       el.style.setProperty('--happiness', String(ease((t - 1.85) / .35)))
       el.style.setProperty('--beauty', String(1 - ease((t - 1.85) / .35)))
-      el.style.setProperty('--canvas-alpha', String(1 - ease((t - 2.55) / .5)))
-      scene.current?.setProgress(t)
+      frame = Math.round((t / 4) * (FRAME_COUNT - 1))
+      if (!reduced) draw()
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update) }
-    const preference = () => { scene.current?.setReduced(media.matches); schedule() }
-    const lost = (event: Event) => { event.preventDefault(); setReady(false) }
-    target.addEventListener('webglcontextlost', lost)
+    // The canvas is display:none until motion mode is decided, so size it whenever its box changes.
+    const observer = new ResizeObserver(() => { size(); draw() })
+    observer.observe(target)
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image()
+      img.decoding = 'async'
+      img.onload = () => { loaded[i] = true; if (Math.abs(i - frame) < 3 || i === 0) { drawn = -1; draw() } }
+      img.src = frameSrc(dir, i)
+      frames.push(img)
+    }
+
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
-    media.addEventListener('change', preference)
+    media.addEventListener('change', schedule)
     schedule()
-    import('./studio/TimeScene').then(({ TimeScene }) => {
-      if (cancelled) return
-      scene.current = new TimeScene(target, media.matches)
-      setReady(true)
-      schedule()
-    }).catch(() => { if (!cancelled) setReady(false) })
     return () => {
-      cancelled = true
       cancelAnimationFrame(raf)
+      observer.disconnect()
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
-      media.removeEventListener('change', preference)
-      target.removeEventListener('webglcontextlost', lost)
-      scene.current?.dispose()
-      scene.current = null
+      media.removeEventListener('change', schedule)
+      frames.forEach(img => { img.onload = null })
     }
   }, [])
 
@@ -98,13 +114,8 @@ export function StoryHero() {
     <div className={s.stage}>
       <div className={s.topline}><span>NAIL TIME & SPA</span><span>A LITTLE TIME, JUST FOR YOU.</span><a href="#story">ข้ามเรื่องราว <ArrowUpRight size={12} /></a></div>
       <div className={s.visuals} aria-hidden="true">
-        <div className={s.timeWord}>TIME</div>
-        <div className={s.canvasWrap} style={{ visibility: ready ? 'visible' : 'hidden' }}><canvas ref={canvas} className={s.canvas} /></div>
-        {!ready && <div className={s.fallbackRibbon} />}
-        <div className={s.pausePhoto}><Image src="/images/hero.webp" alt="" fill sizes="(max-width:760px) 55vw, 25vw" /><span>A MOMENT OF YOUR OWN.</span></div>
-        <div className={s.beautyPhoto}><Image src="/images/portfolio/1.webp" alt="" fill sizes="(max-width:760px) 45vw, 20vw" /><span>COLOR. FEELING. YOU.</span></div>
-        <div className={s.craftPhoto}><Image src="/images/portfolio/3.webp" alt="" fill sizes="(max-width:760px) 100vw, 55vw" /></div>
-        <div className={s.craftCaption}>THE ART IS IN THE DETAILS.<span>NAIL TIME — SELECTED WORK</span></div>
+        <canvas ref={canvas} className={s.canvas} />
+        <div className={s.shade} />
       </div>
 
       <article data-panel className={`${s.panel} ${s.time}`}>
@@ -141,7 +152,6 @@ export function StoryHero() {
       <div className={s.bottomline}>
         <span className={s.scrollHint}>SCROLL TO FEEL <ArrowDown size={12} /></span>
         <nav aria-label="ฉากในเรื่องราว" className={s.chapters}>{chapters.map((label, i) => <button key={label} onClick={() => goTo(i)} aria-current={active === i ? 'step' : undefined} aria-label={`ฉาก ${i + 1}: ${label}`}><span>0{i + 1}</span><span>{label}</span></button>)}</nav>
-        {ready && <button className={s.motion} aria-label={paused ? 'เล่นการเคลื่อนไหว' : 'หยุดการเคลื่อนไหว'} onClick={() => { setPaused(!paused); scene.current?.setPaused(!paused) }}>{paused ? <Play size={13} /> : <Pause size={13} />}</button>}
       </div>
       <div className={s.progress} />
     </div>
