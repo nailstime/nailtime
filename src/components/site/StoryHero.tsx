@@ -8,17 +8,26 @@ import s from './story.module.css'
 const chapters = ['Time', 'Pause', 'Beauty', 'Craft', 'Your time']
 const FRAME_COUNT = 193
 const frameSrc = (dir: string, i: number) => `/hero/${dir}/${String(i + 1).padStart(4, '0')}.webp`
-// Share of each chapter's scroll where the copy holds still, and the padding before
-// the first chapter so it holds as long as the middle ones. The last chapter gets a
-// longer tail so the booking buttons linger before the next section scrolls in.
+// The scroll is a row of stops the copy parks on. Chapter 3 has two stops so
+// "Beauty" and "Happiness" each get a full hold. VIDEO is where the clip sits at each
+// stop, in chapter units (0–4).
+const STOPS = [0, 1, 2, 2, 3, 4]
+const VIDEO = [0, 1, 2, 2.5, 3, 4]
+const MORPH_STOP = 2
+// Each stop holds for HOLD and moves to the next over MOVE; the last stop gets an
+// extra TAIL so the booking buttons linger before the next section scrolls in.
 const HOLD = .75
-const LEAD = HOLD / 2
-const TAIL = .8
-const SPAN = 4 + LEAD + TAIL
-// How much of the video keeps playing while copy holds (the rest plays in the transitions).
+const MOVE = .25
+const TAIL = .45
+const UNITS = STOPS.length * HOLD + (STOPS.length - 1) * MOVE + TAIL
+// How much of the video keeps playing while copy holds (the rest plays in the moves).
 const DRIFT = .3
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 const ease = (v: number) => { const t = clamp(v); return t * t * (3 - 2 * t) }
+const lerpAt = (values: number[], x: number) => {
+  const i = Math.min(values.length - 2, Math.floor(x))
+  return values[i] + (values[i + 1] - values[i]) * (x - i)
+}
 
 export function StoryHero() {
   const root = useRef<HTMLElement>(null)
@@ -62,12 +71,15 @@ export function StoryHero() {
       const stage = el.firstElementChild as HTMLElement
       const travel = Math.max(1, el.offsetHeight - stage.offsetHeight)
       const p = clamp((68 - el.getBoundingClientRect().top) / travel)
-      // `raw` moves steadily; `t` parks on each chapter for most of its scroll distance so
-      // the copy stays readable. The video mostly follows `t` too, so the busy pour/hand
-      // shots in chapters 3–5 don't keep racing past while the text is on screen.
-      const raw = Math.max(0, Math.min(4, p * SPAN - LEAD))
-      const seg = Math.min(3, Math.floor(raw))
-      const t = seg + ease((raw - seg - HOLD / 2) / (1 - HOLD))
+      // `stop` parks on each stop for HOLD, then eases to the next; `steady` moves evenly.
+      // The video mostly follows `stop` so the busy pour/hand shots don't race past the copy.
+      const last = STOPS.length - 1
+      const u = p * UNITS
+      const k = Math.min(last, Math.floor(u / (HOLD + MOVE)))
+      const stop = k === last ? last : k + ease((u - k * (HOLD + MOVE) - HOLD) / MOVE)
+      const steady = Math.max(0, Math.min(last, (u - HOLD / 2) / (HOLD + MOVE)))
+      const t = lerpAt(STOPS, stop)
+      const morph = clamp(stop - MORPH_STOP)
       const index = Math.round(t)
       if (current !== index) { current = index; setActive(index) }
       panels.forEach((panel, i) => {
@@ -81,9 +93,9 @@ export function StoryHero() {
         else panel.setAttribute('aria-hidden', String(index !== i))
       })
       el.style.setProperty('--progress', String(p))
-      el.style.setProperty('--happiness', String(ease((raw - 1.9) / .25)))
-      el.style.setProperty('--beauty', String(1 - ease((raw - 1.9) / .25)))
-      frame = Math.round(((DRIFT * raw + (1 - DRIFT) * t) / 4) * (FRAME_COUNT - 1))
+      el.style.setProperty('--happiness', String(morph))
+      el.style.setProperty('--beauty', String(1 - morph))
+      frame = Math.round((lerpAt(VIDEO, DRIFT * steady + (1 - DRIFT) * stop) / 4) * (FRAME_COUNT - 1))
       if (!reduced) draw()
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update) }
@@ -121,7 +133,8 @@ export function StoryHero() {
       return
     }
     const height = (el.firstElementChild as HTMLElement).offsetHeight
-    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 68 + (el.offsetHeight - height) * ((index + LEAD) / SPAN), behavior: 'smooth' })
+    const at = STOPS.indexOf(index) * (HOLD + MOVE) + HOLD / 2
+    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 68 + (el.offsetHeight - height) * (at / UNITS), behavior: 'smooth' })
   }
 
   return <section id="top" ref={root} className={s.hero} aria-label="Your time for happiness — เรื่องราวของ Nail Time">
