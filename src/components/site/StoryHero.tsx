@@ -10,7 +10,7 @@ const FRAME_COUNT = 193
 const frameSrc = (dir: string, i: number) => `/hero/${dir}/${String(i + 1).padStart(4, '0')}.webp`
 // Share of each chapter's scroll where the copy holds still, and the padding before
 // the first / after the last chapter so they hold as long as the middle ones.
-const HOLD = .5
+const HOLD = .75
 const LEAD = HOLD / 2
 const SPAN = 4 + 2 * LEAD
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
