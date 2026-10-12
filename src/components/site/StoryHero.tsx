@@ -8,6 +8,11 @@ import s from './story.module.css'
 const chapters = ['Time', 'Pause', 'Beauty', 'Craft', 'Your time']
 const FRAME_COUNT = 193
 const frameSrc = (dir: string, i: number) => `/hero/${dir}/${String(i + 1).padStart(4, '0')}.webp`
+// Share of each chapter's scroll where the copy holds still, and the padding before
+// the first / after the last chapter so they hold as long as the middle ones.
+const HOLD = .5
+const LEAD = HOLD / 2
+const SPAN = 4 + 2 * LEAD
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 const ease = (v: number) => { const t = clamp(v); return t * t * (3 - 2 * t) }
 
@@ -53,7 +58,11 @@ export function StoryHero() {
       const stage = el.firstElementChild as HTMLElement
       const travel = Math.max(1, el.offsetHeight - stage.offsetHeight)
       const p = clamp((68 - el.getBoundingClientRect().top) / travel)
-      const t = Math.max(0, Math.min(4, p * 4.8 - .15))
+      // `raw` moves steadily and drives the video; `t` parks on each chapter for half of
+      // its scroll distance so the copy stays fully readable before the next one comes in.
+      const raw = Math.max(0, Math.min(4, p * SPAN - LEAD))
+      const seg = Math.min(3, Math.floor(raw))
+      const t = seg + ease((raw - seg - HOLD / 2) / (1 - HOLD))
       const index = Math.round(t)
       if (current !== index) { current = index; setActive(index) }
       panels.forEach((panel, i) => {
@@ -67,9 +76,9 @@ export function StoryHero() {
         else panel.setAttribute('aria-hidden', String(index !== i))
       })
       el.style.setProperty('--progress', String(p))
-      el.style.setProperty('--happiness', String(ease((t - 1.85) / .35)))
-      el.style.setProperty('--beauty', String(1 - ease((t - 1.85) / .35)))
-      frame = Math.round((t / 4) * (FRAME_COUNT - 1))
+      el.style.setProperty('--happiness', String(ease((raw - 1.9) / .25)))
+      el.style.setProperty('--beauty', String(1 - ease((raw - 1.9) / .25)))
+      frame = Math.round((raw / 4) * (FRAME_COUNT - 1))
       if (!reduced) draw()
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update) }
@@ -107,7 +116,7 @@ export function StoryHero() {
       return
     }
     const height = (el.firstElementChild as HTMLElement).offsetHeight
-    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 68 + (el.offsetHeight - height) * ((index + .15) / 4.8), behavior: 'smooth' })
+    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 68 + (el.offsetHeight - height) * ((index + LEAD) / SPAN), behavior: 'smooth' })
   }
 
   return <section id="top" ref={root} className={s.hero} aria-label="Your time for happiness — เรื่องราวของ Nail Time">
