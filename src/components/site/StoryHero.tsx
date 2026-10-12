@@ -9,10 +9,14 @@ const chapters = ['Time', 'Pause', 'Beauty', 'Craft', 'Your time']
 const FRAME_COUNT = 193
 const frameSrc = (dir: string, i: number) => `/hero/${dir}/${String(i + 1).padStart(4, '0')}.webp`
 // Share of each chapter's scroll where the copy holds still, and the padding before
-// the first / after the last chapter so they hold as long as the middle ones.
+// the first chapter so it holds as long as the middle ones. The last chapter gets a
+// longer tail so the booking buttons linger before the next section scrolls in.
 const HOLD = .75
 const LEAD = HOLD / 2
-const SPAN = 4 + 2 * LEAD
+const TAIL = .8
+const SPAN = 4 + LEAD + TAIL
+// How much of the video keeps playing while copy holds (the rest plays in the transitions).
+const DRIFT = .3
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 const ease = (v: number) => { const t = clamp(v); return t * t * (3 - 2 * t) }
 
@@ -58,8 +62,9 @@ export function StoryHero() {
       const stage = el.firstElementChild as HTMLElement
       const travel = Math.max(1, el.offsetHeight - stage.offsetHeight)
       const p = clamp((68 - el.getBoundingClientRect().top) / travel)
-      // `raw` moves steadily and drives the video; `t` parks on each chapter for half of
-      // its scroll distance so the copy stays fully readable before the next one comes in.
+      // `raw` moves steadily; `t` parks on each chapter for most of its scroll distance so
+      // the copy stays readable. The video mostly follows `t` too, so the busy pour/hand
+      // shots in chapters 3–5 don't keep racing past while the text is on screen.
       const raw = Math.max(0, Math.min(4, p * SPAN - LEAD))
       const seg = Math.min(3, Math.floor(raw))
       const t = seg + ease((raw - seg - HOLD / 2) / (1 - HOLD))
@@ -78,7 +83,7 @@ export function StoryHero() {
       el.style.setProperty('--progress', String(p))
       el.style.setProperty('--happiness', String(ease((raw - 1.9) / .25)))
       el.style.setProperty('--beauty', String(1 - ease((raw - 1.9) / .25)))
-      frame = Math.round((raw / 4) * (FRAME_COUNT - 1))
+      frame = Math.round(((DRIFT * raw + (1 - DRIFT) * t) / 4) * (FRAME_COUNT - 1))
       if (!reduced) draw()
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update) }

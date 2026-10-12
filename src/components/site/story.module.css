@@ -1,6 +1,6 @@
 .hero { position:relative; background:#faf8f5; color:#472d36; padding-top:68px; --progress:0; --alpha:1; --shift:0px; --beauty:1; --happiness:0; }
 .stage { position:relative; overflow:hidden; }
-.hero[data-motion=full] { height:1100svh; }
+.hero[data-motion=full] { height:1200svh; }
 .hero[data-motion=full] .stage { position:sticky; top:68px; height:calc(100svh - 68px); min-height:540px; }
 .topline { position:absolute; z-index:5; top:26px; left:5vw; right:5vw; display:flex; align-items:center; justify-content:space-between; font-size:9px; letter-spacing:1.7px; }
 .topline a { display:flex; gap:9px; align-items:center; min-height:44px; letter-spacing:.2px; }
@@ -47,7 +47,7 @@
 .progress { position:absolute; bottom:0; left:0; height:2px; width:100%; background:#b28c9b; transform:scaleX(var(--progress)); transform-origin:left; }
 .hero a:focus-visible,.hero button:focus-visible { outline:2px solid #762d43; outline-offset:6px; }
 @media(max-width:760px) {
- .hero[data-motion=full] { height:950svh; }
+ .hero[data-motion=full] { height:1040svh; }
  .hero[data-motion=full] .stage { min-height:590px; }
  .topline { top:12px; left:24px; right:24px; font-size:7px; letter-spacing:1px; }
  .topline>span:nth-child(2) { display:none; }
